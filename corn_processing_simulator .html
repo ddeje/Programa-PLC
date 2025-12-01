@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corn Processing Simulator - Material Queue System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        /* Groups */
+        .group {
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .group-1 { background: #ffe6e6; border: 3px solid #ff6b6b; }
+        .group-2 { background: #e6f3ff; border: 3px solid #4ecdc4; }
+        .group-3 { background: #e6f7ff; border: 3px solid #45b7d1; }
+        .group-4 { background: #f0f9ff; border: 3px solid #96ceb4; }
+        .group-5 { background: #fff9e6; border: 3px solid #f39c12; }
+        
+        .group-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* Material ID display */
+        .material-id {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .material-id.active {
+            display: inline-block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Equipment */
+        .equipment {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 8px;
+            background: white;
+            border: 3px solid #bdc3c7;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .equipment.active {
+            background: #27ae60;
+            color: white;
+            border-color: #2ecc71;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .equipment.has-material {
+            background: #f1c40f;
+            color: #2c3e50;
+            border-color: #f39c12;
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+        }
+        
+        /* Gates */
+        .gate {
+            display: block;
+            width: 220px;
+            margin: 25px auto;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .gate.closed {
+            background: #e74c3c;
+            color: white;
+            border: 3px solid #c0392b;
+        }
+        
+        .gate.open {
+            background: #27ae60;
+            color: white;
+            border: 3px solid #229954;
+        }
+        
+        .gate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* Flow arrows */
+        .flow-arrow {
+            text-align: center;
+            font-size: 35px;
+            color: #7f8c8d;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .flow-arrow.active {
+            color: #27ae60;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        /* Material Queue Status - Fixed position */
+        .queue-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 280px;
+            z-index: 1000;
+            border: 3px solid #3498db;
+        }
+        
+        .queue-status h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        /* Main Controls */
+        .main-controls {
+            text-align: center;
+            margin: 30px 0;
+            padding: 25px;
+            background: #ecf0f1;
+            border-radius: 12px;
+        }
+        
+        .control-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .control-btn.start {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .control-btn.start:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.stop {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .control-btn.stop:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.scan {
+            background: #3498db;
+            color: white;
+        }
+        
+        .control-btn.scan:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Equipment clickable states */
+        .equipment.clickable {
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .equipment.clickable:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .equipment.clickable.can-release {
+            border-color: #f39c12;
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+            animation: canRelease 2s infinite;
+        }
+        
+        @keyframes canRelease {
+            0%, 100% { box-shadow: 0 0 10px rgba(243, 156, 18, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(243, 156, 18, 0.7); }
+        }
+        
+        /* Status */
+        .status {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .status.running {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status.stopped {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* Info */
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 3px solid #2196F3;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+        
+        .queue-status {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .queue-item {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 2px;
+            font-size: 12px;
+        }
+        
+        .sensor {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f39c12;
+            color: white;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        .sensor.active {
+            opacity: 1;
+            animation: sensorBlink 0.5s infinite alternate;
+        }
+        
+        @keyframes sensorBlink {
+            from { background: #f39c12; }
+            to { background: #e67e22; }
+        }
+        
+        .last-scan {
+            background: #9b59b6;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌽 Corn Processing Simulator - Material Queue System</h1>
+        
+        <!-- Main Controls -->
+        <div class="main-controls">
+            <div class="status stopped" id="status">System Stopped</div>
+            
+            <div class="control-row">
+                <button class="control-btn start" id="btn-start" onclick="startSystem()">
+                    ▶️ START SYSTEM
+                </button>
+                <button class="control-btn stop" id="btn-stop" onclick="stopSystem()" disabled>
+                    ⏹️ STOP SYSTEM
+                </button>
+                <button class="control-btn scan" id="btn-scan" onclick="scanMaterial()" disabled>
+                    🔍 SCAN MATERIAL
+                </button>
+            </div>
+            
+            <div id="last-scan" style="display: none;">
+                <strong>Last Scanned:</strong> <span id="last-matid"></span>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <strong>📌 Instructions:</strong><br>
+            • <strong>Gates:</strong> Click gates to open/close material flow<br>
+            • <strong>Equipment:</strong> Click highlighted equipment to release material<br>
+            • <strong>Queue Rules:</strong> Only ONE material per group (no mixing)<br>
+            • <strong>Flow:</strong> Follow the sequence step by step
+        </div>
+        
+        <!-- GROUP 1: INPUT -->
+        <div class="group group-1">
+            <div class="group-title">
+                GROUP 1: CORN COB INPUT
+                <div class="material-id" id="matid-1"></div>
+            </div>
+            <div class="equipment" id="loader">👤 LOADER (Operator)</div>
+            <div class="equipment clickable" id="feeder-tray" onclick="releaseFromFeederTray()">FEEDER TRAY</div>
+        </div>
+        
+        <div class="flow-arrow" id="flow-1">⬇️</div>
+        
+        <!-- GROUP 2: THRESHING AND CLEANING -->
+        <div class="group group-2">
+            <div class="group-title">
+                GROUP 2: THRESHING AND CLEANING
+                <div class="material-id" id="matid-2"></div>
+            </div>
+            <div class="equipment" id="aec-thresher">AEC THRESHER</div>
+            <div class="sensor" id="sensor-0">SENSOR 0</div>
+            <br><br>
+            <div style="text-align: center;">
+                <div class="equipment" id="air-conveyor">AIR CONVEYOR ⬆️</div>
+                <br>
+                <div class="equipment" id="cyclone">CYCLONE 🌪️</div>
+                <br>
+                <div class="equipment" id="aspirator">ASPIRATOR ⬇️</div>
+                <br>
+                <div class="equipment" id="aspirator-hopper">ASPIRATOR HOPPER</div>
+            </div>
+        </div>
+        
+        <div class="gate closed" id="gate1" onclick="toggleGate(1)">
+            🚪 MATERIAL GATE #1 - CLOSED
+        </div>
+        <div class="sensor" id="sensor-1">SENSOR 1</div>
+        
+        <div class="flow-arrow" id="flow-2">⬇️</div>
+        
+        <!-- GROUP 3: VMEK HOPPER ONLY -->
+        <div class="group group-3">
+            <div class="group-title">
+                GROUP 3: VMEK HOPPER
+                <div class="material-id" id="matid-3"></div>
+            </div>
+            <div class="equipment clickable" id="vmek-hopper" onclick="releaseFromVmekHopper()">VMEK HOPPER</div>
+        </div>
+        
+        <div class="flow-arrow" id="flow-3">⬇️</div>
+        
+        <!-- GROUP 4: PROCESSING AND STORAGE -->
+        <div class="group group-4">
+            <div class="group-title">
+                GROUP 4: PROCESSING AND STORAGE
+                <div class="material-id" id="matid-4"></div>
+            </div>
+            <div class="equipment" id="vmek">VMEK (Sorter/Processor)</div>
+            <div class="equipment" id="seed-treater-hopper">SEED TREATER HOPPER</div>
+        </div>
+        
+        <div class="gate closed" id="gate2" onclick="toggleGate(2)">
+            🚪 MATERIAL GATE #2 - CLOSED
+        </div>
+        <div class="sensor" id="sensor-2">SENSOR 2</div>
+        
+        <div class="flow-arrow" id="flow-4">⬇️</div>
+        
+        <!-- GROUP 5: FINAL TREATMENT -->
+        <div class="group group-5">
+            <div class="group-title">
+                GROUP 5: FINAL TREATMENT
+                <div class="material-id" id="matid-5"></div>
+            </div>
+            <div class="equipment clickable" id="seed-treater" onclick="releaseFromSeedTreater()">SEED TREATER R12</div>
+            <div class="equipment clickable" id="receiver" onclick="activateReceiver()">👤 RECEIVER (Operator)</div>
+        </div>
+    </div>
+    
+    <!-- Material Queue Status - Fixed position -->
+    <div class="queue-status">
+        <h3>📋 Material Queue</h3>
+        <div id="queue-display">
+            <div><strong>Group 1:</strong> <span id="queue-1">Empty</span></div>
+            <div><strong>Group 2:</strong> <span id="queue-2">Empty</span></div>
+            <div><strong>Group 3:</strong> <span id="queue-3">Empty</span></div>
+            <div><strong>Group 4:</strong> <span id="queue-4">Empty</span></div>
+            <div><strong>Group 5:</strong> <span id="queue-5">Empty</span></div>
+        </div>
+        
+        <hr style="margin: 15px 0;">
+        
+        <div style="font-size: 12px;">
+            <div><strong>Gate 1:</strong> <span id="gate1-status">Closed</span></div>
+            <div><strong>Gate 2:</strong> <span id="gate2-status">Closed</span></div>
+            <div><strong>VMEK:</strong> <span id="vmek-status">Idle</span></div>
+            <div><strong>Receiver:</strong> <span id="receiver-status">Inactive</span></div>
+        </div>
+    </div>
+    
+    <script>
+        // System state
+        let system = {
+            running: false,
+            materialQueue: {
+                group1: null,
+                group2: null,
+                group3: null,
+                group4: null,
+                group5: null
+            },
+            gates: {
+                gate1: false,
+                gate2: false
+            },
+            vmekProcessing: false,
+            receiverActive: false,
+            lastMaterialId: null
+        };
+        
+        // Generate random Material ID (MATID)
+        function generateMaterialId() {
+            const prefix = 'MAT';
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `${prefix}${timestamp}${random}`;
+        }
+        
+        // Start system
+        function startSystem() {
+            system.running = true;
+            document.getElementById('status').className = 'status running';
+            document.getElementById('status').textContent = 'System Active';
+            document.getElementById('btn-start').disabled = true;
+            document.getElementById('btn-stop').disabled = false;
+            document.getElementById('btn-scan').disabled = false;
+            
+            // AEC always active when system runs
+            document.getElementById('aec-thresher').classList.add('active');
+            
+            updateDisplay();
+            updateEquipmentStates();
+            console.log('System started');
+        }
+        
+        // Stop system
+        function stopSystem() {
+            system.running = false;
+            document.getElementById('status').className = 'status stopped';
+            document.getElementById('status').textContent = 'System Stopped';
+            document.getElementById('btn-start').disabled = false;
+            document.getElementById('btn-stop').disabled = true;
+            document.getElementById('btn-scan').disabled = true;
+            
+            // Reset visuals
+            resetVisuals();
+            
+            console.log('System stopped');
+        }
+        
+        // Scan material (Loader function)
+        function scanMaterial() {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            if (system.materialQueue.group1 !== null) {
+                alert('Group 1 already has material. Cannot mix materials!');
+                return;
+            }
+            
+            // Generate new Material ID
+            const newMaterialId = generateMaterialId();
+            system.lastMaterialId = newMaterialId;
+            system.materialQueue.group1 = newMaterialId;
+            
+            // Update display
+            document.getElementById('last-scan').style.display = 'block';
+            document.getElementById('last-matid').textContent = newMaterialId;
+            document.getElementById('matid-1').textContent = `MATID: ${newMaterialId}`;
+            document.getElementById('matid-1').classList.add('active');
+            
+            // Visual feedback
+            document.getElementById('loader').classList.add('has-material');
+            document.getElementById('feeder-tray').classList.add('has-material');
+            
+            updateDisplay();
+            updateEquipmentStates();
+            
+            console.log(`Material scanned: ${newMaterialId}`);
+        }
+        
+        // Manual release from Feeder Tray (Group 1 to Group 2)
+        function releaseFromFeederTray() {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            if (!system.materialQueue.group1) {
+                alert('No material in Feeder Tray to release');
+                return;
+            }
+            
+            if (system.materialQueue.group2) {
+                alert('Group 2 is occupied! Cannot release material.');
+                return;
+            }
+            
+            flowToGroup2();
+        }
+        
+        // Manual release from VMEK Hopper (Group 3 to Group 4)
+        function releaseFromVmekHopper() {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            if (!system.materialQueue.group3) {
+                alert('No material in VMEK Hopper to release');
+                return;
+            }
+            
+            if (system.materialQueue.group4) {
+                alert('Group 4 is occupied! Cannot release material.');
+                return;
+            }
+            
+            flowToGroup4();
+        }
+        
+        // Manual release from Seed Treater (Group 5 to Receiver)
+        function releaseFromSeedTreater() {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            if (!system.materialQueue.group5) {
+                alert('No material in Seed Treater to release');
+                return;
+            }
+            
+            if (!system.receiverActive) {
+                alert('Please activate the receiver first!');
+                return;
+            }
+            
+            completeProcess(system.materialQueue.group5);
+        }
+        
+        // Flow to group 2
+        function flowToGroup2() {
+            if (!system.running || !system.materialQueue.group1) return;
+            
+            // Check if group 2 is empty
+            if (system.materialQueue.group2 !== null) {
+                console.log('Group 2 occupied, waiting...');
+                setTimeout(() => flowToGroup2(), 1000);
+                return;
+            }
+            
+            // Activate flow
+            document.getElementById('flow-1').classList.add('active');
+            
+            setTimeout(() => {
+                // Move material from group 1 to group 2
+                const materialId = system.materialQueue.group1;
+                system.materialQueue.group1 = null;
+                system.materialQueue.group2 = materialId;
+                
+                // Update visuals
+                document.getElementById('loader').classList.remove('has-material');
+                document.getElementById('feeder-tray').classList.remove('has-material');
+                document.getElementById('matid-1').classList.remove('active');
+                document.getElementById('flow-1').classList.remove('active');
+                
+                // Group 2 equipment
+                document.getElementById('air-conveyor').classList.add('has-material');
+                document.getElementById('cyclone').classList.add('has-material');
+                document.getElementById('aspirator').classList.add('has-material');
+                document.getElementById('aspirator-hopper').classList.add('has-material');
+                document.getElementById('matid-2').textContent = `MATID: ${materialId}`;
+                document.getElementById('matid-2').classList.add('active');
+                
+                // Activate sensor
+                document.getElementById('sensor-0').classList.add('active');
+                setTimeout(() => document.getElementById('sensor-0').classList.remove('active'), 3000);
+                
+                updateDisplay();
+                updateEquipmentStates();
+                console.log(`Material ${materialId} moved to Group 2`);
+            }, 2000);
+        }
+        
+        // Toggle gates with safety checks
+        function toggleGate(gateNum) {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            const gateKey = `gate${gateNum}`;
+            
+            // Safety check before opening gates
+            if (!system.gates[gateKey]) { // If trying to open
+                if (gateNum === 1 && system.materialQueue.group3) {
+                    alert('Cannot open Gate 1: Group 3 (VMEK Hopper) already has material!');
+                    return;
+                }
+                if (gateNum === 2 && system.materialQueue.group5) {
+                    alert('Cannot open Gate 2: Group 5 (Seed Treater) already has material!');
+                    return;
+                }
+                // Check if there's material to release
+                if (gateNum === 1 && !system.materialQueue.group2) {
+                    alert('No material in Group 2 to release through Gate 1');
+                    return;
+                }
+                if (gateNum === 2 && !system.materialQueue.group4) {
+                    alert('No material in Group 4 to release through Gate 2');
+                    return;
+                }
+            }
+            
+            system.gates[gateKey] = !system.gates[gateKey];
+            
+            const gateElement = document.getElementById(gateKey);
+            if (system.gates[gateKey]) {
+                gateElement.className = 'gate open';
+                gateElement.textContent = `🚪 MATERIAL GATE #${gateNum} - OPEN`;
+                
+                // Manual flow - only when gate opens
+                if (gateNum === 1 && system.materialQueue.group2) {
+                    flowToGroup3();
+                } else if (gateNum === 2 && system.materialQueue.group4) {
+                    flowToGroup5();
+                }
+            } else {
+                gateElement.className = 'gate closed';
+                gateElement.textContent = `🚪 MATERIAL GATE #${gateNum} - CLOSED`;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Flow to group 3
+        function flowToGroup3() {
+            if (!system.running || !system.gates.gate1 || !system.materialQueue.group2) return;
+            
+            if (system.materialQueue.group3 !== null) {
+                console.log('Group 3 occupied, waiting...');
+                return;
+            }
+            
+            // Activate sensor and flow
+            document.getElementById('sensor-1').classList.add('active');
+            document.getElementById('flow-2').classList.add('active');
+            
+            setTimeout(() => {
+                // Move material
+                const materialId = system.materialQueue.group2;
+                system.materialQueue.group2 = null;
+                system.materialQueue.group3 = materialId;
+                
+                // Update visuals - Group 2
+                document.getElementById('air-conveyor').classList.remove('has-material');
+                document.getElementById('cyclone').classList.remove('has-material');
+                document.getElementById('aspirator').classList.remove('has-material');
+                document.getElementById('aspirator-hopper').classList.remove('has-material');
+                document.getElementById('matid-2').classList.remove('active');
+                
+                // Update visuals - Group 3
+                document.getElementById('vmek-hopper').classList.add('has-material');
+                document.getElementById('matid-3').textContent = `MATID: ${materialId}`;
+                document.getElementById('matid-3').classList.add('active');
+                
+                // Deactivate flow elements
+                document.getElementById('sensor-1').classList.remove('active');
+                document.getElementById('flow-2').classList.remove('active');
+                
+                // Auto-close gate
+                system.gates.gate1 = false;
+                document.getElementById('gate1').className = 'gate closed';
+                document.getElementById('gate1').textContent = '🚪 MATERIAL GATE #1 - CLOSED';
+                
+                updateDisplay();
+                
+                console.log(`Material ${materialId} moved to Group 3`);
+            }, 3000);
+        }
+        
+        // Flow to group 4
+        function flowToGroup4() {
+            if (!system.running || !system.materialQueue.group3) return;
+            
+            if (system.materialQueue.group4 !== null) {
+                console.log('Group 4 occupied, waiting...');
+                setTimeout(() => flowToGroup4(), 1000);
+                return;
+            }
+            
+            document.getElementById('flow-3').classList.add('active');
+            
+            setTimeout(() => {
+                // Move material
+                const materialId = system.materialQueue.group3;
+                system.materialQueue.group3 = null;
+                system.materialQueue.group4 = materialId;
+                
+                // Update visuals
+                document.getElementById('vmek-hopper').classList.remove('has-material');
+                document.getElementById('matid-3').classList.remove('active');
+                document.getElementById('flow-3').classList.remove('active');
+                document.getElementById('matid-4').textContent = `MATID: ${materialId}`;
+                document.getElementById('matid-4').classList.add('active');
+                
+                updateDisplay();
+                
+                // Process in VMEK (manual control)
+                processVmek(materialId);
+                console.log(`Material ${materialId} moved to Group 4 - Ready for VMEK processing`);
+            }, 2000);
+        }
+        
+        // Process VMEK (now more manual)
+        function processVmek(materialId) {
+            if (!system.running) return;
+            
+            // Just show that material is ready for processing
+            document.getElementById('vmek').classList.add('has-material');
+            document.getElementById('vmek-status').textContent = 'Material Ready';
+            
+            // Simulate processing time but don't auto-transfer
+            system.vmekProcessing = true;
+            document.getElementById('vmek').classList.add('active');
+            document.getElementById('vmek-status').textContent = 'Processing...';
+            
+            setTimeout(() => {
+                // Finish processing
+                system.vmekProcessing = false;
+                document.getElementById('vmek').classList.remove('active');
+                document.getElementById('vmek-status').textContent = 'Ready for transfer';
+                
+                // Move to seed treater hopper
+                document.getElementById('vmek').classList.remove('has-material');
+                document.getElementById('seed-treater-hopper').classList.add('has-material');
+                
+                console.log(`Material ${materialId} processed in VMEK - Ready for Gate 2`);
+            }, 3000);
+        }
+        
+        // Flow to group 5
+        function flowToGroup5() {
+            if (!system.running || !system.gates.gate2 || !system.materialQueue.group4) return;
+            
+            if (system.materialQueue.group5 !== null) {
+                console.log('Group 5 occupied, waiting...');
+                return;
+            }
+            
+            // Activate sensor and flow
+            document.getElementById('sensor-2').classList.add('active');
+            document.getElementById('flow-4').classList.add('active');
+            
+            setTimeout(() => {
+                // Move material
+                const materialId = system.materialQueue.group4;
+                system.materialQueue.group4 = null;
+                system.materialQueue.group5 = materialId;
+                
+                // Update visuals
+                document.getElementById('seed-treater-hopper').classList.remove('has-material');
+                document.getElementById('matid-4').classList.remove('active');
+                document.getElementById('seed-treater').classList.add('has-material');
+                document.getElementById('matid-5').textContent = `MATID: ${materialId}`;
+                document.getElementById('matid-5').classList.add('active');
+                
+                // Deactivate flow elements
+                document.getElementById('sensor-2').classList.remove('active');
+                document.getElementById('flow-4').classList.remove('active');
+                
+                // Auto-close gate
+                system.gates.gate2 = false;
+                document.getElementById('gate2').className = 'gate closed';
+                document.getElementById('gate2').textContent = '🚪 MATERIAL GATE #2 - CLOSED';
+                
+                updateDisplay();
+                
+                console.log(`Material ${materialId} moved to Group 5 - Ready for final treatment`);
+            }, 3000);
+        }
+        
+        // Activate receiver
+        function activateReceiver() {
+            if (!system.running) {
+                alert('Please start the system first');
+                return;
+            }
+            
+            system.receiverActive = !system.receiverActive;
+            
+            const receiver = document.getElementById('receiver');
+            
+            if (system.receiverActive) {
+                receiver.classList.add('active');
+                updateEquipmentStates();
+            } else {
+                receiver.classList.remove('active');
+                updateEquipmentStates();
+            }
+            
+            updateDisplay();
+        }
+        
+        // Update equipment clickable states
+        function updateEquipmentStates() {
+            if (!system.running) return;
+            
+            // Reset all equipment states
+            document.querySelectorAll('.equipment.clickable').forEach(eq => {
+                eq.classList.remove('can-release');
+            });
+            
+            // FEEDER TRAY - can release if has material and group 2 is empty
+            if (system.materialQueue.group1 && !system.materialQueue.group2) {
+                document.getElementById('feeder-tray').classList.add('can-release');
+            }
+            
+            // VMEK HOPPER - can release if has material and group 4 is empty
+            if (system.materialQueue.group3 && !system.materialQueue.group4) {
+                document.getElementById('vmek-hopper').classList.add('can-release');
+            }
+            
+            // SEED TREATER - can release if has material and receiver is active
+            if (system.materialQueue.group5 && system.receiverActive) {
+                document.getElementById('seed-treater').classList.add('can-release');
+            }
+        }
+        
+        // Complete the process
+        function completeProcess(materialId) {
+            if (!system.receiverActive) return;
+            
+            setTimeout(() => {
+                // Final delivery
+                document.getElementById('receiver').classList.add('has-material');
+                alert(`Process completed! Material ${materialId} delivered to receiver.`);
+                
+                // Clear the material from system
+                system.materialQueue.group5 = null;
+                
+                // Reset group 5 visuals
+                setTimeout(() => {
+                    document.getElementById('seed-treater').classList.remove('has-material');
+                    document.getElementById('receiver').classList.remove('has-material');
+                    document.getElementById('matid-5').classList.remove('active');
+                    updateDisplay();
+                }, 3000);
+                
+                console.log(`Material ${materialId} process completed`);
+            }, 2000);
+        }
+        
+        // Update display
+        function updateDisplay() {
+            // Update queue status
+            for (let i = 1; i <= 5; i++) {
+                const queueElement = document.getElementById(`queue-${i}`);
+                const materialId = system.materialQueue[`group${i}`];
+                queueElement.textContent = materialId || 'Empty';
+                queueElement.className = materialId ? 'queue-item' : '';
+            }
+            
+            // Update gate status
+            document.getElementById('gate1-status').textContent = system.gates.gate1 ? 'Open' : 'Closed';
+            document.getElementById('gate2-status').textContent = system.gates.gate2 ? 'Open' : 'Closed';
+            document.getElementById('receiver-status').textContent = system.receiverActive ? 'Active' : 'Inactive';
+        }
+        
+        // Reset visuals
+        function resetVisuals() {
+            // Clear all equipment states
+            document.querySelectorAll('.equipment').forEach(eq => {
+                eq.classList.remove('active', 'has-material');
+            });
+            
+            // Clear all flow arrows
+            document.querySelectorAll('.flow-arrow').forEach(arrow => {
+                arrow.classList.remove('active');
+            });
+            
+            // Clear all sensors
+            document.querySelectorAll('.sensor').forEach(sensor => {
+                sensor.classList.remove('active');
+            });
+            
+            // Clear material IDs
+            document.querySelectorAll('.material-id').forEach(matid => {
+                matid.classList.remove('active');
+                matid.textContent = '';
+            });
+            
+            // Reset gates
+            Object.keys(system.gates).forEach(key => system.gates[key] = false);
+            document.getElementById('gate1').className = 'gate closed';
+            document.getElementById('gate1').textContent = '🚪 MATERIAL GATE #1 - CLOSED';
+            document.getElementById('gate2').className = 'gate closed';
+            document.getElementById('gate2').textContent = '🚪 MATERIAL GATE #2 - CLOSED';
+            
+            // Reset material queue
+            Object.keys(system.materialQueue).forEach(key => system.materialQueue[key] = null);
+            
+            // Reset other states
+            system.vmekProcessing = false;
+            system.receiverActive = false;
+            
+            // Update status displays
+            document.getElementById('vmek-status').textContent = 'Idle';
+            document.getElementById('btn-receiver').textContent = '📦 ACTIVATE RECEIVER';
+            document.getElementById('last-scan').style.display = 'none';
+            
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
