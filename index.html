@@ -12,20 +12,18 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --bg-panel: #1e293b;
-            --bg-card: #334155;
+            --bg-dark: #0a0e1a;
+            --bg-panel: #1a1f2e;
+            --bg-card: #252b3d;
             --primary: #0ea5e9;
-            /* Syngenta-ish Blue */
             --accent: #22c55e;
-            /* Syngenta-ish Green */
             --danger: #ef4444;
             --warning: #f59e0b;
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
-            --border: #475569;
-            --glow-primary: 0 0 15px rgba(14, 165, 233, 0.3);
-            --glow-accent: 0 0 15px rgba(34, 197, 94, 0.3);
+            --border: #374151;
+            --glow-primary: 0 0 20px rgba(14, 165, 233, 0.4);
+            --glow-accent: 0 0 20px rgba(34, 197, 94, 0.4);
         }
 
         * {
@@ -46,13 +44,13 @@
 
         /* HEADER */
         header {
-            background-color: var(--bg-panel);
-            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--bg-panel), var(--bg-dark));
+            padding: 1.2rem 2rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             z-index: 10;
         }
 
@@ -64,9 +62,9 @@
 
         .logo-text {
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             letter-spacing: -0.025em;
-            background: linear-gradient(to right, var(--accent), var(--primary));
+            background: linear-gradient(135deg, var(--accent), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -74,37 +72,51 @@
         .system-status {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 999px;
             border: 1px solid var(--border);
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background-color: var(--danger);
-            box-shadow: 0 0 10px var(--danger);
+            box-shadow: 0 0 15px var(--danger);
             transition: all 0.3s ease;
         }
 
         .status-dot.active {
             background-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
         }
 
         /* MAIN LAYOUT */
         main {
             flex: 1;
             display: grid;
-            grid-template-columns: 320px 1fr;
+            grid-template-columns: 340px 1fr;
             gap: 1px;
             background-color: var(--border);
-            /* Grid lines */
         }
 
         /* SIDEBAR CONTROLS */
@@ -118,10 +130,11 @@
         }
 
         .panel-section {
-            background-color: var(--bg-dark);
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-dark));
             border: 1px solid var(--border);
-            border-radius: 0.8rem;
-            padding: 1rem;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            transition: all 0.3s;
         }
 
         .panel-section.input-station {
@@ -129,50 +142,57 @@
         }
 
         .panel-section.control-room {
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .panel-header h3 {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .role-badge {
             font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 4px;
             background: var(--bg-card);
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .role-badge.receiver {
-            background: var(--primary);
-            color: white;
+            background: var(--accent);
+            color: black;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.9rem;
         }
 
         .status-card {
-            background: var(--bg-card);
-            padding: 0.8rem;
-            border-radius: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 0.6rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--border);
         }
 
         .toggle-switch {
@@ -181,23 +201,24 @@
         }
 
         .toggle-switch button {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
         }
 
         button {
             background-color: var(--bg-card);
             color: var(--text-main);
             border: 1px solid var(--border);
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+            padding: 0.85rem 1.1rem;
+            border-radius: 0.6rem;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
+            font-size: 0.9rem;
         }
 
         button:hover:not(:disabled) {
@@ -205,23 +226,26 @@
             border-color: var(--primary);
             color: white;
             box-shadow: var(--glow-primary);
+            transform: translateY(-2px);
         }
 
         button:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
         button.active {
-            background-color: var(--primary);
+            background-color: var(--accent);
             color: white;
-            box-shadow: var(--glow-primary);
+            border-color: var(--accent);
+            box-shadow: var(--glow-accent);
         }
 
         button.btn-start {
-            background-color: rgba(34, 197, 94, 0.1);
+            background-color: rgba(34, 197, 94, 0.15);
             border-color: var(--accent);
             color: var(--accent);
+            font-weight: 700;
         }
 
         button.btn-start:hover:not(:disabled) {
@@ -230,9 +254,10 @@
         }
 
         button.btn-stop {
-            background-color: rgba(239, 68, 68, 0.1);
+            background-color: rgba(239, 68, 68, 0.15);
             border-color: var(--danger);
             color: var(--danger);
+            font-weight: 700;
         }
 
         button.btn-stop:hover:not(:disabled) {
@@ -241,7 +266,7 @@
         }
 
         button.btn-confirm {
-            background-color: rgba(245, 158, 11, 0.1);
+            background-color: rgba(245, 158, 11, 0.15);
             border-color: var(--warning);
             color: var(--warning);
         }
@@ -251,22 +276,37 @@
             color: white;
         }
 
+        button.btn-receiver-action {
+            background: linear-gradient(135deg, var(--accent), #16a34a);
+            color: white;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        button.btn-receiver-action:hover:not(:disabled) {
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+            transform: translateY(-3px);
+        }
+
         .gate-controls-list {
             margin-top: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
         .gate-controls-list h4 {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .gate-btn {
-            font-size: 0.8rem;
-            padding: 0.5rem;
+            font-size: 0.85rem;
+            padding: 0.6rem;
             justify-content: flex-start;
             text-align: left;
         }
@@ -279,11 +319,11 @@
 
         .log-container {
             flex: 1;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 0.6rem;
             padding: 1rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             overflow-y: auto;
             border: 1px solid var(--border);
             display: flex;
@@ -292,9 +332,10 @@
         }
 
         .log-entry {
-            padding-left: 0.5rem;
-            border-left: 2px solid var(--text-muted);
-            opacity: 0.8;
+            padding-left: 0.6rem;
+            border-left: 3px solid var(--text-muted);
+            opacity: 0.9;
+            line-height: 1.4;
         }
 
         .log-entry.success {
@@ -327,9 +368,11 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Grid Pattern */
-            background-image: radial-gradient(var(--bg-card) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(34, 197, 94, 0.05) 0%, transparent 50%),
+                radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px;
         }
 
         .pipeline {
@@ -337,12 +380,10 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            max-width: 1400px;
-            /* Increased width */
+            max-width: 1500px;
             position: relative;
             padding: 2rem 0;
-            transform: scale(1.1);
-            /* Scale up everything */
+            transform: scale(1.15);
         }
 
         /* STAGES */
@@ -350,34 +391,30 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 1.2rem;
             position: relative;
             z-index: 2;
             width: 200px;
-            /* Increased width */
         }
 
         .machine-icon {
-            width: 140px;
-            /* Increased size */
-            height: 140px;
-            /* Increased size */
-            background-color: var(--bg-panel);
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--bg-panel), var(--bg-card));
             border: 3px solid var(--border);
-            border-radius: 1.5rem;
+            border-radius: 1.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
-            /* Increased font size */
+            font-size: 4rem;
             position: relative;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .stage.active .machine-icon {
             border-color: var(--primary);
-            box-shadow: var(--glow-primary);
+            box-shadow: var(--glow-primary), 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .hopper-level {
@@ -386,10 +423,10 @@
             left: 0;
             width: 100%;
             height: 0%;
-            background: linear-gradient(to top, var(--warning), #fcd34d);
-            opacity: 0.8;
-            border-radius: 1.2rem;
-            transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(to top, #f59e0b, #fbbf24, #fcd34d);
+            opacity: 0.7;
+            border-radius: 1.5rem;
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
 
@@ -399,9 +436,9 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            animation: shimmer 1s infinite linear;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.4);
+            animation: shimmer 1.2s infinite linear;
         }
 
         @keyframes shimmer {
@@ -417,20 +454,23 @@
         .stage-label {
             font-weight: 600;
             text-align: center;
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .batch-id {
             background-color: var(--bg-card);
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 99px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-family: 'JetBrains Mono', monospace;
             opacity: 0;
             transform: translateY(-10px);
-            transition: all 0.3s;
-            border: 1px solid var(--border);
+            transition: all 0.4s;
+            border: 2px solid var(--border);
+            font-weight: 700;
         }
 
         .stage.has-material .batch-id {
@@ -439,6 +479,7 @@
             background-color: var(--primary);
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
         }
 
         .stage.pending .batch-id {
@@ -451,29 +492,27 @@
         }
 
         @keyframes pulse {
-            0% {
-                opacity: 0.6;
+
+            0%,
+            100% {
+                opacity: 0.7;
             }
 
             50% {
                 opacity: 1;
-            }
-
-            100% {
-                opacity: 0.6;
             }
         }
 
         /* PIPES & GATES */
         .pipe {
             flex: 1;
-            height: 12px;
-            /* Thicker pipes */
+            height: 14px;
             background-color: var(--bg-card);
             position: relative;
             margin: 0 -10px;
             z-index: 1;
             overflow: hidden;
+            border-radius: 8px;
         }
 
         .pipe-flow {
@@ -511,11 +550,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50px;
-            height: 80px;
-            background-color: var(--bg-panel);
+            width: 55px;
+            height: 85px;
+            background: linear-gradient(135deg, var(--bg-panel), var(--bg-card));
             border: 3px solid var(--danger);
-            border-radius: 6px;
+            border-radius: 8px;
             z-index: 3;
             display: flex;
             flex-direction: column;
@@ -523,27 +562,29 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
         .gate::before {
             content: 'GATE';
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: var(--danger);
-            margin-bottom: 4px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
         .gate-bar {
-            width: 36px;
-            height: 6px;
+            width: 38px;
+            height: 7px;
             background-color: var(--danger);
-            transition: all 0.3s;
+            transition: all 0.4s;
+            border-radius: 2px;
         }
 
         .gate.open {
             border-color: var(--accent);
-            background-color: rgba(34, 197, 94, 0.1);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), var(--bg-card));
         }
 
         .gate.open::before {
@@ -557,37 +598,38 @@
         }
 
         .gate-indicator {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background-color: var(--danger);
-            margin-top: 5px;
+            margin-top: 6px;
             transition: all 0.3s;
+            box-shadow: 0 0 8px var(--danger);
         }
 
         .gate.open .gate-indicator {
             background-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
+            box-shadow: 0 0 12px var(--accent);
         }
 
         .gate.ready {
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
             animation: pulse-green 2s infinite;
         }
 
         .gate.ready .gate-indicator {
             background-color: var(--warning);
-            box-shadow: 0 0 5px var(--warning);
+            box-shadow: 0 0 10px var(--warning);
         }
 
         @keyframes pulse-green {
             0% {
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
             }
 
             70% {
-                box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+                box-shadow: 0 0 0 15px rgba(34, 197, 94, 0);
             }
 
             100% {
@@ -596,21 +638,21 @@
         }
 
         @keyframes pulse-border {
-            0% {
+
+            0%,
+            100% {
                 border-color: var(--accent);
+                opacity: 1;
             }
 
             50% {
                 border-color: transparent;
-            }
-
-            100% {
-                border-color: var(--accent);
+                opacity: 0.6;
             }
         }
 
         .gate:hover {
-            transform: translate(-50%, -50%) scale(1.1);
+            transform: translate(-50%, -50%) scale(1.15);
         }
 
         /* OVERLAY ALERTS */
@@ -618,17 +660,17 @@
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(-100px);
+            transform: translateX(-50%) translateY(-120px);
             background-color: var(--bg-panel);
             border: 1px solid var(--border);
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 1.2rem 2.5rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             z-index: 100;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 1.2rem;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .alert-overlay.visible {
@@ -636,24 +678,25 @@
         }
 
         .alert-icon {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
         .alert-content h4 {
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
         }
 
         .alert-content p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
         }
 
         .alert-overlay.error {
-            border-left: 4px solid var(--danger);
+            border-left: 5px solid var(--danger);
         }
 
         .alert-overlay.success {
-            border-left: 4px solid var(--accent);
+            border-left: 5px solid var(--accent);
         }
 
         /* CHATBOT WIDGET */
@@ -668,12 +711,12 @@
         }
 
         .chat-window {
-            width: 350px;
-            height: 500px;
+            width: 380px;
+            height: 550px;
             background-color: var(--bg-panel);
             border: 1px solid var(--border);
-            border-radius: 1rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 1.2rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
             display: none;
             flex-direction: column;
             overflow: hidden;
@@ -685,8 +728,8 @@
         }
 
         .chat-header {
-            background-color: var(--bg-card);
-            padding: 1rem;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+            padding: 1.2rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -697,12 +740,13 @@
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
+            font-size: 1.05rem;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 1rem;
+            padding: 1.2rem;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -710,57 +754,60 @@
         }
 
         .message {
-            max-width: 80%;
-            padding: 0.8rem;
-            border-radius: 0.8rem;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            max-width: 85%;
+            padding: 0.9rem 1.1rem;
+            border-radius: 1rem;
+            font-size: 0.92rem;
+            line-height: 1.5;
         }
 
         .message.ai {
             background-color: var(--bg-card);
             align-self: flex-start;
-            border-bottom-left-radius: 0;
+            border-bottom-left-radius: 0.3rem;
+            border: 1px solid var(--border);
         }
 
         .message.user {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #0284c7);
             color: white;
             align-self: flex-end;
-            border-bottom-right-radius: 0;
+            border-bottom-right-radius: 0.3rem;
         }
 
         .chat-input-area {
-            padding: 1rem;
+            padding: 1.2rem;
             border-top: 1px solid var(--border);
             display: flex;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
         .chat-input {
             flex: 1;
             background-color: var(--bg-dark);
             border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
+            border-radius: 0.6rem;
+            padding: 0.7rem;
             color: white;
+            font-size: 0.9rem;
         }
 
         .chat-toggle {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
-            transition: transform 0.2s;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+            transition: all 0.3s;
         }
 
         .chat-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.7);
         }
 
         .settings-modal {
@@ -769,7 +816,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(10, 14, 26, 0.95);
             display: none;
             align-items: center;
             justify-content: center;
@@ -785,8 +832,19 @@
             padding: 2rem;
             border-radius: 1rem;
             width: 90%;
-            max-width: 300px;
+            max-width: 320px;
             border: 1px solid var(--border);
+        }
+
+        .receiver-info {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 0.6rem;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-align: center;
         }
     </style>
 </head>
@@ -795,7 +853,7 @@
 
     <header>
         <div class="brand">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#22c55e" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
                 <path d="M2 17L12 22L22 17" stroke="#22c55e" stroke-width="2" stroke-linecap="round"
@@ -821,7 +879,7 @@
                 </div>
                 <div class="control-group">
                     <button id="btn-scan" onclick="system.scanInput()" disabled>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
                             <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
@@ -832,7 +890,7 @@
                         1. Scan Group
                     </button>
                     <button class="btn-confirm" id="btn-confirm" onclick="system.confirmScan()" disabled>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
@@ -841,11 +899,15 @@
                 </div>
             </div>
 
-            <!-- CONTROL ROOM PANEL -->
+            <!-- RECEIVER CONTROL PANEL -->
             <div class="panel-section control-room">
                 <div class="panel-header">
-                    <h3>🎛️ Control Room</h3>
-                    <div class="role-badge receiver">Receiver</div>
+                    <h3>🎛️ Receiver Control</h3>
+                    <div class="role-badge receiver">ACTIVE</div>
+                </div>
+
+                <div class="receiver-info">
+                    ✓ Receiver controls the entire process flow
                 </div>
 
                 <div class="control-group">
@@ -857,32 +919,33 @@
                         </div>
                     </div>
 
-                    <button id="btn-receiver" onclick="system.toggleReceiver()" disabled>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <button class="btn-receiver-action" id="btn-process-next" onclick="system.processNext()" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
                         </svg>
-                        Receiver Control: <span id="receiver-state">OFF</span>
+                        Process Next Material
                     </button>
 
                     <div class="gate-controls-list">
-                        <h4>Gate Overrides</h4>
-                        <button class="gate-btn" id="btn-gate-1" onclick="system.toggleGate(1)">Gate 1 (Input →
-                            Vmek)</button>
-                        <button class="gate-btn" id="btn-gate-2" onclick="system.toggleGate(2)">Gate 2 (Vmek →
-                            Treater)</button>
-                        <button class="gate-btn" id="btn-gate-3" onclick="system.toggleGate(3)">Gate 3 (Treater →
-                            Out)</button>
+                        <h4>Manual Gate Controls</h4>
+                        <button class="gate-btn" id="btn-gate-1" onclick="system.toggleGate(1)" disabled>Gate 1 →
+                            Vmek</button>
+                        <button class="gate-btn" id="btn-gate-2" onclick="system.toggleGate(2)" disabled>Gate 2 →
+                            Treater</button>
+                        <button class="gate-btn" id="btn-gate-3" onclick="system.toggleGate(3)" disabled>Gate 3 →
+                            Output</button>
                     </div>
                 </div>
             </div>
 
             <div class="control-group" style="flex: 1;">
-                <h3>System Log</h3>
+                <h3
+                    style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                    System Log</h3>
                 <div class="log-container" id="system-log">
-                    <div class="log-entry info">System initialized. Waiting for start.</div>
+                    <div class="log-entry info">System initialized. Receiver ready.</div>
                 </div>
             </div>
         </aside>
@@ -980,7 +1043,7 @@
                     <span>🤖</span> Syngenta AI
                 </div>
                 <button onclick="chatbot.toggleSettings()"
-                    style="padding: 5px; background: transparent; border: none;">⚙️</button>
+                    style="padding: 5px; background: transparent; border: none; font-size: 1.2rem;">⚙️</button>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <div class="message ai">Hello! I am your Syngenta Process Assistant. How can I help you?</div>
@@ -995,7 +1058,7 @@
             <div class="settings-modal" id="settings-modal">
                 <div class="settings-content">
                     <h3 style="margin-bottom: 1rem;">AI Configuration</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Enter your Gemini API
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Enter your Gemini API
                         Key to enable smart responses.</p>
                     <input type="password" id="api-key-input" class="chat-input" placeholder="Paste API Key here"
                         style="width: 100%; margin-bottom: 1rem;">
@@ -1012,35 +1075,24 @@
         class SyngentaSystem {
             constructor() {
                 this.running = false;
-                this.receiverActive = false;
-
-                // 4 Storage Slots (Groups)
-                // null = empty, string = material ID
+                this.receiverActive = true; // ALWAYS ACTIVE
                 this.groups = [null, null, null, null];
-
-                // Pending Scan
                 this.pendingScan = null;
-
-                // 3 Gates
-                // false = closed, true = open
                 this.gates = [false, false, false];
-
                 this.ui = new UIController();
-
-                // Start update loop for visuals
                 setInterval(() => this.checkGateStatus(), 500);
             }
 
             start() {
                 this.running = true;
                 this.ui.updateSystemStatus(true);
-                this.ui.log('System Started. Ready for operations.', 'success');
+                this.ui.log('System Started. Receiver active and controlling flow.', 'success');
                 this.ui.updateControls(true);
             }
 
             stop() {
                 this.running = false;
-                this.gates = [false, false, false]; // Auto close gates on stop
+                this.gates = [false, false, false];
                 this.ui.updateSystemStatus(false);
                 this.ui.log('System Stopped. All gates closed.', 'error');
                 this.ui.updateControls(false);
@@ -1059,9 +1111,8 @@
                 this.pendingScan = newId;
 
                 this.ui.log(`Scanned new group: ${newId}. Waiting for confirmation...`, 'warning');
-                this.ui.updateGroup(0, newId, true); // True = Pending
+                this.ui.updateGroup(0, newId, true);
 
-                // Enable confirm button
                 document.getElementById('btn-confirm').disabled = false;
                 document.getElementById('btn-scan').disabled = true;
             }
@@ -1073,14 +1124,33 @@
                 this.groups[0] = id;
                 this.pendingScan = null;
 
-                this.ui.updateGroup(0, id, false); // False = Confirmed
-                this.ui.log(`Group ${id} Confirmed. Ready for Gate 1.`, 'success');
+                this.ui.updateGroup(0, id, false);
+                this.ui.log(`Group ${id} Confirmed. Ready for processing.`, 'success');
 
                 document.getElementById('btn-confirm').disabled = true;
                 document.getElementById('btn-scan').disabled = false;
             }
 
-            toggleGate(gateIndex) { // gateIndex 1-based from UI, converted to 0-based
+            processNext() {
+                if (!this.running) return;
+
+                // Find the first ready gate and open it
+                for (let i = 0; i < 3; i++) {
+                    const sourceGroup = this.groups[i];
+                    const destGroup = this.groups[i + 1];
+                    const isPending = (i === 0 && this.pendingScan);
+
+                    if (sourceGroup && !isPending && !destGroup) {
+                        this.ui.log(`Receiver: Processing material from stage ${i + 1}`, 'info');
+                        this.toggleGate(i + 1);
+                        return;
+                    }
+                }
+
+                this.ui.showAlert('Nothing to Process', 'No material ready to move. Scan a new group first.', 'error');
+            }
+
+            toggleGate(gateIndex) {
                 if (!this.running) {
                     this.ui.showAlert('System Stopped', 'Start system to operate gates.', 'error');
                     return;
@@ -1089,11 +1159,9 @@
                 const idx = gateIndex - 1;
                 const currentState = this.gates[idx];
 
-                // If opening, check safety conditions
                 if (!currentState) {
                     const sourceGroup = this.groups[idx];
                     const destGroup = (idx < 3) ? this.groups[idx + 1] : null;
-
                     const stageNames = ['Input/Sheller', 'Vmek Hopper', 'Treater Hopper', 'Output'];
 
                     if (!sourceGroup) {
@@ -1101,7 +1169,6 @@
                         return;
                     }
 
-                    // Special check for Gate 1: Must be confirmed (not pending)
                     if (idx === 0 && this.pendingScan) {
                         this.ui.showAlert('Not Confirmed', 'Operator must confirm scan before releasing.', 'error');
                         return;
@@ -1111,20 +1178,13 @@
                         this.ui.showAlert('Destination Full', `Cannot open gate. ${stageNames[idx + 1]} is occupied.`, 'error');
                         return;
                     }
-
-                    // Special check for last gate (Gate 3 -> Output)
-                    if (idx === 2 && !this.receiverActive) {
-                        this.ui.showAlert('Receiver Inactive', 'Receiver must be active to release final product.', 'error');
-                        return;
-                    }
                 }
 
-                // Toggle
                 this.gates[idx] = !this.gates[idx];
                 this.ui.renderGates(this.gates);
 
                 if (this.gates[idx]) {
-                    this.ui.log(`Gate ${gateIndex} Opened.`, 'info');
+                    this.ui.log(`Gate ${gateIndex} Opened by Receiver.`, 'info');
                     this.initiateFlow(idx);
                 } else {
                     this.ui.log(`Gate ${gateIndex} Closed.`, 'info');
@@ -1135,7 +1195,6 @@
             checkGateStatus() {
                 if (!this.running) return;
 
-                // Check each gate to see if it CAN be opened
                 for (let i = 0; i < 3; i++) {
                     const sourceGroup = this.groups[i];
                     const destGroup = this.groups[i + 1];
@@ -1147,65 +1206,48 @@
                         canOpen = true;
                     }
 
-                    // Special check for Gate 3
-                    if (i === 2 && !this.receiverActive) canOpen = false;
-
                     this.ui.setGateReady(i + 1, canOpen);
                 }
             }
 
             initiateFlow(gateIdx) {
-                // Visual flow
                 this.ui.setFlow(gateIdx, true);
 
-                // Logic transfer delay
                 setTimeout(() => {
-                    if (this.gates[gateIdx]) { // Ensure gate is still open
+                    if (this.gates[gateIdx]) {
                         this.transferMaterial(gateIdx);
                     }
-                }, 2000); // 2 second flow time
+                }, 2000);
             }
 
             transferMaterial(gateIdx) {
                 const material = this.groups[gateIdx];
 
-                // Move logic
                 this.groups[gateIdx] = null;
                 this.groups[gateIdx + 1] = material;
 
-                // UI Update
                 this.ui.updateGroup(gateIdx, null);
                 this.ui.updateGroup(gateIdx + 1, material);
 
                 this.ui.log(`Material ${material} moved through Gate ${gateIdx + 1}`, 'success');
 
-                // Auto close gate
                 this.gates[gateIdx] = false;
                 this.ui.renderGates(this.gates);
                 this.ui.setFlow(gateIdx, false);
 
-                // If it was the last gate, clear the output after a moment (simulating removal)
                 if (gateIdx === 2) {
                     setTimeout(() => {
                         this.groups[3] = null;
                         this.ui.updateGroup(3, null);
-                        this.ui.log(`Material ${material} received and cleared.`, 'success');
+                        this.ui.log(`Material ${material} received and cleared by Receiver.`, 'success');
                     }, 1500);
                 }
             }
 
-            toggleReceiver() {
-                if (!this.running) return;
-                this.receiverActive = !this.receiverActive;
-                this.ui.updateReceiver(this.receiverActive);
-                this.ui.log(`Receiver is now ${this.receiverActive ? 'ON' : 'OFF'}`, 'info');
-            }
-
-            // Helper for AI
             getStateSummary() {
                 return `
                 System Running: ${this.running}
-                Receiver Active: ${this.receiverActive}
+                Receiver: ALWAYS ACTIVE (controls all flow)
                 Pending Scan: ${this.pendingScan ? 'Yes' : 'No'}
                 
                 Group 1 (Input): ${this.groups[0] || 'Empty'}
@@ -1244,18 +1286,10 @@
                 document.getElementById('btn-start').disabled = isRunning;
                 document.getElementById('btn-stop').disabled = !isRunning;
                 document.getElementById('btn-scan').disabled = !isRunning;
-                document.getElementById('btn-receiver').disabled = !isRunning;
-                // Confirm button is managed separately
-            }
-
-            updateReceiver(isActive) {
-                const span = document.getElementById('receiver-state');
-                const btn = document.getElementById('btn-receiver');
-                span.textContent = isActive ? 'ON' : 'OFF';
-                span.style.color = isActive ? 'var(--accent)' : 'var(--text-muted)';
-
-                if (isActive) btn.classList.add('active');
-                else btn.classList.remove('active');
+                document.getElementById('btn-process-next').disabled = !isRunning;
+                document.getElementById('btn-gate-1').disabled = !isRunning;
+                document.getElementById('btn-gate-2').disabled = !isRunning;
+                document.getElementById('btn-gate-3').disabled = !isRunning;
             }
 
             log(msg, type = 'info') {
@@ -1268,7 +1302,6 @@
             }
 
             updateGroup(index, materialId, isPending = false) {
-                // index 0-3
                 const stageId = index + 1;
                 const stageEl = document.getElementById(`stage-${stageId}`);
                 const batchEl = document.getElementById(`batch-${stageId}`);
@@ -1280,10 +1313,10 @@
                     else stageEl.classList.remove('pending');
 
                     batchEl.textContent = materialId;
-                    levelEl.style.height = '60%'; // Fill up
+                    levelEl.style.height = '65%';
                 } else {
                     stageEl.classList.remove('has-material', 'pending');
-                    levelEl.style.height = '0%'; // Empty
+                    levelEl.style.height = '0%';
                 }
             }
 
@@ -1335,7 +1368,6 @@
 
         class Chatbot {
             constructor() {
-                // Pre-filled API Key for testing
                 this.apiKey = localStorage.getItem('gemini_api_key') || 'AIzaSyDGKQe_IDiZ2wKks4LSz-2YBY3I3mJbPKM';
                 this.messages = [];
             }
@@ -1391,7 +1423,6 @@
 
                 try {
                     const response = await this.callGemini(text);
-                    // Remove "Thinking..."
                     document.getElementById('chat-messages').lastChild.remove();
                     this.addMessage('ai', response);
                 } catch (error) {
@@ -1409,10 +1440,10 @@
                     
                     User Question: ${userPrompt}
                     
-                    Answer briefly and helpfully based on the system state. If a gate is closed, explain why based on the rules (e.g., destination full, receiver inactive).
+                    Answer briefly and helpfully based on the system state. The Receiver controls all material flow.
                 `;
 
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${this.apiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
 
                 const response = await fetch(url, {
                     method: 'POST',
