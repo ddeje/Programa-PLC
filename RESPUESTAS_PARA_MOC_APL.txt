@@ -1,0 +1,434 @@
+================================================================================
+    RESPUESTAS PARA LLENAR EL MOC - SISTEMA APL PROCESAMIENTO DE MAÍZ
+    Syngenta Seeds
+================================================================================
+
+Usa este documento para copiar y pegar las respuestas en tu template MOC.
+Cada sección corresponde a los campos típicos de un MOC.
+
+================================================================================
+INFORMACIÓN GENERAL DEL DOCUMENTO
+================================================================================
+
+Título del MOC:
+    Método de Control Operacional - Sistema APL Procesamiento de Semillas de Maíz
+
+Código del Documento:
+    MOC-APL-001
+
+Versión:
+    1.0
+
+Fecha de Emisión:
+    Diciembre 2024
+
+Fecha de Próxima Revisión:
+    Diciembre 2025
+
+Área/Departamento:
+    Procesamiento APL / Planta de Semillas
+
+Planta/Ubicación:
+    Syngenta Seeds - [Insertar ubicación específica]
+
+================================================================================
+1. OBJETIVO / PROPÓSITO
+================================================================================
+
+Establecer los procedimientos operacionales estandarizados para el control y 
+operación del sistema APL (Automated Processing Line) de procesamiento de 
+semillas de maíz, garantizando:
+
+• La trazabilidad completa de cada lote de material (MATID) durante todo el proceso
+• La prevención de contaminación cruzada entre diferentes lotes de material
+• La operación segura y eficiente del sistema de compuertas (gates)
+• La coordinación efectiva entre el Operador (Input Station) y el Receiver (Control Room)
+• El cumplimiento de los estándares de calidad de Syngenta
+
+================================================================================
+2. ALCANCE
+================================================================================
+
+Este procedimiento aplica a:
+
+• Todas las operaciones del sistema APL de procesamiento de semillas de maíz
+• Personal que opera en Input Station (Operadores)
+• Personal que opera en Control Room (Receivers)
+• Supervisores del área de procesamiento
+• Personal de mantenimiento que interviene el sistema
+
+Etapas del proceso cubiertas:
+• Grupo 1: Entrada de materia prima / Desgranado (Input/Sheller)
+• Grupo 2: Tolva de recepción y clasificación (Vmek Hopper)
+• Grupo 3: Tratamiento de semillas (Seed Treater Hopper)
+• Grupo 4: Salida y empaque final (Final Output)
+
+Equipos incluidos:
+• Input Station / Sheller
+• Vmek Hopper
+• Seed Treater Hopper
+• Sistema de compuertas (Gate 1, Gate 2, Gate 3)
+• Panel de control del Receiver
+• Sistema de escaneo de materiales
+
+================================================================================
+3. DEFINICIONES / TERMINOLOGÍA
+================================================================================
+
+APL (Automated Processing Line):
+    Línea de procesamiento automatizado de semillas de maíz.
+
+MATID (Material ID):
+    Identificador único asignado a cada lote de material escaneado 
+    (formato: MAT-XXX).
+
+Gate (Compuerta):
+    Dispositivo de control que regula el flujo de material entre etapas 
+    del proceso. El sistema tiene 3 compuertas.
+
+Input Station:
+    Estación de entrada donde el Operador escanea y confirma el material 
+    antes de ingresarlo al proceso.
+
+Receiver:
+    Persona responsable del control total del flujo del proceso desde 
+    el Control Room.
+
+Sheller:
+    Equipo de desgranado ubicado en la primera etapa del proceso.
+
+Vmek Hopper:
+    Tolva de recepción y clasificación de semillas (segunda etapa).
+
+Seed Treater Hopper:
+    Tolva del equipo de tratamiento de semillas (tercera etapa).
+
+Scan (Escaneo):
+    Acción de registrar un nuevo lote de material en el sistema.
+
+Confirm & Release (Confirmar y Liberar):
+    Acción del Operador para validar el escaneo y autorizar el material 
+    para procesamiento.
+
+================================================================================
+4. RESPONSABILIDADES
+================================================================================
+
+OPERADOR (Input Station):
+─────────────────────────
+• Escanear cada grupo de material antes de ingresarlo al sistema
+• Verificar visualmente que el material corresponde al lote indicado
+• Confirmar el escaneo presionando "Confirm & Release"
+• Verificar que el Input Station esté vacío antes de escanear nuevo material
+• Comunicar al Receiver cualquier anomalía detectada
+• Mantener limpia y ordenada el área de entrada
+• Usar el EPP requerido en todo momento
+
+RECEIVER (Control Room):
+────────────────────────
+• Iniciar y detener el sistema según sea necesario
+• Controlar el flujo total del proceso mediante las compuertas (gates)
+• Monitorear el estado de cada etapa del proceso en tiempo real
+• Autorizar la apertura de compuertas cuando las condiciones son seguras
+• Verificar que no haya mezcla de materiales entre etapas
+• Recibir y verificar el material procesado en la salida final
+• Mantener registro en el log de operaciones
+• Comunicarse constantemente con el Operador
+
+SUPERVISOR:
+───────────
+• Verificar el cumplimiento de los procedimientos operacionales
+• Autorizar arranques después de paradas de emergencia
+• Revisar y aprobar los registros de producción diarios
+• Coordinar el mantenimiento preventivo y correctivo
+• Investigar y documentar incidentes o desviaciones
+• Capacitar al personal nuevo en el sistema
+
+================================================================================
+5. EQUIPOS / MATERIALES / HERRAMIENTAS
+================================================================================
+
+EQUIPOS PRINCIPALES:
+• Input Station con sistema de escaneo
+• Sheller (Desgranadora)
+• Vmek Hopper (Tolva de clasificación)
+• Seed Treater Hopper (Tolva de tratamiento)
+• Final Output Station
+• Panel de control del Receiver
+• Sistema de compuertas automáticas (Gate 1, 2, 3)
+• Sensores de nivel en cada tolva
+• Sistema de visualización del proceso
+
+MATERIALES:
+• Semillas de maíz (materia prima)
+• Etiquetas de identificación de lotes
+• Formatos de registro de producción
+
+EPP REQUERIDO:
+• Casco de seguridad
+• Gafas de seguridad
+• Guantes de trabajo
+• Calzado de seguridad con punta de acero
+• Protección auditiva (en áreas designadas)
+
+================================================================================
+6. PROCEDIMIENTO DE ARRANQUE
+================================================================================
+
+ANTES DE INICIAR (Verificaciones Pre-Arranque):
+
+1. Verificar que todas las etapas del proceso estén vacías y limpias
+2. Confirmar que no hay material residual de operaciones anteriores
+3. Verificar que Gate 1, Gate 2 y Gate 3 están en posición CERRADA 
+   (indicador ROJO)
+4. Verificar que el panel de control muestra "SYSTEM STOPPED"
+5. Confirmar comunicación con el Operador en Input Station
+6. Verificar que el Operador tiene EPP completo
+7. Revisar que no hay condiciones inseguras en el área
+
+PROCEDIMIENTO DE ARRANQUE:
+
+Paso 1: El Receiver verifica todas las condiciones pre-arranque
+Paso 2: El Receiver comunica al Operador que el sistema será iniciado
+Paso 3: El Receiver presiona el botón START en el panel de control
+Paso 4: Verificar que el indicador cambia a "SYSTEM ACTIVE" (luz verde)
+Paso 5: Verificar en el System Log: "System Started. Receiver active and 
+        controlling flow."
+Paso 6: Confirmar con el Operador que puede iniciar escaneo de materiales
+
+================================================================================
+7. PROCEDIMIENTO OPERACIONAL ESTÁNDAR
+================================================================================
+
+A) INGRESO DE MATERIAL (Operador en Input Station):
+───────────────────────────────────────────────────
+
+Paso 1: ESCANEO
+   • Verificar que Input/Sheller está vacío
+   • Presionar botón "1. Scan Group"
+   • El sistema genera un MATID único (ej: MAT-123)
+   • El material aparece con indicador AMARILLO (pendiente)
+
+Paso 2: VERIFICACIÓN
+   • Verificar que el MATID corresponde al material físico
+   • Confirmar que el código escaneado es correcto
+
+Paso 3: CONFIRMACIÓN
+   • Presionar botón "2. Confirm & Release"
+   • El indicador cambia a AZUL (material confirmado)
+   • El material está listo para procesamiento
+
+   ⚠️ IMPORTANTE: No escanear nuevo material si el Input/Sheller 
+      ya contiene material. El sistema bloqueará la acción.
+
+
+B) CONTROL DE FLUJO (Receiver en Control Room):
+───────────────────────────────────────────────
+
+Paso 1: MONITOREO
+   • Observar el visualizador del proceso constantemente
+   • Las compuertas listas muestran indicador VERDE pulsante
+
+Paso 2: PROCESAMIENTO AUTOMÁTICO
+   • Presionar "Process Next Material" para que el sistema abra 
+     automáticamente la siguiente compuerta disponible
+   
+   O
+
+Paso 2 (ALTERNATIVA): CONTROL MANUAL
+   • Usar botones individuales "Gate 1", "Gate 2", "Gate 3" 
+     para control manual de cada compuerta
+
+Paso 3: VERIFICACIÓN DE TRANSFERENCIA
+   • Confirmar que el material se transfirió correctamente
+   • La compuerta se cierra automáticamente después de la transferencia
+   • El MATID se mueve a la siguiente etapa en el visualizador
+
+
+C) CONDICIONES PARA ABRIR COMPUERTAS:
+─────────────────────────────────────
+
+GATE 1 (Input/Sheller → Vmek Hopper):
+   ✓ Material CONFIRMADO en Input/Sheller
+   ✓ Vmek Hopper VACÍO
+   ✓ Sistema ACTIVO
+
+GATE 2 (Vmek Hopper → Treater Hopper):
+   ✓ Material presente en Vmek Hopper
+   ✓ Treater Hopper VACÍO
+   ✓ Sistema ACTIVO
+
+GATE 3 (Treater Hopper → Final Output):
+   ✓ Material presente en Treater Hopper
+   ✓ Final Output VACÍO
+   ✓ Sistema ACTIVO
+
+================================================================================
+8. PROCEDIMIENTO DE PARADA
+================================================================================
+
+PARADA NORMAL:
+──────────────
+Paso 1: Verificar que todo el material en proceso ha sido completado
+Paso 2: Confirmar que todas las etapas están vacías
+Paso 3: Notificar al Operador que el sistema será detenido
+Paso 4: Presionar botón STOP en el panel de control
+Paso 5: Verificar que todas las compuertas están cerradas
+Paso 6: Confirmar indicador "SYSTEM STOPPED" (luz roja)
+
+PARADA DE EMERGENCIA:
+─────────────────────
+Paso 1: Presionar INMEDIATAMENTE el botón STOP
+Paso 2: El sistema cierra automáticamente todas las compuertas
+Paso 3: Notificar al Supervisor inmediatamente
+Paso 4: NO reiniciar sin autorización del Supervisor
+Paso 5: Documentar el incidente en el log de operaciones
+Paso 6: Investigar la causa antes de reiniciar
+
+================================================================================
+9. ALERTAS DEL SISTEMA Y ACCIONES CORRECTIVAS
+================================================================================
+
+┌─────────────────────┬─────────────────────────────┬─────────────────────────────┐
+│ ALERTA              │ CAUSA                       │ ACCIÓN CORRECTIVA           │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "Input Occupied"    │ Se intentó escanear nuevo   │ Esperar a que el material   │
+│                     │ material cuando Input ya    │ actual sea procesado        │
+│                     │ tiene material              │                             │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "Source Empty"      │ Se intentó abrir compuerta  │ Verificar que hay material  │
+│                     │ sin material en origen      │ antes de abrir compuerta    │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "Destination Full"  │ Se intentó abrir compuerta  │ Procesar el material en     │
+│                     │ con destino ocupado         │ destino antes de transferir │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "Not Confirmed"     │ Se intentó abrir Gate 1     │ Operador debe confirmar     │
+│                     │ sin confirmar escaneo       │ usando "Confirm & Release"  │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "System Stopped"    │ Se intentó operar con       │ Iniciar sistema con START   │
+│                     │ sistema detenido            │ antes de operar             │
+├─────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ "Nothing to Process"│ No hay material listo       │ Escanear y confirmar nuevo  │
+│                     │ para procesar               │ material en Input Station   │
+└─────────────────────┴─────────────────────────────┴─────────────────────────────┘
+
+================================================================================
+10. NORMAS DE SEGURIDAD
+================================================================================
+
+EQUIPO DE PROTECCIÓN PERSONAL (EPP) OBLIGATORIO:
+• Casco de seguridad - En todo momento dentro del área de proceso
+• Gafas de seguridad - Durante operaciones de escaneo e inspección
+• Guantes de trabajo - Al manipular material
+• Calzado de seguridad - Con punta de acero
+• Protección auditiva - En áreas designadas de alto ruido
+
+PROHIBICIONES:
+• NO introducir manos ni objetos en las compuertas mientras están abiertas
+• NO bypassear los sensores de seguridad
+• NO operar el sistema sin la capacitación requerida
+• NO dejar el sistema operando sin supervisión
+• NO mezclar materiales de diferentes lotes
+• NO ignorar las alertas del sistema
+
+BLOQUEOS DE SEGURIDAD DEL SISTEMA:
+• Anti-mezcla: No permite abrir compuerta si destino tiene material
+• Confirmación: Gate 1 no abre si material no está confirmado
+• Sistema inactivo: Compuertas no operan si sistema está detenido
+• Cierre automático: Al presionar STOP, todas las compuertas se cierran
+
+================================================================================
+11. REGISTROS Y DOCUMENTACIÓN
+================================================================================
+
+REGISTROS REQUERIDOS:
+┌─────────────────────────────┬─────────────┬──────────────┬───────────┐
+│ Registro                    │ Responsable │ Frecuencia   │ Retención │
+├─────────────────────────────┼─────────────┼──────────────┼───────────┤
+│ Bitácora de Producción      │ Receiver    │ Por turno    │ 2 años    │
+│ Registro de MATIDs          │ Sistema     │ Continuo     │ 5 años    │
+│ Registro de Incidentes      │ Supervisor  │ Por evento   │ 5 años    │
+│ Checklist Pre-Arranque      │ Receiver    │ Cada arranque│ 1 año     │
+│ Registro de Mantenimiento   │ Mtto.       │ Por interv.  │ 3 años    │
+└─────────────────────────────┴─────────────┴──────────────┴───────────┘
+
+================================================================================
+12. DIAGRAMA DE FLUJO (descripción textual)
+================================================================================
+
+    ┌─────────────────┐
+    │   INPUT/SHELLER │  ← Operador escanea y confirma material
+    │      🌽         │     (MATID generado)
+    └────────┬────────┘
+             │
+        [GATE 1] ← Receiver controla apertura
+             │
+             ▼
+    ┌─────────────────┐
+    │   VMEK HOPPER   │  ← Clasificación de semillas
+    │      📥        │
+    └────────┬────────┘
+             │
+        [GATE 2] ← Receiver controla apertura
+             │
+             ▼
+    ┌─────────────────┐
+    │ TREATER HOPPER  │  ← Tratamiento de semillas
+    │      🧪        │
+    └────────┬────────┘
+             │
+        [GATE 3] ← Receiver controla apertura
+             │
+             ▼
+    ┌─────────────────┐
+    │  FINAL OUTPUT   │  ← Receiver recibe material procesado
+    │      📦        │
+    └─────────────────┘
+
+REGLA FUNDAMENTAL: Solo UN material (MATID) por etapa. 
+                   No se permite mezcla de materiales.
+
+================================================================================
+13. INFORMACIÓN DE CONTACTO / REFERENCIAS
+================================================================================
+
+En caso de emergencia contactar a:
+• Supervisor de turno: [Insertar nombre y extensión]
+• Seguridad Industrial: [Insertar extensión]
+• Mantenimiento: [Insertar extensión]
+
+Documentos relacionados:
+• Manual de operación del sistema APL
+• Procedimiento de limpieza entre lotes
+• Plan de mantenimiento preventivo
+• Procedimiento de respuesta a emergencias
+
+================================================================================
+14. HISTORIAL DE REVISIONES
+================================================================================
+
+Versión | Fecha           | Descripción del Cambio      | Autor
+--------|-----------------|-----------------------------|-----------------
+1.0     | Diciembre 2024  | Emisión inicial             | [Tu nombre]
+        |                 |                             |
+        |                 |                             |
+
+================================================================================
+15. FIRMAS DE APROBACIÓN
+================================================================================
+
+Elaborado por:  _________________________ Fecha: ___/___/______
+                Nombre: 
+                Cargo:
+
+Revisado por:   _________________________ Fecha: ___/___/______
+                Nombre:
+                Cargo:
+
+Aprobado por:   _________________________ Fecha: ___/___/______
+                Nombre:
+                Cargo:
+
+================================================================================
+                         FIN DEL DOCUMENTO
+================================================================================

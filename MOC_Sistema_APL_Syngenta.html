@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOC - Sistema APL Procesamiento de Maíz - Syngenta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #00843D;
+            --primary-dark: #006630;
+            --secondary: #0EA5E9;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --success: #22C55E;
+            --dark: #1a1f2e;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: #1e293b;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+        
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+        
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 30px 40px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-logo svg {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .header-info {
+            text-align: right;
+            font-size: 12px;
+        }
+        
+        .header-info div {
+            margin: 3px 0;
+        }
+        
+        .doc-code {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        
+        /* CONTENT */
+        .content {
+            padding: 40px;
+        }
+        
+        /* INFO BOX */
+        .info-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-item label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .info-item span {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        /* SECTIONS */
+        .section {
+            margin-bottom: 35px;
+            page-break-inside: avoid;
+        }
+        
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-number {
+            background: white;
+            color: var(--primary);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10.5pt;
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tr:hover {
+            background: #e2e8f0;
+        }
+        
+        /* SUBSECTIONS */
+        .subsection {
+            margin: 20px 0;
+        }
+        
+        .subsection h4 {
+            color: var(--primary-dark);
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+        
+        /* LISTS */
+        ul, ol {
+            margin: 10px 0 10px 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        /* FLOW DIAGRAM */
+        .flow-diagram {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .flow-stages {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .flow-stage {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+            flex: 1;
+        }
+        
+        .flow-stage.input { border-color: var(--accent); background: #fef3c7; }
+        .flow-stage.process { border-color: var(--secondary); background: #e0f2fe; }
+        .flow-stage.output { border-color: var(--success); background: #dcfce7; }
+        
+        .flow-stage-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .flow-stage-name {
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--dark);
+        }
+        
+        .flow-arrow {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .flow-gate {
+            background: var(--danger);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        /* ALERT BOXES */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert-icon {
+            font-size: 20px;
+        }
+        
+        .alert-danger {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger);
+            color: #991b1b;
+        }
+        
+        .alert-warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--accent);
+            color: #92400e;
+        }
+        
+        .alert-success {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+            color: #166534;
+        }
+        
+        .alert-info {
+            background: #eff6ff;
+            border-left: 4px solid var(--secondary);
+            color: #1e40af;
+        }
+        
+        /* ROLE BADGES */
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .role-operator {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .role-receiver {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .role-supervisor {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+        
+        /* CHECKLIST */
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .checklist li {
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .checklist li::before {
+            content: "☐";
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        /* SIGNATURE BOX */
+        .signature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .signature-box {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .signature-box label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .signature-line {
+            border-bottom: 2px solid var(--dark);
+            margin: 30px 10px 10px;
+        }
+        
+        .signature-box .name {
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+        
+        .footer-confidential {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        /* PRINT STYLES */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            .header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+        
+        /* STEP PROCEDURE */
+        .step-procedure {
+            counter-reset: step;
+        }
+        
+        .step {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .step-content h5 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .step-role {
+            margin-top: 8px;
+        }
+        
+        /* EQUIPMENT TABLE */
+        .equipment-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .equipment-icon {
+            font-size: 35px;
+            text-align: center;
+        }
+        
+        .equipment-info h5 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .equipment-info p {
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div>
+                    <h1>MÉTODO DE CONTROL OPERACIONAL</h1>
+                    <div class="header-subtitle">Sistema APL - Procesamiento de Semillas de Maíz</div>
+                </div>
+            </div>
+            <div class="header-info">
+                <div><strong>Planta:</strong> Syngenta Seeds</div>
+                <div><strong>Área:</strong> Procesamiento APL</div>
+                <div class="doc-code">MOC-APL-001</div>
+            </div>
+        </div>
+        
+        <!-- INFO BOX -->
+        <div class="content">
+            <div class="info-box">
+                <div class="info-item">
+                    <label>Versión</label>
+                    <span>1.0</span>
+                </div>
+                <div class="info-item">
+                    <label>Fecha de Emisión</label>
+                    <span>Diciembre 2024</span>
+                </div>
+                <div class="info-item">
+                    <label>Fecha de Revisión</label>
+                    <span>Diciembre 2025</span>
+                </div>
+            </div>
+            
+            <!-- SECTION 1: OBJETIVO -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">1</span>
+                    <span class="section-title">OBJETIVO</span>
+                </div>
+                <div class="section-content">
+                    <p>Establecer los procedimientos operacionales estandarizados para el control y operación del sistema APL (Automated Processing Line) de procesamiento de semillas de maíz, asegurando:</p>
+                    <ul>
+                        <li>La trazabilidad completa de cada lote de material (MATID) a través del proceso</li>
+                        <li>La prevención de contaminación cruzada entre lotes</li>
+                        <li>La operación segura y eficiente del sistema de compuertas (gates)</li>
+                        <li>La coordinación efectiva entre el Operador (Input Station) y el Receiver (Control Room)</li>
+                        <li>El cumplimiento de los estándares de calidad de Syngenta</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SECTION 2: ALCANCE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">2</span>
+                    <span class="section-title">ALCANCE</span>
+                </div>
+                <div class="section-content">
+                    <p>Este procedimiento aplica a todas las operaciones del sistema APL de procesamiento de maíz, incluyendo:</p>
+                    
+                    <div class="subsection">
+                        <h4>Etapas del Proceso</h4>
+                        <table>
+                            <tr>
+                                <th>Etapa</th>
+                                <th>Descripción</th>
+                                <th>Equipo Principal</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Grupo 1</strong></td>
+                                <td>Entrada de materia prima / Desgranado (Shelling)</td>
+                                <td>Input Station / Sheller</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grupo 2</strong></td>
+                                <td>Tolva de recepción y clasificación</td>
+                                <td>Vmek Hopper</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grupo 3</strong></td>
+                                <td>Tratamiento de semillas</td>
+                                <td>Seed Treater Hopper</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grupo 4</strong></td>
+                                <td>Salida y empaque final</td>
+                                <td>Final Output / Receiver Station</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>Sistema de Compuertas (Gates)</h4>
+                        <table>
+                            <tr>
+                                <th>Compuerta</th>
+                                <th>Ubicación</th>
+                                <th>Función</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 1</strong></td>
+                                <td>Entre Input/Sheller y Vmek Hopper</td>
+                                <td>Controla flujo hacia clasificación</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 2</strong></td>
+                                <td>Entre Vmek Hopper y Treater Hopper</td>
+                                <td>Controla flujo hacia tratamiento</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 3</strong></td>
+                                <td>Entre Treater Hopper y Output</td>
+                                <td>Controla flujo hacia salida final</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 3: DIAGRAMA DE FLUJO -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">3</span>
+                    <span class="section-title">DIAGRAMA DE FLUJO DEL PROCESO</span>
+                </div>
+                <div class="section-content">
+                    <div class="flow-diagram">
+                        <div class="flow-stages">
+                            <div class="flow-stage input">
+                                <div class="flow-stage-icon">🌽</div>
+                                <div class="flow-stage-name">INPUT / SHELLER</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-gate">GATE 1</div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-stage process">
+                                <div class="flow-stage-icon">📥</div>
+                                <div class="flow-stage-name">VMEK HOPPER</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-gate">GATE 2</div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-stage process">
+                                <div class="flow-stage-icon">🧪</div>
+                                <div class="flow-stage-name">TREATER HOPPER</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-gate">GATE 3</div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-stage output">
+                                <div class="flow-stage-icon">📦</div>
+                                <div class="flow-stage-name">FINAL OUTPUT</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">ℹ️</span>
+                        <div>
+                            <strong>Principio Fundamental:</strong> Solo puede haber UN material (MATID) por grupo/etapa. 
+                            No se permite la mezcla de materiales en ninguna etapa del proceso.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 4: RESPONSABILIDADES -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">4</span>
+                    <span class="section-title">RESPONSABILIDADES</span>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th style="width: 25%;">Rol</th>
+                            <th>Responsabilidades</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="role-badge role-operator">Operador</span>
+                                <br><small>(Input Station)</small>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Escanear cada grupo de material antes de ingresarlo al sistema</li>
+                                    <li>Confirmar el escaneo y liberar el material hacia el Sheller</li>
+                                    <li>Verificar que el Input Station esté vacío antes de escanear nuevo material</li>
+                                    <li>Comunicar al Receiver cualquier anomalía detectada</li>
+                                    <li>Mantener limpia el área de entrada</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="role-badge role-receiver">Receiver</span>
+                                <br><small>(Control Room)</small>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><strong>Control total del flujo de proceso</strong> mediante las compuertas (gates)</li>
+                                    <li>Monitorear el estado de cada etapa del proceso en tiempo real</li>
+                                    <li>Autorizar la apertura de compuertas cuando las condiciones son seguras</li>
+                                    <li>Iniciar y detener el sistema según sea necesario</li>
+                                    <li>Recibir y verificar el material procesado en la salida final</li>
+                                    <li>Mantener registro del log de operaciones</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="role-badge role-supervisor">Supervisor</span>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Verificar el cumplimiento de los procedimientos operacionales</li>
+                                    <li>Autorizar arranques después de paradas de emergencia</li>
+                                    <li>Revisar y aprobar los registros de producción</li>
+                                    <li>Coordinar mantenimiento preventivo y correctivo</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 5: PROCEDIMIENTO DE ARRANQUE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">5</span>
+                    <span class="section-title">PROCEDIMIENTO DE ARRANQUE DEL SISTEMA</span>
+                </div>
+                <div class="section-content">
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <strong>IMPORTANTE:</strong> Solo personal autorizado (Receiver o Supervisor) puede iniciar el sistema.
+                        </div>
+                    </div>
+                    
+                    <div class="step-procedure">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5>Inspección Visual Pre-Arranque</h5>
+                                <p>Verificar que todas las etapas del proceso estén vacías y limpias. Confirmar que no hay material residual de operaciones anteriores.</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5>Verificación de Compuertas</h5>
+                                <p>Confirmar que todas las compuertas (Gate 1, 2 y 3) están en posición CERRADA. El indicador debe mostrar color ROJO.</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5>Verificación del Panel de Control</h5>
+                                <p>En el Control Room, verificar que el indicador de estado del sistema muestre "SYSTEM STOPPED" con luz roja.</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h5>Comunicación con Input Station</h5>
+                                <p>Confirmar con el Operador en Input Station que está listo para iniciar operaciones y que el área está despejada.</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span> <span class="role-badge role-operator">Operador</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h5>Inicio del Sistema</h5>
+                                <p>Presionar el botón <strong>START</strong> en el panel de Receiver Control. El indicador cambiará a "SYSTEM ACTIVE" con luz verde pulsante.</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h5>Confirmación de Arranque</h5>
+                                <p>Verificar en el System Log que aparece el mensaje: "System Started. Receiver active and controlling flow."</p>
+                                <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 6: PROCEDIMIENTO OPERACIONAL -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">6</span>
+                    <span class="section-title">PROCEDIMIENTO OPERACIONAL ESTÁNDAR</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>6.1 Ingreso de Material (Input Station)</h4>
+                        <div class="step-procedure">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h5>Escaneo del Material</h5>
+                                    <p>Presionar el botón <strong>"1. Scan Group"</strong> para escanear el código del material. El sistema generará un MATID único (ej: MAT-XXX).</p>
+                                    <div class="step-role"><span class="role-badge role-operator">Operador</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h5>Verificación del Escaneo</h5>
+                                    <p>Verificar que el MATID aparece en la etapa Input/Sheller con indicador AMARILLO (pendiente de confirmación).</p>
+                                    <div class="step-role"><span class="role-badge role-operator">Operador</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h5>Confirmación y Liberación</h5>
+                                    <p>Presionar el botón <strong>"2. Confirm & Release"</strong> para confirmar el escaneo. El indicador cambiará a AZUL indicando material confirmado y listo para procesamiento.</p>
+                                    <div class="step-role"><span class="role-badge role-operator">Operador</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-danger">
+                            <span class="alert-icon">🚫</span>
+                            <div>
+                                <strong>PROHIBIDO:</strong> No escanear nuevo material si el Input/Sheller ya contiene material. El sistema bloqueará esta acción y mostrará alerta "Input Occupied".
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>6.2 Control de Flujo (Receiver Control)</h4>
+                        <div class="step-procedure">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h5>Monitoreo del Estado</h5>
+                                    <p>Observar el visualizador del proceso. Las compuertas listas para abrir mostrarán un indicador VERDE pulsante.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h5>Procesamiento Automático</h5>
+                                    <p>Presionar <strong>"Process Next Material"</strong> para que el sistema abra automáticamente la siguiente compuerta disponible.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h5>Control Manual de Compuertas (Opcional)</h5>
+                                    <p>Si es necesario, usar los botones individuales <strong>"Gate 1/2/3"</strong> para control manual de cada compuerta.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>6.3 Condiciones para Apertura de Compuertas</h4>
+                        <table>
+                            <tr>
+                                <th>Compuerta</th>
+                                <th>Condición para Abrir</th>
+                                <th>Resultado de Apertura</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 1</strong></td>
+                                <td>
+                                    ✓ Material confirmado en Input/Sheller<br>
+                                    ✓ Vmek Hopper VACÍO<br>
+                                    ✓ Sistema activo
+                                </td>
+                                <td>Material fluye de Input/Sheller → Vmek Hopper</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 2</strong></td>
+                                <td>
+                                    ✓ Material presente en Vmek Hopper<br>
+                                    ✓ Treater Hopper VACÍO<br>
+                                    ✓ Sistema activo
+                                </td>
+                                <td>Material fluye de Vmek Hopper → Treater Hopper</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gate 3</strong></td>
+                                <td>
+                                    ✓ Material presente en Treater Hopper<br>
+                                    ✓ Output VACÍO<br>
+                                    ✓ Sistema activo
+                                </td>
+                                <td>Material fluye de Treater Hopper → Final Output</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 7: PARADA DEL SISTEMA -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">7</span>
+                    <span class="section-title">PROCEDIMIENTO DE PARADA</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>7.1 Parada Normal</h4>
+                        <div class="step-procedure">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h5>Verificar Línea Vacía</h5>
+                                    <p>Confirmar que todo el material en proceso ha sido completado y la línea está vacía.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h5>Comunicar Parada</h5>
+                                    <p>Notificar al Operador en Input Station que el sistema será detenido.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h5>Detener Sistema</h5>
+                                    <p>Presionar el botón <strong>STOP</strong> en el panel de Receiver Control.</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h5>Verificar Estado</h5>
+                                    <p>Confirmar que todas las compuertas están cerradas y el indicador muestra "SYSTEM STOPPED".</p>
+                                    <div class="step-role"><span class="role-badge role-receiver">Receiver</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>7.2 Parada de Emergencia</h4>
+                        <div class="alert alert-danger">
+                            <span class="alert-icon">🚨</span>
+                            <div>
+                                <strong>EN CASO DE EMERGENCIA:</strong>
+                                <ol>
+                                    <li>Presionar inmediatamente el botón <strong>STOP</strong></li>
+                                    <li>El sistema cerrará automáticamente todas las compuertas</li>
+                                    <li>Notificar al Supervisor inmediatamente</li>
+                                    <li>No reiniciar sin autorización del Supervisor</li>
+                                    <li>Documentar el incidente en el log de operaciones</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 8: MANEJO DE ALERTAS -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">8</span>
+                    <span class="section-title">MANEJO DE ALERTAS Y ERRORES</span>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th style="width: 30%;">Alerta</th>
+                            <th style="width: 35%;">Causa</th>
+                            <th style="width: 35%;">Acción Correctiva</th>
+                        </tr>
+                        <tr>
+                            <td><strong>"Input Occupied"</strong></td>
+                            <td>Se intentó escanear nuevo material cuando el Input/Sheller ya tiene material</td>
+                            <td>Esperar a que el material actual sea procesado antes de escanear nuevo material</td>
+                        </tr>
+                        <tr>
+                            <td><strong>"Source Empty"</strong></td>
+                            <td>Se intentó abrir una compuerta sin material en la etapa origen</td>
+                            <td>Verificar que hay material listo para transferir antes de abrir la compuerta</td>
+                        </tr>
+                        <tr>
+                            <td><strong>"Destination Full"</strong></td>
+                            <td>Se intentó abrir una compuerta cuando la etapa destino tiene material</td>
+                            <td>Procesar el material en la etapa destino antes de transferir más material</td>
+                        </tr>
+                        <tr>
+                            <td><strong>"Not Confirmed"</strong></td>
+                            <td>Se intentó abrir Gate 1 sin confirmar el escaneo del material</td>
+                            <td>El Operador debe confirmar el escaneo usando "Confirm & Release"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>"System Stopped"</strong></td>
+                            <td>Se intentó operar compuertas con el sistema detenido</td>
+                            <td>Iniciar el sistema usando el botón START antes de operar</td>
+                        </tr>
+                        <tr>
+                            <td><strong>"Nothing to Process"</strong></td>
+                            <td>Se presionó "Process Next Material" sin material listo</td>
+                            <td>Escanear y confirmar nuevo material en Input Station</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 9: SEGURIDAD -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">9</span>
+                    <span class="section-title">NORMAS DE SEGURIDAD</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>9.1 Equipo de Protección Personal (EPP)</h4>
+                        <ul class="checklist">
+                            <li>Casco de seguridad en todo momento dentro del área de proceso</li>
+                            <li>Gafas de seguridad durante operaciones de escaneo e inspección</li>
+                            <li>Guantes de trabajo al manipular material</li>
+                            <li>Calzado de seguridad con punta de acero</li>
+                            <li>Protección auditiva en áreas designadas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>9.2 Prohibiciones</h4>
+                        <div class="alert alert-danger">
+                            <span class="alert-icon">🚫</span>
+                            <div>
+                                <ul style="margin: 0;">
+                                    <li>No introducir manos ni objetos en las compuertas mientras están abiertas</li>
+                                    <li>No bypassear los sensores de seguridad</li>
+                                    <li>No operar el sistema sin la capacitación requerida</li>
+                                    <li>No dejar el sistema operando sin supervisión</li>
+                                    <li>No mezclar materiales de diferentes lotes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4>9.3 Bloqueos de Seguridad del Sistema</h4>
+                        <table>
+                            <tr>
+                                <th>Bloqueo</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <td>Anti-mezcla</td>
+                                <td>El sistema no permite abrir una compuerta si la etapa destino ya contiene material</td>
+                            </tr>
+                            <tr>
+                                <td>Confirmación de escaneo</td>
+                                <td>Gate 1 no puede abrirse si el material no ha sido confirmado por el Operador</td>
+                            </tr>
+                            <tr>
+                                <td>Sistema inactivo</td>
+                                <td>Ninguna compuerta puede operarse si el sistema está detenido</td>
+                            </tr>
+                            <tr>
+                                <td>Cierre automático</td>
+                                <td>Al presionar STOP, todas las compuertas se cierran automáticamente</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 10: REGISTROS -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">10</span>
+                    <span class="section-title">REGISTROS Y DOCUMENTACIÓN</span>
+                </div>
+                <div class="section-content">
+                    <p>El sistema mantiene un registro automático (System Log) de todas las operaciones. Adicionalmente, se deben mantener los siguientes registros:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Registro</th>
+                            <th>Responsable</th>
+                            <th>Frecuencia</th>
+                            <th>Retención</th>
+                        </tr>
+                        <tr>
+                            <td>Bitácora de Producción</td>
+                            <td>Receiver</td>
+                            <td>Por turno</td>
+                            <td>2 años</td>
+                        </tr>
+                        <tr>
+                            <td>Registro de MATIDs Procesados</td>
+                            <td>Sistema (automático)</td>
+                            <td>Continuo</td>
+                            <td>5 años</td>
+                        </tr>
+                        <tr>
+                            <td>Registro de Incidentes</td>
+                            <td>Supervisor</td>
+                            <td>Por evento</td>
+                            <td>5 años</td>
+                        </tr>
+                        <tr>
+                            <td>Checklist Pre-Arranque</td>
+                            <td>Receiver</td>
+                            <td>Cada arranque</td>
+                            <td>1 año</td>
+                        </tr>
+                        <tr>
+                            <td>Registro de Mantenimiento</td>
+                            <td>Mantenimiento</td>
+                            <td>Por intervención</td>
+                            <td>3 años</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SECTION 11: CHECKLIST PRE-ARRANQUE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">11</span>
+                    <span class="section-title">CHECKLIST DE VERIFICACIÓN PRE-ARRANQUE</span>
+                </div>
+                <div class="section-content">
+                    <p><strong>Fecha:</strong> _________________ <strong>Turno:</strong> _________________ <strong>Receiver:</strong> _________________</p>
+                    
+                    <ul class="checklist">
+                        <li>Área de trabajo limpia y ordenada</li>
+                        <li>Input/Sheller vacío y limpio</li>
+                        <li>Vmek Hopper vacío y limpio</li>
+                        <li>Treater Hopper vacío y limpio</li>
+                        <li>Output vacío y limpio</li>
+                        <li>Gate 1 en posición CERRADA (indicador rojo)</li>
+                        <li>Gate 2 en posición CERRADA (indicador rojo)</li>
+                        <li>Gate 3 en posición CERRADA (indicador rojo)</li>
+                        <li>Panel de control funcionando correctamente</li>
+                        <li>Sistema de comunicación operativo</li>
+                        <li>Operador en Input Station presente y listo</li>
+                        <li>EPP completo verificado</li>
+                        <li>Sin condiciones inseguras detectadas</li>
+                    </ul>
+                    
+                    <div style="margin-top: 30px;">
+                        <p><strong>Observaciones:</strong></p>
+                        <div style="border: 1px solid var(--border); height: 80px; border-radius: 6px;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECTION 12: HISTORIAL DE REVISIONES -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">12</span>
+                    <span class="section-title">HISTORIAL DE REVISIONES</span>
+                </div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Versión</th>
+                            <th>Fecha</th>
+                            <th>Descripción del Cambio</th>
+                            <th>Autor</th>
+                        </tr>
+                        <tr>
+                            <td>1.0</td>
+                            <td>Diciembre 2024</td>
+                            <td>Emisión inicial del documento</td>
+                            <td>_________________</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- SIGNATURES -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-number">13</span>
+                    <span class="section-title">FIRMAS DE APROBACIÓN</span>
+                </div>
+                <div class="section-content">
+                    <div class="signature-grid">
+                        <div class="signature-box">
+                            <label>Elaborado por</label>
+                            <div class="signature-line"></div>
+                            <div class="name">_________________</div>
+                            <small>Fecha: ___/___/______</small>
+                        </div>
+                        <div class="signature-box">
+                            <label>Revisado por</label>
+                            <div class="signature-line"></div>
+                            <div class="name">_________________</div>
+                            <small>Fecha: ___/___/______</small>
+                        </div>
+                        <div class="signature-box">
+                            <label>Aprobado por</label>
+                            <div class="signature-line"></div>
+                            <div class="name">_________________</div>
+                            <small>Fecha: ___/___/______</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <div>
+                <strong>Syngenta Seeds</strong> | Sistema APL - Procesamiento de Maíz
+            </div>
+            <div class="footer-confidential">
+                DOCUMENTO CONFIDENCIAL - USO INTERNO
+            </div>
+            <div>
+                MOC-APL-001 v1.0 | Página 1 de 1
+            </div>
+        </div>
+    </div>
+</body>
+</html>

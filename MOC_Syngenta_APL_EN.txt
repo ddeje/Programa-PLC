@@ -1,0 +1,110 @@
+OPERATIONAL CONTROL METHOD (MOC)
+SYNGENTA CORN PROCESSING CONTROL SYSTEM (APL)
+
+Date: December 02, 2025
+System: Corn Processing Simulator (APL)
+Location: Processing Plant
+
+--------------------------------------------------------------------------------
+1. PURPOSE AND SCOPE
+This document establishes standard operating procedures for the safe and efficient control of material flow in the corn processing line, from the input (Sheller) to the final output, passing through the Vmek and Treatment (Treater) stages.
+
+--------------------------------------------------------------------------------
+2. SYSTEM DESCRIPTION
+The system is an automated processing line with centralized control.
+
+Process Stages:
+1. Input / Sheller: Batch reception and scanning.
+2. Vmek Hopper: Intermediate hopper.
+3. Treater Hopper: Chemical treatment hopper.
+4. Final Output: Finished product output.
+
+Control Mechanism:
+- 3 Digitally controlled Gates.
+
+Roles:
+- Operator (Input Station): Responsible for scanning and confirming new batches.
+- Receiver (Control Room): Responsible for global flow, gate operation, and monitoring.
+
+--------------------------------------------------------------------------------
+3. ROLES AND RESPONSIBILITIES
+
+ROLE: RECEIVER (Master Control)
+- Start/Stop the system.
+- Control material flow ("Process Next").
+- Manually operate gates if necessary.
+- Monitor the status of all hoppers.
+
+ROLE: OPERATOR (Input)
+- Scan new material groups.
+- Confirm batch integrity before release.
+- Ensure the input is not blocked.
+
+--------------------------------------------------------------------------------
+4. OPERATING PROCEDURES
+
+4.1. SYSTEM START-UP
+1. Verify there are no active alarm conditions.
+2. The Receiver must press the "START" button on the control panel.
+3. Confirm the status indicator changes to "SYSTEM ACTIVE" (green).
+4. Verify the system log states: "System Started. Receiver active and controlling flow."
+
+4.2. MATERIAL INPUT (INPUT STATION)
+1. The Operator verifies that the "Input / Sheller" stage is empty.
+2. Press the "1. Scan Group" button.
+   - The system will generate a unique batch ID (e.g., MAT-123).
+   - The status will change to "Pending" (yellow).
+3. The Operator verifies the data and presses "2. Confirm & Release".
+   - The batch is confirmed and ready to be processed by the Receiver.
+
+4.3. PROCESSING AND TRANSFER (NORMAL FLOW)
+The flow is controlled by the Receiver using the smart "Process Next Material" button.
+
+- Transfer Input -> Vmek (Gate 1):
+  Condition: Input has confirmed material AND Vmek is empty.
+  Action: Receiver activates Gate 1.
+
+- Transfer Vmek -> Treater (Gate 2):
+  Condition: Vmek has material AND Treater is empty.
+  Action: Receiver activates Gate 2.
+
+- Transfer Treater -> Output (Gate 3):
+  Condition: Treater has material AND Output is empty.
+  Action: Receiver activates Gate 3.
+
+4.4. SYSTEM SHUTDOWN
+1. The Receiver presses the "STOP" button.
+2. All gates (Gates 1, 2, and 3) will close automatically for safety.
+3. The status will change to "SYSTEM STOPPED" (red).
+4. Operation controls will be locked.
+
+--------------------------------------------------------------------------------
+5. INTERLOCKS AND SAFETY (CONTROL LOGIC)
+
+The system features the following automatic protections (Interlocks) to prevent errors:
+
+- Overfill Protection (Destination Full): A gate cannot be opened if the destination stage already has material.
+- Empty Source Protection (Source Empty): A gate cannot be opened if the source stage has no material.
+- Confirmation Lock: Material at the input cannot move until the Operator has confirmed it ("Confirm Scan").
+- Emergency Stop: Pressing STOP immediately halts all flow.
+
+--------------------------------------------------------------------------------
+6. ABNORMALITY MANAGEMENT
+
+Condition: "Input Occupied"
+Action: The Operator attempts to scan but there is already material. Must wait for the Receiver to move the current material.
+
+Condition: "Destination Full"
+Action: The Receiver attempts to move material but the next hopper is full. Must empty the next hopper first (forward flow).
+
+Condition: Power Failure
+Action: The system defaults to "STOPPED" state upon restart.
+
+--------------------------------------------------------------------------------
+7. ASSISTANCE SYSTEM (AI)
+The system includes an integrated "Syngenta AI" assistant.
+- Usage: Consult regarding current status or procedures.
+- Configuration: Requires Gemini API Key configured in the settings menu.
+
+--------------------------------------------------------------------------------
+End of Document
