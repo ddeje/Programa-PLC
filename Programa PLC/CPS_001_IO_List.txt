@@ -1,0 +1,157 @@
+================================================================================
+                    CPS_001 - CORN PROCESSING SYSTEM
+                         I/O DOCUMENTATION
+                    Fecha: December 3, 2025
+================================================================================
+
+HARDWARE CONFIGURATION
+----------------------
+PLC: Allen-Bradley CompactLogix 5069-L310ER
+Software: RSLogix 5000 v37.00
+Project: CPS_001
+
+I/O MODULES:
+  Slot 0: 5069-L310ER - CPU (EtherNet/IP Dual-Port)
+  Slot 1: 5069-IB16/A - Digital Input 16-point (Local:1:I)
+  Slot 2: 5069-IB16/A - Digital Input 16-point (Local:2:I)
+  Slot 3: 5069-OB16/B - Digital Output 16-point (Local:3:O)
+
+================================================================================
+                         DIGITAL INPUTS - SLOT 1
+                         Module: 5069-IB16/A (Local:1:I)
+================================================================================
+Point | Tag Name                    | Description
+------|-----------------------------|-----------------------------------------
+Pt00  | AEC_Sheller_ON              | AEC Sheller Running Status
+Pt01  | Compressed_Air              | Compressed Air Pressure OK
+Pt02  | Dust_Colletor_ON            | Dust Collector Running Status
+Pt03  | Seed_Treater_R12_Running    | R12 Seed Treater Running Status
+Pt04  | Material_Gate_Open_Pos      | Material Gate Open Position Sensor
+Pt05  | Material_Gate_Close_Pos     | Material Gate Closed Position Sensor
+Pt06  | (Available)                 | Not Assigned
+Pt07  | AEC_Material_Sensor         | AEC Hopper Material Detection Sensor
+Pt08  | Aspiration_Gate_Open        | Aspiration Gate Open Position Sensor
+Pt09  | Aspiration_Gate_Close       | Aspiration Gate Closed Position Sensor
+Pt10  | Aspiartor_Hopper_Sensor     | Aspirator Hopper Material Sensor
+Pt11  | R12_Hopper_Sensor           | R12 Hopper Material Detection Sensor
+Pt12  | R12_Gate_Open_Pos           | R12 Gate Open Position Sensor
+Pt13  | R12_Gate_Close_Pos          | R12 Gate Closed Position Sensor
+Pt14  | R12_Ready                   | R12 System Ready Signal
+Pt15  | R12_Envelop_Present_Sensor  | R12 Envelope Present Sensor
+
+================================================================================
+                         DIGITAL INPUTS - SLOT 2
+                         Module: 5069-IB16/A (Local:2:I)
+================================================================================
+Point | Tag Name                        | Description
+------|---------------------------------|-------------------------------------
+Pt00  | Aspirator_Hooper_Gate_Close_Pos | Aspirator Hopper Gate Closed Position
+Pt01  | Aspirator_Hooper_Gate_Open_Pos  | Aspirator Hopper Gate Open Position
+Pt02  | (Available)                     | Not Assigned
+Pt03  | (Available)                     | Not Assigned
+Pt04  | (Available)                     | Not Assigned
+Pt05  | (Available)                     | Not Assigned
+Pt06  | (Available)                     | Not Assigned
+Pt07  | (Available)                     | Not Assigned
+Pt08  | (Available)                     | Not Assigned
+Pt09  | (Available)                     | Not Assigned
+Pt10  | (Available)                     | Not Assigned
+Pt11  | (Available)                     | Not Assigned
+Pt12  | (Available)                     | Not Assigned
+Pt13  | (Available)                     | Not Assigned
+Pt14  | (Available)                     | Not Assigned
+Pt15  | (Available)                     | Not Assigned
+
+================================================================================
+                         DIGITAL OUTPUTS - SLOT 3
+                         Module: 5069-OB16/B (Local:3:O)
+================================================================================
+Point | Tag Name                  | Description
+------|---------------------------|-------------------------------------------
+Pt00  | AEC_Sheller_Run_Command   | AEC Sheller Start Command
+Pt01  | AEC_Sheller_Stop_Command  | AEC Sheller Stop Command
+Pt02  | R12_Start_Command         | R12 Seed Treater Start Command
+Pt03  | Material_Gate_Open        | Material/Feeder Gate Open Command
+Pt04  | Air_Conveyor              | Air Conveyor Run Command
+Pt05  | Aspirator_Hopper_Gate     | Aspirator Hopper Gate Open Command
+Pt06  | Aspirator_Gate            | Aspirator Gate Open Command
+Pt07  | R12_Hooper_gate           | R12 Hopper Gate Open Command
+Pt08  | (Available)               | Not Assigned
+Pt09  | (Available)               | Not Assigned
+Pt10  | (Available)               | Not Assigned
+Pt11  | (Available)               | Not Assigned
+Pt12  | (Available)               | Not Assigned
+Pt13  | (Available)               | Not Assigned
+Pt14  | (Available)               | Not Assigned
+Pt15  | (Available)               | Not Assigned
+
+================================================================================
+                         NETWORK COMMUNICATION
+================================================================================
+
+PLC IP CONFIGURATION:
+---------------------
+  PLC IP Address (Port A1): 192.168.101.96
+  Subnet Mask: 255.255.255.0
+  EtherNet/IP Mode: A1/A2 Dual-IP
+
+OPC UA SERVER (VMEK COUNTER):
+-----------------------------
+  Address: opc.tcp://192.168.101.105:55532
+  
+  Key Tags Used:
+    - Status_Heartbeat        : VMEK System Heartbeat
+    - Status_SampleComplete   : Sample Processing Complete Flag
+    - Recipe_Selected         : Current Recipe Selection
+    - Recipe_ListRecipes      : Available Recipes List
+    - IO_Outputs_Ready        : VMEK Ready Status
+    - IO_Inputs_SampleName    : Sample Name Input (Write)
+
+MODBUS TCP (NOT IN USE - RESERVED FOR FUTURE):
+----------------------------------------------
+  Server Address: 192.168.101.106
+  Port: 502
+  Note: Previously used for R12 Seed Treater communication
+
+================================================================================
+                              I/O SUMMARY
+================================================================================
+
+INPUTS USAGE:
+  Slot 1 (Local:1:I): 15 of 16 points used (94%)
+  Slot 2 (Local:2:I):  2 of 16 points used (13%)
+  ----------------------------------------
+  Total Inputs Used:  17 of 32 points (53%)
+  Available Inputs:   15 points
+
+OUTPUTS USAGE:
+  Slot 3 (Local:3:O):  8 of 16 points used (50%)
+  ----------------------------------------
+  Total Outputs Used:  8 of 16 points (50%)
+  Available Outputs:   8 points
+
+================================================================================
+                         KNOWN ISSUES / NOTES
+================================================================================
+
+1. SPELLING INCONSISTENCY: 
+   Several tags use "Hooper" instead of "Hopper". 
+   Examples: Aspirator_Hooper_Gate_Close_Pos, R12_Hooper_gate
+   Recommendation: Verify with original programmer before correcting.
+
+2. DUPLICATE ALIAS on Pt02:
+   Both R12_Run and R12_Start_Command point to Local:3:O.Pt02.Data
+   Recommendation: Use only one tag name for clarity.
+
+3. TYPO in Tag Name:
+   "Aspiartor_Hopper_Sensor" should be "Aspirator_Hopper_Sensor"
+   "Dust_Colletor_ON" should be "Dust_Collector_ON"
+
+================================================================================
+                         REVISION HISTORY
+================================================================================
+Rev  | Date       | Author    | Description
+-----|------------|-----------|------------------------------------------------
+1.0  | 2025-12-03 | -         | Initial I/O documentation created from L5K
+
+================================================================================

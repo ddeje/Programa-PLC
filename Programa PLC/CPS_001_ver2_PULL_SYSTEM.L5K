@@ -1,0 +1,725 @@
+(*
+================================================================================
+    CPS_001 - CORN PROCESSING SYSTEM
+    Version 2.0 - PULL SYSTEM Implementation
+    
+    Based on: CORN_PROCESSING_SOP_V2
+    Date: December 3, 2025
+    
+    CHANGES FROM V1:
+    - Implemented PULL system (cascade from Group 4 to Group 1)
+    - SEQUENTIAL gate opening (NEVER simultaneous - prevents mixing)
+    - Manual operator workflow with "Batch Ready" button
+    - Automatic gate closing when no material detected
+    - Added Emergency Stop logic
+    
+    CRITICAL RULE: Groups must NEVER mix. Only ONE gate opens at a time.
+    Material flows: Group1 → Group2 → Group3 → Group4
+    Gates open in REVERSE: Gate4(R12) → Gate3(Aspirator) → Gate2(Material)
+================================================================================
+*)
+
+================================================================================
+                    PROPOSED LADDER LOGIC - PSEUDOCODE
+                    Version 2.1 - SEQUENTIAL (NO SIMULTANEOUS)
+                    For Review Before Implementation
+================================================================================
+
+
+================================================================================
+SECTION 0: OPERATOR WORKFLOW (MANUAL FEEDING STATION)
+================================================================================
+
+(*
+    WORKFLOW DEL OPERADOR EN ESTACIÓN DE ALIMENTACIÓN:
+    
+    1. Operador escanea código de barras del lote
+    2. Sistema registra: Producto, Lote, Cantidad
+    3. Operador carga material físicamente en la bandeja
+    4. Operador presiona botón "BATCH_READY" cuando termina de cargar
+    5. Sistema valida que todo esté listo
+    6. Ciclo comienza automáticamente (si todas las condiciones OK)
+    
+    COMUNICACIÓN OPERADOR ALIMENTACIÓN ↔ OPERADOR RECEPCIÓN:
+    - Luces indicadoras en ambas estaciones
+    - HMI muestra estado del lote en tránsito
+    - Operador de recepción ve qué producto viene
+*)
+
+RUNG 0.1: Operator Scans Barcode
+    (* Barcode scanner input - existing logic in _02_BarCode_Scanner *)
+    (* Sets: Product_Code, Lot_Number, etc. *)
+    ----|  |-------------------------------------------------(OTE)----
+    Barcode_Valid                                          Barcode_Scanned
+    (From scanner routine)
+
+
+RUNG 0.2: Batch Ready Button (Operator presses when loading complete)
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+Barcode_    BATCH_READY    Material_On                    Batch_Ready_Latched
+Scanned     _Button        _Tray
+            (HMI/Physical) (Optional sensor or assumed TRUE)
+    
+    ----| /|---------------------------------------------------
+        Cycle_Active
+        (Cannot set ready during active cycle)
+    
+    ----|  |---------------------------------------------------
+    Batch_Ready_Latched (Seal-in/Latch)
+
+
+RUNG 0.3: Clear Batch Ready when cycle completes
+----|  |-----------------------------------------------------(OTU)----
+Cycle_Complete                                             Batch_Ready_Latched
+(Reset for next batch)
+
+    ----|  |-------------------------------------------------(OTU)----
+    Cycle_Complete                                         Barcode_Scanned
+
+
+================================================================================
+SECTION 1: GROUP STATUS DETECTION
+================================================================================
+
+(*
+    DEFINICIÓN DE GRUPOS:
+    
+    Group 1 = Feeder Tray (Bandeja de alimentación manual)
+              Sensor: Batch_Ready_Latched (operador indica que hay material)
+              
+    Group 2 = Sheller + Air Conveyor + Aspirator
+              Sensor: AEC_Material_Sensor
+              
+    Group 3 = Aspirator Hopper (hacia VMEK)
+              Sensor: Aspiartor_Hopper_Sensor
+              
+    Group 4 = R12 Seed Treater Hopper
+              Sensor: R12_Hopper_Sensor
+    
+    REGLA: Group EMPTY = Sensor FALSE por 3 segundos
+*)
+
+RUNG 1.1: Group 1 Status (Feeder Tray - Manual)
+    (* Group 1 is special - controlled by operator button *)
+    (* Group1_Empty = Operator has NOT pressed Batch_Ready *)
+----| /|-----------------------------------------------------(OTE)----
+    Batch_Ready_Latched                                    Group1_Empty
+    (No batch ready = Group 1 is empty)
+
+
+RUNG 1.2: Group 2 Empty Detection (Sheller/Conveyor/Aspirator)
+----| /|-----------------------------------------------------(TON)----
+    AEC_Material_Sensor                                  Group2_Empty_Dly
+    (No material detected)                                    PRE: 3000ms
+    
+    ----|DN|-------------------------------------------------(OTE)----
+    Group2_Empty_Dly.DN                                   Group2_Empty
+
+
+RUNG 1.3: Group 3 Empty Detection (Aspirator Hopper)
+----| /|-----------------------------------------------------(TON)----
+    Aspiartor_Hopper_Sensor                              Group3_Empty_Dly
+    (No material in aspirator hopper)                         PRE: 3000ms
+    
+    ----|DN|-------------------------------------------------(OTE)----
+    Group3_Empty_Dly.DN                                   Group3_Empty
+
+
+RUNG 1.4: Group 4 Empty Detection (R12 Hopper)
+----| /|-----------------------------------------------------(TON)----
+    R12_Hopper_Sensor                                    Group4_Empty_Dly
+    (No material in R12 hopper)                               PRE: 3000ms
+    
+    ----|DN|-------------------------------------------------(OTE)----
+    Group4_Empty_Dly.DN                                   Group4_Empty
+
+
+RUNG 1.5: Group Has Material Flags (inverse of Empty, for clarity)
+----|  |-----------------------------------------------------(OTE)----
+    Batch_Ready_Latched                                   Group1_Has_Material
+
+----| /|-----------------------------------------------------(OTE)----
+    Group2_Empty                                          Group2_Has_Material
+
+----| /|-----------------------------------------------------(OTE)----
+    Group3_Empty                                          Group3_Has_Material
+
+----| /|-----------------------------------------------------(OTE)----
+    Group4_Empty                                          Group4_Has_Material
+
+
+================================================================================
+SECTION 2: SYSTEM READY CONDITIONS
+================================================================================
+
+RUNG 2.1: System Ready (CPS_RDY)
+----|  |-------|  |-------|  |-------|  |-----------------(OTE)----
+Compressed_   Dust_       AEC_        VMEK_Rdy             CPS_RDY
+Air           Collector   Sheller
+              _ON         _ON
+
+
+RUNG 2.2: Cycle Start Enable Conditions
+(*
+    Para iniciar ciclo se requiere:
+    - Sistema listo (CPS_RDY)
+    - Group 4 vacío (destino final listo)
+    - R12 listo para recibir
+    - Sobre/envelope presente en R12
+    - Operador ha indicado batch listo
+*)
+----|  |-------|  |-------|  |-------|  |-------|  |------(OTE)----
+CPS_RDY   Group4_   R12_      R12_Envelop  Batch_Ready   Cycle_Start_Enabled
+          Empty     Ready     _Present     _Latched
+                              _Sensor
+
+================================================================================
+SECTION 3: SEQUENTIAL PULL SEQUENCE (CRITICAL - NO MIXING)
+================================================================================
+
+(*
+    ⚠️⚠️⚠️ REGLA CRÍTICA: NUNCA MEZCLAR GRUPOS ⚠️⚠️⚠️
+    
+    Solo UNA compuerta puede estar abierta a la vez.
+    El material debe pasar completamente de un grupo al siguiente
+    antes de que la siguiente compuerta pueda abrir.
+    
+    SECUENCIA (de atrás hacia adelante):
+    
+    PASO 1: Abrir R12_Hopper_Gate (Group3 → Group4)
+            Condición: Group4 Empty + R12 Ready
+            Esperar: Hasta que Group3 Empty
+            
+    PASO 2: Abrir Aspirator_Hopper_Gate (Group2 → Group3)  
+            Condición: Group3 Empty (paso 1 completado)
+            Esperar: Hasta que Group2 Empty
+            
+    PASO 3: Abrir Material_Gate + Air_Conveyor + Aspirator_Gate (Group1 → Group2)
+            Condición: Group2 Empty (paso 2 completado)
+            Esperar: Hasta que Group1 Empty
+            
+    PASO 4: Ciclo completo, esperar siguiente batch
+*)
+
+
+(* --- CYCLE STATE MACHINE --- *)
+
+RUNG 3.1: Start Cycle (Rising Edge on Start Button)
+----|  |-------|  |-------|P|-----------------------------(OTE)----
+Cycle_Start    START_       One_Shot                      Cycle_Active
+_Enabled       Button       _Start
+               (HMI)
+
+    ----|  |---------------------------------------------------
+    Cycle_Active (Seal-in latch)
+
+    ----| /|---------------------------------------------------
+        Cycle_Complete
+        (Reset when cycle done)
+
+
+RUNG 3.2: Initialize Step Counter on Cycle Start
+----|P|------------------------------------------------------(MOV)----
+Cycle_Active                                               Source: 1
+(Rising edge - cycle just started)                         Dest: Cycle_Step
+
+
+(* --- STEP 1: R12 Hopper Gate (Group3 → Group4) --- *)
+
+RUNG 3.3: Step 1 - Open R12_Hopper_Gate
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+Cycle_    Cycle_Step   Group4_                            Step1_Active
+Active    = 1          Empty
+                       (Destination ready)
+
+    ----|  |-------------------------------------------------(OTE)----
+    Step1_Active                                          R12_Hopper_Gate
+                                                          (OPEN)
+
+
+RUNG 3.4: Step 1 Complete - Material transferred to Group4
+----|  |-------|  |----------------------------------------(MOV)----
+Step1_     Group3_                                        Source: 2
+Active     Empty                                          Dest: Cycle_Step
+           (Source empty = transfer done)
+
+
+(* --- STEP 2: Aspirator Hopper Gate (Group2 → Group3) --- *)
+
+RUNG 3.5: Step 2 - Open Aspirator_Hopper_Gate
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+Cycle_    Cycle_Step   Group3_                            Step2_Active
+Active    = 2          Empty
+                       (Destination ready)
+
+    ----|  |-------------------------------------------------(OTE)----
+    Step2_Active                                          Aspirator_Hopper_Gate
+                                                          (OPEN)
+
+
+RUNG 3.6: Step 2 Complete - Material transferred to Group3
+----|  |-------|  |----------------------------------------(MOV)----
+Step2_     Group2_                                        Source: 3
+Active     Empty                                          Dest: Cycle_Step
+           (Source empty = transfer done)
+
+
+(* --- STEP 3: Material Gate + Air Conveyor + Aspirator Gate (Group1 → Group2) --- *)
+
+RUNG 3.7: Step 3 - Open Material_Gate (and synchronized equipment)
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+Cycle_    Cycle_Step   Group2_                            Step3_Active
+Active    = 3          Empty
+                       (Destination ready)
+
+    ----|  |-------------------------------------------------(OTE)----
+    Step3_Active                                          Material_Gate_Open
+                                                          (OPEN)
+
+    ----|  |-------------------------------------------------(OTE)----
+    Step3_Active                                          Air_Conveyor
+                                                          (ON - synchronized)
+
+    ----|  |-------------------------------------------------(OTE)----
+    Step3_Active                                          Aspirator_Gate
+                                                          (ON - synchronized)
+
+
+RUNG 3.8: Step 3 Complete - Material transferred to Group2
+----|  |-------|  |----------------------------------------(MOV)----
+Step3_     Group1_                                        Source: 4
+Active     Empty                                          Dest: Cycle_Step
+           (Source empty = transfer done)
+
+
+(* --- STEP 4: Cycle Complete --- *)
+
+RUNG 3.9: Step 4 - All material transferred, wait for Groups to empty
+----|  |-------|  |-------|  |-------|  |-------|  |------(OTE)----
+Cycle_    Cycle_Step   Group1_   Group2_   Group3_        Waiting_For
+Active    = 4          Empty     Empty     Empty          _Group4_Empty
+                                                          (All upstream empty)
+
+
+RUNG 3.10: Cycle Complete - All Groups Empty
+----|  |-------|  |----------------------------------------(OTE)----
+Waiting_For   Group4_                                     Cycle_Complete
+_Group4_Empty Empty
+              (Final group processed)
+
+
+RUNG 3.11: Reset Cycle
+----|  |-----------------------------------------------------(OTU)----
+Cycle_Complete                                             Cycle_Active
+
+    ----|  |-------------------------------------------------(MOV)----
+    Cycle_Complete                                        Source: 0
+                                                          Dest: Cycle_Step
+
+
+================================================================================
+SECTION 4: GATE AUTO-CLOSE LOGIC
+================================================================================
+
+(*
+    Las compuertas cierran automáticamente cuando:
+    - El paso ya no está activo, O
+    - No hay material pasando por X segundos
+*)
+
+RUNG 4.1: R12_Hopper_Gate Close
+----| /|-----------------------------------------------------(OTU)----
+    Step1_Active                                          R12_Hopper_Gate
+    (Step 1 not active = close gate)
+
+
+RUNG 4.2: Aspirator_Hopper_Gate Close
+----| /|-----------------------------------------------------(OTU)----
+    Step2_Active                                          Aspirator_Hopper_Gate
+    (Step 2 not active = close gate)
+
+
+RUNG 4.3: Material_Gate Close (and synchronized equipment)
+----| /|-----------------------------------------------------(OTU)----
+    Step3_Active                                          Material_Gate_Open
+    (Step 3 not active = close gate)
+
+    ----| /|-------------------------------------------------(OTU)----
+        Step3_Active                                      Air_Conveyor
+
+    ----| /|-------------------------------------------------(OTU)----
+        Step3_Active                                      Aspirator_Gate
+
+
+================================================================================
+SECTION 5: R12 PERMIT SIGNAL
+================================================================================
+
+RUNG 5.1: R12_Permit Output
+(*
+    R12_Permit se activa cuando hay material en el R12 Hopper
+    y el sistema está listo para que R12 procese
+*)
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+R12_Hopper   R12_Ready   CPS_RDY                          R12_Permit
+_Sensor                                                   (Output to R12)
+(Material 
+present)
+
+
+================================================================================
+SECTION 6: OPERATOR COMMUNICATION INDICATORS
+================================================================================
+
+(*
+    INDICADORES PARA OPERADOR DE ALIMENTACIÓN (FEEDING STATION):
+*)
+
+RUNG 6.1: Ready to Load Indicator (Green Light)
+----|  |-------|  |----------------------------------------(OTE)----
+Cycle_Start   Barcode_                                    Ready_To_Load_Light
+_Enabled      Scanned                                     (Green - can load)
+              (Waiting for batch)
+
+    ----| /|---------------------------------------------------
+        Batch_Ready_Latched
+        (Turn off when batch marked ready)
+
+
+RUNG 6.2: Cycle In Progress Indicator (Yellow Light)  
+----|  |-----------------------------------------------------(OTE)----
+Cycle_Active                                               Cycle_In_Progress_Light
+                                                           (Yellow - processing)
+
+
+RUNG 6.3: Cycle Complete Indicator (Blue Light - Ready for next)
+----|  |-----------------------------------------------------(OTE)----
+Cycle_Complete                                             Cycle_Complete_Light
+                                                           (Blue - done)
+
+
+(*
+    INDICADORES PARA OPERADOR DE RECEPCIÓN (R12 STATION):
+*)
+
+RUNG 6.4: Material Incoming Warning
+----|  |-----------------------------------------------------(OTE)----
+Group3_Has_Material                                        Material_Incoming_Light
+                                                           (Material approaching R12)
+
+
+RUNG 6.5: R12 Processing
+----|  |-----------------------------------------------------(OTE)----
+Group4_Has_Material                                        R12_Processing_Light
+                                                           (R12 has material)
+
+
+================================================================================
+SECTION 7: EMERGENCY STOP
+================================================================================
+
+RUNG 7.1: Emergency Stop Conditions
+----| /|-----------------------------------------------------(OTE)----
+    Compressed_Air                                        E_Stop_Condition
+    (No air pressure)
+
+    ----| /|-------------------------------------------------[Branch]
+        Dust_Colletor_ON
+        (Dust collector off)
+
+    ----| /|-------------------------------------------------[Branch]
+        VMEK_Heartbeat
+        (OPC connection lost - future use)
+
+    ----|  |-------------------------------------------------[Branch]
+        E_Stop_Button
+        (Manual E-Stop)
+
+
+RUNG 7.2: E-Stop Latch (requires manual reset)
+----|  |-----------------------------------------------------(OTE)----
+E_Stop_Condition                                           E_Stop_Active
+
+    ----|  |---------------------------------------------------
+    E_Stop_Active (Seal-in latch)
+
+    ----| /|---------------------------------------------------
+        E_Stop_Reset
+        (Manual reset button)
+
+
+RUNG 7.3: E-Stop Actions - Disable Cycle Start
+----|  |-----------------------------------------------------(OTU)----
+E_Stop_Active                                             Cycle_Start_Enabled
+
+
+RUNG 7.4: E-Stop Actions - Stop All Gates (Optional: Hold or Close)
+(*
+    OPCIÓN 1: Hold gates in current position (no action needed)
+    OPCIÓN 2: Close all gates immediately (uncomment below)
+*)
+(*
+----|  |-----------------------------------------------------(OTU)----
+E_Stop_Active                                             R12_Hopper_Gate
+
+    ----|  |-------------------------------------------------(OTU)----
+    E_Stop_Active                                         Aspirator_Hopper_Gate
+
+    ----|  |-------------------------------------------------(OTU)----
+    E_Stop_Active                                         Material_Gate_Open
+
+    ----|  |-------------------------------------------------(OTU)----
+    E_Stop_Active                                         Air_Conveyor
+
+    ----|  |-------------------------------------------------(OTU)----
+    E_Stop_Active                                         Aspirator_Gate
+*)
+
+
+RUNG 7.5: E-Stop Reset Conditions
+----|  |-------|  |-------|  |-----------------------------(OTE)----
+Compressed   Dust_       E_Stop_                          E_Stop_Reset_OK
+_Air         Collector   _Reset_Button
+             _ON         (HMI/Physical)
+
+
+RUNG 7.6: E-Stop Reset Execution
+----|  |-------|  |----------------------------------------(OTU)----
+E_Stop_Reset  E_Stop_                                     E_Stop_Active
+_OK           _Reset_Button
+
+
+================================================================================
+SECTION 8: HMI INTERFACE TAGS
+================================================================================
+
+(*
+    TAGS PARA HMI - LECTURA (PLC → HMI):
+    
+    STATUS:
+    - CPS_RDY                    : Sistema listo
+    - Cycle_Start_Enabled        : Puede iniciar ciclo
+    - Cycle_Active               : Ciclo en progreso
+    - Cycle_Complete             : Ciclo terminado
+    - Cycle_Step                 : Paso actual (1-4)
+    - E_Stop_Active              : Parada de emergencia activa
+    
+    GROUPS:
+    - Group1_Empty / Group1_Has_Material
+    - Group2_Empty / Group2_Has_Material
+    - Group3_Empty / Group3_Has_Material
+    - Group4_Empty / Group4_Has_Material
+    
+    GATES (feedback):
+    - Material_Gate_Open_Pos / Material_Gate_Close_Pos
+    - R12_Gate_Open_Pos / R12_Gate_Close_Pos
+    - Aspirator_Hopper_Gate_Open_Pos / Aspirator_Hopper_Gate_Close_Pos
+    
+    LIGHTS:
+    - Ready_To_Load_Light
+    - Cycle_In_Progress_Light
+    - Cycle_Complete_Light
+    - Material_Incoming_Light
+    - R12_Processing_Light
+    
+    
+    TAGS PARA HMI - ESCRITURA (HMI → PLC):
+    
+    - START_Button               : Iniciar ciclo
+    - BATCH_READY_Button         : Operador indica batch listo
+    - E_Stop_Reset_Button        : Reset de parada emergencia
+    - Supervisor_Override        : Override de supervisor (futuro)
+*)
+
+
+================================================================================
+                    NEW TAGS REQUIRED
+================================================================================
+
+(* --- Operator Workflow Tags --- *)
+Barcode_Scanned : BOOL := 0;
+Barcode_Valid : BOOL := 0;
+BATCH_READY_Button : BOOL := 0;        (* From HMI/Physical button *)
+Batch_Ready_Latched : BOOL := 0;
+Material_On_Tray : BOOL := 1;          (* Assumed TRUE or from sensor *)
+
+(* --- Group Status Tags --- *)
+Group1_Empty : BOOL := 1;
+Group2_Empty : BOOL := 1;
+Group3_Empty : BOOL := 1;
+Group4_Empty : BOOL := 1;
+
+Group1_Has_Material : BOOL := 0;
+Group2_Has_Material : BOOL := 0;
+Group3_Has_Material : BOOL := 0;
+Group4_Has_Material : BOOL := 0;
+
+Group2_Empty_Dly : TIMER := [0, 3000, 0];
+Group3_Empty_Dly : TIMER := [0, 3000, 0];
+Group4_Empty_Dly : TIMER := [0, 3000, 0];
+
+(* --- Cycle Control Tags --- *)
+CPS_RDY : BOOL := 0;
+Cycle_Start_Enabled : BOOL := 0;
+START_Button : BOOL := 0;              (* From HMI *)
+One_Shot_Start : BOOL := 0;
+Cycle_Active : BOOL := 0;
+Cycle_Step : DINT := 0;                (* 0=Idle, 1-4=Steps *)
+Step1_Active : BOOL := 0;
+Step2_Active : BOOL := 0;
+Step3_Active : BOOL := 0;
+Waiting_For_Group4_Empty : BOOL := 0;
+Cycle_Complete : BOOL := 0;
+
+(* --- Emergency Stop Tags --- *)
+E_Stop_Condition : BOOL := 0;
+E_Stop_Button : BOOL := 0;             (* Physical E-Stop input *)
+E_Stop_Active : BOOL := 0;
+E_Stop_Reset_Button : BOOL := 0;       (* From HMI/Physical *)
+E_Stop_Reset_OK : BOOL := 0;
+VMEK_Heartbeat : BOOL := 0;            (* From OPC UA - future *)
+
+(* --- Indicator Light Tags --- *)
+Ready_To_Load_Light : BOOL := 0;
+Cycle_In_Progress_Light : BOOL := 0;
+Cycle_Complete_Light : BOOL := 0;
+Material_Incoming_Light : BOOL := 0;
+R12_Processing_Light : BOOL := 0;
+
+(* --- Supervisor Tags --- *)
+Supervisor_Override : BOOL := 0;       (* From HMI - future *)
+
+
+================================================================================
+                    I/O MAPPING CONFIRMATION
+================================================================================
+
+DIGITAL INPUTS - Slot 1 (Local:1:I):
+  Pt00 = AEC_Sheller_ON              → System ready condition
+  Pt01 = Compressed_Air              → System ready condition
+  Pt02 = Dust_Colletor_ON            → System ready condition
+  Pt03 = Seed_Treater_R12_Running    → R12 status
+  Pt04 = Material_Gate_Open_Pos      → Gate feedback
+  Pt05 = Material_Gate_Close_Pos     → Gate feedback
+  Pt07 = AEC_Material_Sensor         → Group 2 detection
+  Pt08 = Aspiration_Gate_Open        → Gate feedback
+  Pt09 = Aspiration_Gate_Close       → Gate feedback
+  Pt10 = Aspiartor_Hopper_Sensor     → Group 3 detection
+  Pt11 = R12_Hopper_Sensor           → Group 4 detection
+  Pt12 = R12_Gate_Open_Pos           → Gate feedback
+  Pt13 = R12_Gate_Close_Pos          → Gate feedback
+  Pt14 = R12_Ready                   → R12 ready for material
+  Pt15 = R12_Envelop_Present_Sensor  → Envelope at R12
+
+DIGITAL INPUTS - Slot 2 (Local:2:I):
+  Pt00 = Aspirator_Hopper_Gate_Close_Pos → Gate feedback
+  Pt01 = Aspirator_Hopper_Gate_Open_Pos  → Gate feedback
+
+DIGITAL OUTPUTS - Slot 3 (Local:3:O):
+  Pt00 = AEC_Sheller_Run_Command     → (Manual/future)
+  Pt01 = AEC_Sheller_Stop_Command    → (Manual/future)
+  Pt02 = R12_Permit                  → Permit R12 to process
+  Pt03 = Material_Gate_Open          → Step 3 output
+  Pt04 = Air_Conveyor                → Step 3 output (synchronized)
+  Pt05 = Aspirator_Hopper_Gate       → Step 2 output
+  Pt06 = Aspirator_Gate              → Step 3 output (synchronized)
+  Pt07 = R12_Hopper_Gate             → Step 1 output
+
+
+================================================================================
+                    SEQUENCE DIAGRAM
+================================================================================
+
+    INICIO
+       │
+       ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │  OPERADOR ESCANEA CÓDIGO DE BARRAS                          │
+    │  Barcode_Valid = TRUE                                        │
+    └─────────────────────────────────────────────────────────────┘
+       │
+       ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │  OPERADOR CARGA MATERIAL EN BANDEJA                          │
+    │  Presiona BATCH_READY_Button cuando termina                  │
+    └─────────────────────────────────────────────────────────────┘
+       │
+       ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │  SISTEMA VERIFICA CONDICIONES:                               │
+    │  - CPS_RDY (Air, Dust Collector, Sheller, VMEK)             │
+    │  - Group4_Empty (R12 hopper vacío)                          │
+    │  - R12_Ready (R12 listo)                                    │
+    │  - R12_Envelope_Present (sobre presente)                    │
+    │  - Batch_Ready_Latched (operador confirmó)                  │
+    │                                                              │
+    │  Si TODO OK → Cycle_Start_Enabled = TRUE                    │
+    └─────────────────────────────────────────────────────────────┘
+       │
+       ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │  OPERADOR PRESIONA START_Button                              │
+    │  Cycle_Active = TRUE, Cycle_Step = 1                        │
+    └─────────────────────────────────────────────────────────────┘
+       │
+       ▼
+    ╔═════════════════════════════════════════════════════════════╗
+    ║  STEP 1: R12_Hopper_Gate ABRE                               ║
+    ║  (Material fluye: Group3 → Group4)                          ║
+    ║                                                              ║
+    ║  Espera hasta: Group3_Empty = TRUE                          ║
+    ╚═════════════════════════════════════════════════════════════╝
+       │
+       ▼
+    ╔═════════════════════════════════════════════════════════════╗
+    ║  STEP 2: Aspirator_Hopper_Gate ABRE                         ║
+    ║  (Material fluye: Group2 → Group3)                          ║
+    ║                                                              ║
+    ║  Espera hasta: Group2_Empty = TRUE                          ║
+    ╚═════════════════════════════════════════════════════════════╝
+       │
+       ▼
+    ╔═════════════════════════════════════════════════════════════╗
+    ║  STEP 3: Material_Gate + Air_Conveyor + Aspirator_Gate      ║
+    ║  (Material fluye: Group1 → Group2)                          ║
+    ║                                                              ║
+    ║  Espera hasta: Group1_Empty = TRUE                          ║
+    ╚═════════════════════════════════════════════════════════════╝
+       │
+       ▼
+    ╔═════════════════════════════════════════════════════════════╗
+    ║  STEP 4: Esperando que Group4 se vacíe                      ║
+    ║  (R12 procesando el material)                               ║
+    ║                                                              ║
+    ║  Cuando Group4_Empty = TRUE → Cycle_Complete = TRUE         ║
+    ╚═════════════════════════════════════════════════════════════╝
+       │
+       ▼
+    ┌─────────────────────────────────────────────────────────────┐
+    │  CICLO COMPLETO                                              │
+    │  Reset automático, listo para siguiente batch               │
+    └─────────────────────────────────────────────────────────────┘
+       │
+       ▼
+    VOLVER A INICIO
+
+
+================================================================================
+                    IMPLEMENTATION NOTES
+================================================================================
+
+1. Este documento es PSEUDOCÓDIGO para revisión antes de convertir a L5K real
+2. La lógica asegura que NUNCA haya dos compuertas abiertas simultáneamente
+3. El sistema PULL garantiza que el material fluye sin mezclar grupos
+4. Los indicadores de luz ayudan comunicación entre operadores
+5. E-Stop detiene el ciclo y requiere reset manual
+
+PRÓXIMOS PASOS:
+1. ✓ Revisar y aprobar esta lógica
+2. Convertir a código L5K real
+3. Integrar con rutina de barcode existente
+4. Agregar lógica de producto/lote tracking
+5. Configurar HMI
+
+================================================================================
+
