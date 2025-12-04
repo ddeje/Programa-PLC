@@ -1,0 +1,11 @@
+# requirements.txt - OPC UA Test Suite
+# Instalar con: pip install -r requirements.txt
+
+# Opción 1: python-opcua (más simple, funcional)
+opcua>=0.98.0
+
+# Opción 2: asyncua (más moderna, recomendada para proyectos nuevos)
+asyncua>=1.0.0
+
+# Alternativa: Si tienes problemas con las anteriores
+# python-opcua-asyncio

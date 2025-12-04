@@ -1,0 +1,357 @@
+================================================================================
+    DOCUMENTACIÓN OPC UA - PLC OMRON VIEJO (NO ES EL NUEVO ROCKWELL)
+    
+    ⚠️  ESTE ES EL PLC VIEJO - NO CONFUNDIR CON EL NUEVO ⚠️
+================================================================================
+
+Fecha de exploración: 2025-12-04
+Autor: Diagnóstico automático via Python asyncua
+
+================================================================================
+1. INFORMACIÓN DE CONEXIÓN
+================================================================================
+
+    IP:         192.168.101.100
+    Puerto:     55533
+    URL OPC UA: opc.tcp://192.168.101.100:55533
+
+================================================================================
+2. INFORMACIÓN DEL SERVIDOR
+================================================================================
+
+    Fabricante:     OMRON Corporation
+    Producto:       NxOpcUaServer
+    Versión SW:     1.05.03
+    Build Number:   0001
+    Build Date:     2022-12-27
+    
+    Estado PLC:     RUN
+    Error Status:   ContinuousError
+    Versión PLC:    5.1.4
+
+================================================================================
+3. NAMESPACES DISPONIBLES
+================================================================================
+
+    ns=0: http://opcfoundation.org/UA/              (OPC UA estándar)
+    ns=1: urn:192.168.101.100:OMRON:NxOpcUaServer   (Servidor específico)
+    ns=2: http://opcfoundation.org/UA/DI/           (Device Integration)
+    ns=3: http://PLCopen.org/OpcUa/IEC61131-3/      (PLCopen)
+    ns=4: urn:OMRON:NxOpcUaServer:FactoryAutomation (*** TAGS DEL PLC ***)
+
+================================================================================
+4. FORMATO DE NODEID PARA ACCEDER A TAGS
+================================================================================
+
+    Namespace:  ns=4
+    Tipo:       String (s=)
+    Formato:    ns=4;s=NombreDelTag
+    
+    EJEMPLOS:
+    ---------
+    ns=4;s=DBoard_PLC_Heartbeat
+    ns=4;s=EgComIn_Heartbeat
+    ns=4;s=Vmek_ON
+    ns=4;s=Version
+
+    NOTA: A diferencia del PLC Rockwell nuevo, NO se necesita prefijo 
+          "Program:NombrePrograma." - Los tags son globales directamente.
+
+================================================================================
+5. COMPARACIÓN CON PLC ROCKWELL NUEVO
+================================================================================
+
+    ASPECTO             | OMRON (VIEJO)              | ROCKWELL (NUEVO)
+    --------------------|----------------------------|---------------------------
+    IP                  | 192.168.101.100            | 192.168.101.96
+    Puerto              | 55533                      | 4840
+    Namespace Tags      | ns=4                       | ns=6
+    Formato NodeId      | ns=4;s=TagName             | ns=6;s=Program:Prog.Tag
+    Prefijo             | Ninguno                    | Program:ProgramName.
+    Servidor OPC UA     | NxOpcUaServer (OMRON)      | OptixEdge (Rockwell)
+
+================================================================================
+6. TIPOS DE DATOS ENCONTRADOS
+================================================================================
+
+    Tipo OPC UA    | Cantidad | Descripción
+    ---------------|----------|----------------------------------
+    1 (Boolean)    | 43 tags  | Flags, estados, heartbeats
+    4 (Int16)      | 3 tags   | Números pequeños
+    5 (UInt16)     | 2 tags   | Números sin signo pequeños
+    6 (Int32)      | 9 tags   | Enteros
+    7 (UInt32)     | 34 tags  | Contadores, counts
+    8 (Int64)      | 4 tags   | Tiempos de ciclo
+    9 (UInt64)     | 1 tag    | Números grandes
+    10 (Float)     | 10 tags  | Pesos, moisture, valores decimales
+    12 (String)    | 78 tags  | Textos, códigos, nombres
+    13 (DateTime)  | 4 tags   | Timestamps, fechas
+    22 (ExtObj)    | 1 tag    | Estructura compleja
+    ---------------|----------|----------------------------------
+    TOTAL          | 189 tags |
+
+================================================================================
+7. LISTADO COMPLETO DE TAGS GLOBALES
+================================================================================
+
+--- TAGS ABACUS (Contadores) ---
+    GlobalVars.Abacus1_connected          [Boolean]   
+    GlobalVars.Abacus1_Count              [Int16]     
+    GlobalVars.Abacus1_Data_Update_Done   [Boolean]   
+    GlobalVars.Abacus1_Option             [Boolean]   
+    GlobalVars.Abacus1_Start              [Boolean]   
+    GlobalVars.Abacus2_connected          [Boolean]   
+    GlobalVars.Abacus2_Count              [Int16]     
+    GlobalVars.Abacus2_Data_Update_Done   [Boolean]   
+    GlobalVars.Abacus2_Option             [Boolean]   
+    GlobalVars.Abacus2_Start              [Boolean]   
+
+--- TAGS BULKS (Procesamiento a granel) ---
+    GlobalVars.Bulks_Holding_Moisture_Option  [Boolean]
+    GlobalVars.Bulks_Holding_Weight_Option    [Boolean]
+    GlobalVars.Bulks_Option                   [Boolean] = True
+
+--- TAGS DASHBOARD (Visualización) ---
+    GlobalVars.DBoard_BulkCycleRunning              [Boolean]
+    GlobalVars.DBoard_ConfigurationDetails          [String]  = "No line configuration selected"
+    GlobalVars.DBoard_ContainerUUID1                [String]
+    GlobalVars.DBoard_ContainerUUID2                [String]
+    GlobalVars.DBoard_ContainerUUID3                [String]
+    GlobalVars.DBoard_CycleRunning                  [Boolean]
+    GlobalVars.DBoard_LineConfiguration             [String]  = "No Grading Option"
+    GlobalVars.DBoard_MeasuredBulkCycleTime_Sec     [Int64]
+    GlobalVars.DBoard_MeasuredCycleTime_Sec         [Int64]
+    GlobalVars.DBoard_OperatorName                  [String]
+    GlobalVars.DBoard_PLC_Heartbeat                 [Boolean] = True (cambiante)
+    GlobalVars.DBoard_PLC_Timestamp                 [DateTime]
+    GlobalVars.DBoard_RecipeEstBulkCycleTime_Sec    [Int64]   = 50
+    GlobalVars.DBoard_RecipeEstCycleTime_Sec        [Int64]   = 25
+    GlobalVars.DBoard_RecipeName                    [String]  = "1500 seeds"
+    GlobalVars.DBoard_RecipeTemplate                [String]  = "No_Grading_Option"
+    GlobalVars.DBoard_VmekAccepted1                 [UInt32]
+    GlobalVars.DBoard_VmekAccepted2                 [UInt32]
+    GlobalVars.DBoard_VmekAccepted3                 [UInt32]
+    GlobalVars.DBoard_VmekAccepted4                 [UInt32]
+    GlobalVars.DBoard_VmekAcceptedCount             [UInt32]
+    GlobalVars.DBoard_VmekEndWithoutReachingTargetCount [Boolean]
+    GlobalVars.DBoard_VmekReady                     [Boolean]
+    GlobalVars.DBoard_VmekRejected1                 [UInt32]
+    GlobalVars.DBoard_VmekRejected2                 [UInt32]
+    GlobalVars.DBoard_VmekRejected3                 [UInt32]
+    GlobalVars.DBoard_VmekRejected4                 [UInt32]
+    GlobalVars.DBoard_VmekRejectedCount             [UInt32]
+    GlobalVars.DBoard_VmekSampleID                  [String]
+    GlobalVars.DBoard_VmekTotal1                    [UInt32]
+    GlobalVars.DBoard_VmekTotal2                    [UInt32]
+    GlobalVars.DBoard_VmekTotal3                    [UInt32]
+    GlobalVars.DBoard_VmekTotal4                    [UInt32]
+    GlobalVars.DBoard_VmekTotalCount                [UInt32]
+
+--- TAGS EDGE GATEWAY COMMUNICATION ---
+    GlobalVars.EgComIn_Heartbeat                [Boolean]
+    GlobalVars.EgComIn_RecordNotFound           [Boolean]
+    GlobalVars.EgComIn_UUID_pull                [ExtensionObject] (Estructura)
+    GlobalVars.EgComIn_WriteToDb_Confirmation   [Boolean]
+    GlobalVars.EgComOut_BarcodeReq              [Boolean]
+    GlobalVars.EgComOut_BarcodeValue            [String]
+    GlobalVars.EgComOut_UUIDReq                 [Boolean]
+    GlobalVars.EgComOut_WriteToDb               [Boolean]
+
+--- TAGS GRADER (Clasificador) ---
+    GlobalVars.Grader_Cyclone1_Moisture_Option      [Boolean] = True
+    GlobalVars.Grader_Holding1_Moisture_Option      [Boolean]
+    GlobalVars.Grader_Holding1_Weight_Option        [Boolean]
+    GlobalVars.Grader_Holding2_Moisture_Option      [Boolean]
+    GlobalVars.Grader_Holding2_Weight_Option        [Boolean]
+    GlobalVars.Grader_Hopper2_Option                [Boolean]
+
+--- TAGS GENERALES ---
+    GlobalVars.Notes_Option                 [Boolean] = True
+    GlobalVars.PC_Name                      [String]
+    GlobalVars.Version                      [String]  = "5.1.4"
+
+--- TAGS R12 (Máquina R12) ---
+    GlobalVars.R12_AutoManualToggle         [Boolean]
+    GlobalVars.R12_CycleStartRelay          [Boolean]
+    GlobalVars.R12_DoseRate                 [Float]
+    GlobalVars.R12_Pump1RunTime             [Float]
+    GlobalVars.R12_SeedCount_ReadVal        [Int32]
+    GlobalVars.R12_SeedCount_SetVal         [Int32]
+
+--- TAGS R25 (Máquina R25) ---
+    GlobalVars.R25_AutoManualToggle         [Boolean]
+    GlobalVars.R25_BatchNumber              [UInt16]
+    GlobalVars.R25_CycleStartRelay          [Boolean]
+    GlobalVars.R25_DoseRate                 [Float]
+    GlobalVars.R25_Pump1RunTime             [Float]
+    GlobalVars.R25_SeedCount_ReadVal        [Int32]
+    GlobalVars.R25_SeedCount_SetVal         [Int32]
+
+--- TAGS SHELLER (Descascarillador) ---
+    GlobalVars.Sheller_Holding_Moisture_Option  [Boolean]
+    GlobalVars.Sheller_Holding_Weight_Option    [Boolean]
+    GlobalVars.Sheller_Hopper_Option            [Boolean]
+
+--- TAGS SINCRONIZACIÓN LECTURA (FileReadIn) ---
+    GlobalVars.Syn_FileReadIn_ABARN         [String]
+    GlobalVars.Syn_FileReadIn_ABBRC         [String]
+    GlobalVars.Syn_FileReadIn_ADMNC         [String]
+    GlobalVars.Syn_FileReadIn_BARCD         [String]
+    GlobalVars.Syn_FileReadIn_BGPCD         [String]
+    GlobalVars.Syn_FileReadIn_BGPNM         [String]
+    GlobalVars.Syn_FileReadIn_CGENES        [String]
+    GlobalVars.Syn_FileReadIn_CNT           [String]
+    GlobalVars.Syn_FileReadIn_COATI         [String]
+    GlobalVars.Syn_FileReadIn_CRPNM         [String]
+    GlobalVars.Syn_FileReadIn_EXTNO         [String]
+    GlobalVars.Syn_FileReadIn_GENCD         [String]
+    GlobalVars.Syn_FileReadIn_GGORG         [String]
+    GlobalVars.Syn_FileReadIn_GMO           [String]
+    GlobalVars.Syn_FileReadIn_HGHNM         [String]
+    GlobalVars.Syn_FileReadIn_HRVDT         [String]
+    GlobalVars.Syn_FileReadIn_LINCD         [String]
+    GlobalVars.Syn_FileReadIn_LOSCT         [String]
+    GlobalVars.Syn_FileReadIn_MATID         [String]
+    GlobalVars.Syn_FileReadIn_MINRNG        [String]
+    GlobalVars.Syn_FileReadIn_MINROW        [String]
+    GlobalVars.Syn_FileReadIn_MVRMK         [String]
+    GlobalVars.Syn_FileReadIn_PMATID        [String]
+    GlobalVars.Syn_FileReadIn_REG           [String]
+    GlobalVars.Syn_FileReadIn_REMRK         [String]
+    GlobalVars.Syn_FileReadIn_RSRGT         [String]
+    GlobalVars.Syn_FileReadIn_SDTRT         [String]
+    GlobalVars.Syn_FileReadIn_SEACD         [String]
+    GlobalVars.Syn_FileReadIn_SHPHD         [String]
+    GlobalVars.Syn_FileReadIn_SPLOC         [String]
+    GlobalVars.Syn_FileReadIn_TRLID         [String]
+    GlobalVars.Syn_FileReadIn_YEAR          [String]
+
+--- TAGS SINCRONIZACIÓN ESCRITURA (FileWriteOut) - Arrays de 3 ---
+    GlobalVars.Syn_FileWriteOut_Abacus1Count        [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_Abacus2Count        [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_ABARN               [String[3]]
+    GlobalVars.Syn_FileWriteOut_ABBRC               [String[3]]
+    GlobalVars.Syn_FileWriteOut_Accepted            [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_ADMNC               [String[3]]
+    GlobalVars.Syn_FileWriteOut_ALTID               [String[3]]
+    GlobalVars.Syn_FileWriteOut_BARCD               [String[3]]
+    GlobalVars.Syn_FileWriteOut_BGPCD               [String[3]]
+    GlobalVars.Syn_FileWriteOut_BGPNM               [String[3]]
+    GlobalVars.Syn_FileWriteOut_CGENES              [String[3]]
+    GlobalVars.Syn_FileWriteOut_CNT                 [Int32[3]]
+    GlobalVars.Syn_FileWriteOut_COATI               [String[3]]
+    GlobalVars.Syn_FileWriteOut_ContainerUUID       [String[3]]
+    GlobalVars.Syn_FileWriteOut_Count1              [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_Count2              [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_Count3              [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_CRPNM               [String[3]]
+    GlobalVars.Syn_FileWriteOut_EXTNO               [String[3]]
+    GlobalVars.Syn_FileWriteOut_GENCD               [String[3]]
+    GlobalVars.Syn_FileWriteOut_GGORG               [String[3]]
+    GlobalVars.Syn_FileWriteOut_GMO                 [String[3]]
+    GlobalVars.Syn_FileWriteOut_GrossMoisture       [Float[3]]
+    GlobalVars.Syn_FileWriteOut_HGHNM               [String[3]]
+    GlobalVars.Syn_FileWriteOut_HRVDT               [DateTime[3]]
+    GlobalVars.Syn_FileWriteOut_LINCD               [String[3]]
+    GlobalVars.Syn_FileWriteOut_LOSCT               [Int32[3]]
+    GlobalVars.Syn_FileWriteOut_MATID               [String[3]]
+    GlobalVars.Syn_FileWriteOut_MetrixTotalCount    [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_MINRNG              [Int32[3]]
+    GlobalVars.Syn_FileWriteOut_MINROW              [Int32[3]]
+    GlobalVars.Syn_FileWriteOut_MVRMK               [String[3]]
+    GlobalVars.Syn_FileWriteOut_NetWeight           [Float[3]]
+    GlobalVars.Syn_FileWriteOut_OperatorName        [String[3]]
+    GlobalVars.Syn_FileWriteOut_PCName              [String[3]]
+    GlobalVars.Syn_FileWriteOut_PMATID              [String[3]]
+    GlobalVars.Syn_FileWriteOut_ProcessingNotes    [String[3]]
+    GlobalVars.Syn_FileWriteOut_REG                 [String[3]]
+    GlobalVars.Syn_FileWriteOut_Rejected            [UInt32[3]]
+    GlobalVars.Syn_FileWriteOut_REMRK               [String[3]]
+    GlobalVars.Syn_FileWriteOut_RSRGT               [String[3]]
+    GlobalVars.Syn_FileWriteOut_SampleNumber        [UInt64[3]]
+    GlobalVars.Syn_FileWriteOut_SDTRT               [String[3]]
+    GlobalVars.Syn_FileWriteOut_SEACD               [String[3]]
+    GlobalVars.Syn_FileWriteOut_SeedNotes           [String[3]]
+    GlobalVars.Syn_FileWriteOut_SHPHD               [DateTime[3]]
+    GlobalVars.Syn_FileWriteOut_SPLOC               [String[3]]
+    GlobalVars.Syn_FileWriteOut_TimeStamp           [DateTime[3]]
+    GlobalVars.Syn_FileWriteOut_TRLID               [String[3]]
+    GlobalVars.Syn_FileWriteOut_Weight1             [Float[3]]
+    GlobalVars.Syn_FileWriteOut_Weight2             [Float[3]]
+    GlobalVars.Syn_FileWriteOut_Weight3             [Float[3]]
+    GlobalVars.Syn_FileWriteOut_WeightOf1000s       [Float[3]]
+    GlobalVars.Syn_FileWriteOut_YEAR                [Int32[3]]
+
+--- TAGS VMEK (Contador de semillas) ---
+    GlobalVars.Trigger_New_Bin_Vmek             [Boolean]
+    GlobalVars.Vmek_Automation_Mode             [Int16]   = -1
+    GlobalVars.Vmek_BinID                       [String]
+    GlobalVars.Vmek_Data_Accepted_1             [UInt32]
+    GlobalVars.Vmek_Data_Accepted_2             [UInt32]
+    GlobalVars.Vmek_Data_Accepted_3             [UInt32]
+    GlobalVars.Vmek_Data_Accepted_4             [UInt32]
+    GlobalVars.Vmek_Data_Rejected_1             [UInt32]
+    GlobalVars.Vmek_Data_Rejected_2             [UInt32]
+    GlobalVars.Vmek_Data_Rejected_3             [UInt32]
+    GlobalVars.Vmek_Data_Rejected_4             [UInt32]
+    GlobalVars.Vmek_Data_Update_Done            [Boolean]
+    GlobalVars.Vmek_EndWithoutReachTarget       [Boolean]
+    GlobalVars.Vmek_Heartbeat                   [Boolean]
+    GlobalVars.Vmek_Holding_Weight_Option       [Boolean]
+    GlobalVars.Vmek_ON                          [Boolean]
+    GlobalVars.Vmek_Ready_Option                [Boolean] = True
+    GlobalVars.Vmek_Recipe_TargetCount1         [UInt32]
+    GlobalVars.Vmek_Recipe_TargetCount2         [UInt32]
+    GlobalVars.Vmek_Recipe_TargetCount3         [UInt32]
+
+--- TAGS DEVICE STATUS ---
+    DeviceStatus.Mode                       [String]  = "RUN"
+    DeviceStatus.ErrorStatus                [String]  = "ContinuousError"
+    DeviceStatus.UnpublishedVariablesStatus [UInt16]  = 0
+
+================================================================================
+8. EJEMPLO DE CÓDIGO PYTHON PARA CONECTAR
+================================================================================
+
+    from asyncua import Client
+    import asyncio
+
+    async def read_omron_plc():
+        client = Client(url="opc.tcp://192.168.101.100:55533")
+        await client.connect()
+        
+        # Leer un tag
+        node = client.get_node("ns=4;s=DBoard_PLC_Heartbeat")
+        value = await node.read_value()
+        print(f"Heartbeat: {value}")
+        
+        # Leer versión
+        node = client.get_node("ns=4;s=Version")
+        version = await node.read_value()
+        print(f"Versión: {version}")
+        
+        await client.disconnect()
+
+    asyncio.run(read_omron_plc())
+
+================================================================================
+9. NOTAS IMPORTANTES
+================================================================================
+
+    1. Este PLC OMRON usa NxOpcUaServer, diferente al OptixEdge de Rockwell
+    
+    2. Los tags están en ns=4 (NO en ns=6 como el Rockwell)
+    
+    3. NO se necesita prefijo "Program:NombrePrograma." - son GlobalVars
+    
+    4. Los arrays FileWriteOut tienen dimensión [3] (para 3 contenedores)
+    
+    5. El tag EgComIn_UUID_pull es un ExtensionObject (estructura compleja)
+    
+    6. El Heartbeat del PLC está activo (cambia True/False)
+    
+    7. El estado del PLC es "RUN" pero tiene "ContinuousError"
+
+================================================================================
+FIN DEL DOCUMENTO
+================================================================================

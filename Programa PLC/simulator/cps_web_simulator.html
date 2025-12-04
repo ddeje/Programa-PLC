@@ -356,10 +356,12 @@
             // System Ready
             s.CPS_RDY = !s.E_Stop_Active;
             
-            // R12 Permit - process material in Group 4
-            s.R12_Permit = s.groups[3].material > 0 && s.R12_Ready && s.CPS_RDY;
+            // R12 Permit - process when Group 4 has material AND transfer to G4 is complete
+            const hasG4Material = s.groups[3].material > 0;
+            const notTransferringToG4 = !s.gates[2]; // Gate 2 is R12 gate (G3→G4)
+            s.R12_Permit = hasG4Material && notTransferringToG4 && s.R12_Ready && s.CPS_RDY;
             
-            // Auto-process R12
+            // Auto-process R12 (only after transfer is complete)
             if (s.R12_Permit && s.groups[3].material > 0) {
                 s.groups[3].material -= 3;
                 if (s.groups[3].material <= 0) {
@@ -384,6 +386,9 @@
                     fromGroup.material -= transfer;
                     toGroup.material += transfer;
                     
+                    // Cap at 100%
+                    if (toGroup.material > 100) toGroup.material = 100;
+                    
                     // Transfer lot info on first transfer
                     if (!toGroup.lot) {
                         toGroup.lot = fromGroup.lot;
@@ -393,6 +398,7 @@
                     // Check if this transfer is complete
                     if (fromGroup.material <= 0) {
                         fromGroup.material = 0;
+                        toGroup.material = 100; // Ensure destination is exactly 100%
                         fromGroup.lot = null;
                         fromGroup.lotColor = 'empty';
                         s.gates[t.gate] = false;

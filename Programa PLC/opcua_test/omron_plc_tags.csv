@@ -1,0 +1,190 @@
+Tag Name,NodeId,Data Type,Current Value
+GlobalVars.Abacus1_connected,"NodeId(Identifier='Abacus1_connected', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus1_Count,"NodeId(Identifier='Abacus1_Count', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",4,0
+GlobalVars.Abacus1_Data_Update_Done,"NodeId(Identifier='Abacus1_Data_Update_Done', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus1_Option,"NodeId(Identifier='Abacus1_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus1_Start,"NodeId(Identifier='Abacus1_Start', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus2_connected,"NodeId(Identifier='Abacus2_connected', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus2_Count,"NodeId(Identifier='Abacus2_Count', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",4,0
+GlobalVars.Abacus2_Data_Update_Done,"NodeId(Identifier='Abacus2_Data_Update_Done', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus2_Option,"NodeId(Identifier='Abacus2_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Abacus2_Start,"NodeId(Identifier='Abacus2_Start', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Bulks_Holding_Moisture_Option,"NodeId(Identifier='Bulks_Holding_Moisture_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Bulks_Holding_Weight_Option,"NodeId(Identifier='Bulks_Holding_Weight_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Bulks_Option,"NodeId(Identifier='Bulks_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,True
+GlobalVars.DBoard_BulkCycleRunning,"NodeId(Identifier='DBoard_BulkCycleRunning', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.DBoard_ConfigurationDetails,"NodeId(Identifier='DBoard_ConfigurationDetails', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,No line configuration selected
+GlobalVars.DBoard_ContainerUUID1,"NodeId(Identifier='DBoard_ContainerUUID1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.DBoard_ContainerUUID2,"NodeId(Identifier='DBoard_ContainerUUID2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.DBoard_ContainerUUID3,"NodeId(Identifier='DBoard_ContainerUUID3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.DBoard_CycleRunning,"NodeId(Identifier='DBoard_CycleRunning', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.DBoard_LineConfiguration,"NodeId(Identifier='DBoard_LineConfiguration', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,No Grading Option
+GlobalVars.DBoard_MeasuredBulkCycleTime_Sec,"NodeId(Identifier='DBoard_MeasuredBulkCycleTime_Sec', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",8,0
+GlobalVars.DBoard_MeasuredCycleTime_Sec,"NodeId(Identifier='DBoard_MeasuredCycleTime_Sec', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",8,0
+GlobalVars.DBoard_OperatorName,"NodeId(Identifier='DBoard_OperatorName', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.DBoard_PLC_Heartbeat,"NodeId(Identifier='DBoard_PLC_Heartbeat', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,True
+GlobalVars.DBoard_PLC_Timestamp,"NodeId(Identifier='DBoard_PLC_Timestamp', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",13,2025-12-04 17:48:23.702000+00:00
+GlobalVars.DBoard_RecipeEstBulkCycleTime_Sec,"NodeId(Identifier='DBoard_RecipeEstBulkCycleTime_Sec', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",8,50
+GlobalVars.DBoard_RecipeEstCycleTime_Sec,"NodeId(Identifier='DBoard_RecipeEstCycleTime_Sec', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",8,25
+GlobalVars.DBoard_RecipeName,"NodeId(Identifier='DBoard_RecipeName', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,1500 seeds
+GlobalVars.DBoard_RecipeTemplate,"NodeId(Identifier='DBoard_RecipeTemplate', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,No_Grading_Option
+GlobalVars.DBoard_VmekAccepted1,"NodeId(Identifier='DBoard_VmekAccepted1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekAccepted2,"NodeId(Identifier='DBoard_VmekAccepted2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekAccepted3,"NodeId(Identifier='DBoard_VmekAccepted3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekAccepted4,"NodeId(Identifier='DBoard_VmekAccepted4', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekAcceptedCount,"NodeId(Identifier='DBoard_VmekAcceptedCount', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekEndWithoutReachingTargetCount,"NodeId(Identifier='DBoard_VmekEndWithoutReachingTargetCount', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.DBoard_VmekReady,"NodeId(Identifier='DBoard_VmekReady', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.DBoard_VmekRejected1,"NodeId(Identifier='DBoard_VmekRejected1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekRejected2,"NodeId(Identifier='DBoard_VmekRejected2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekRejected3,"NodeId(Identifier='DBoard_VmekRejected3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekRejected4,"NodeId(Identifier='DBoard_VmekRejected4', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekRejectedCount,"NodeId(Identifier='DBoard_VmekRejectedCount', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekSampleID,"NodeId(Identifier='DBoard_VmekSampleID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.DBoard_VmekTotal1,"NodeId(Identifier='DBoard_VmekTotal1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekTotal2,"NodeId(Identifier='DBoard_VmekTotal2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekTotal3,"NodeId(Identifier='DBoard_VmekTotal3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekTotal4,"NodeId(Identifier='DBoard_VmekTotal4', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.DBoard_VmekTotalCount,"NodeId(Identifier='DBoard_VmekTotalCount', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.EgComIn_Heartbeat,"NodeId(Identifier='EgComIn_Heartbeat', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.EgComIn_RecordNotFound,"NodeId(Identifier='EgComIn_RecordNotFound', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.EgComIn_UUID_pull,"NodeId(Identifier='EgComIn_UUID_pull', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",22,"[ExtensionObject(TypeId=NodeId(Identifier=5002, NamespaceIndex=4, NodeIdType=<NodeIdType.FourByte: 1>), Body=b'\x00\x00\x00\x00\x00\x00\x00\x00'), ExtensionObject(TypeId=NodeId(Identifier=5002, Namesp..."
+GlobalVars.EgComIn_WriteToDb_Confirmation,"NodeId(Identifier='EgComIn_WriteToDb_Confirmation', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.EgComOut_BarcodeReq,"NodeId(Identifier='EgComOut_BarcodeReq', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.EgComOut_BarcodeValue,"NodeId(Identifier='EgComOut_BarcodeValue', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.EgComOut_UUIDReq,"NodeId(Identifier='EgComOut_UUIDReq', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.EgComOut_WriteToDb,"NodeId(Identifier='EgComOut_WriteToDb', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Grader_Cyclone1_Moisture_Option,"NodeId(Identifier='Grader_Cyclone1_Moisture_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,True
+GlobalVars.Grader_Holding1_Moisture_Option,"NodeId(Identifier='Grader_Holding1_Moisture_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Grader_Holding1_Weight_Option,"NodeId(Identifier='Grader_Holding1_Weight_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Grader_Holding2_Moisture_Option,"NodeId(Identifier='Grader_Holding2_Moisture_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Grader_Holding2_Weight_Option,"NodeId(Identifier='Grader_Holding2_Weight_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Grader_Hopper2_Option,"NodeId(Identifier='Grader_Hopper2_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Notes_Option,"NodeId(Identifier='Notes_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,True
+GlobalVars.PC_Name,"NodeId(Identifier='PC_Name', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.R12_AutoManualToggle,"NodeId(Identifier='R12_AutoManualToggle', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.R12_CycleStartRelay,"NodeId(Identifier='R12_CycleStartRelay', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.R12_DoseRate,"NodeId(Identifier='R12_DoseRate', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,0.0
+GlobalVars.R12_Pump1RunTime,"NodeId(Identifier='R12_Pump1RunTime', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,0.0
+GlobalVars.R12_SeedCount_ReadVal,"NodeId(Identifier='R12_SeedCount_ReadVal', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,0
+GlobalVars.R12_SeedCount_SetVal,"NodeId(Identifier='R12_SeedCount_SetVal', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,0
+GlobalVars.R25_AutoManualToggle,"NodeId(Identifier='R25_AutoManualToggle', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.R25_BatchNumber,"NodeId(Identifier='R25_BatchNumber', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",5,0
+GlobalVars.R25_CycleStartRelay,"NodeId(Identifier='R25_CycleStartRelay', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.R25_DoseRate,"NodeId(Identifier='R25_DoseRate', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,0.0
+GlobalVars.R25_Pump1RunTime,"NodeId(Identifier='R25_Pump1RunTime', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,0.0
+GlobalVars.R25_SeedCount_ReadVal,"NodeId(Identifier='R25_SeedCount_ReadVal', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,0
+GlobalVars.R25_SeedCount_SetVal,"NodeId(Identifier='R25_SeedCount_SetVal', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,0
+GlobalVars.Sheller_Holding_Moisture_Option,"NodeId(Identifier='Sheller_Holding_Moisture_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Sheller_Holding_Weight_Option,"NodeId(Identifier='Sheller_Holding_Weight_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Sheller_Hopper_Option,"NodeId(Identifier='Sheller_Hopper_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Syn_FileReadIn_ABARN,"NodeId(Identifier='Syn_FileReadIn_ABARN', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_ABBRC,"NodeId(Identifier='Syn_FileReadIn_ABBRC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_ADMNC,"NodeId(Identifier='Syn_FileReadIn_ADMNC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_BARCD,"NodeId(Identifier='Syn_FileReadIn_BARCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_BGPCD,"NodeId(Identifier='Syn_FileReadIn_BGPCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_BGPNM,"NodeId(Identifier='Syn_FileReadIn_BGPNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_CGENES,"NodeId(Identifier='Syn_FileReadIn_CGENES', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_CNT,"NodeId(Identifier='Syn_FileReadIn_CNT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_COATI,"NodeId(Identifier='Syn_FileReadIn_COATI', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_CRPNM,"NodeId(Identifier='Syn_FileReadIn_CRPNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_EXTNO,"NodeId(Identifier='Syn_FileReadIn_EXTNO', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_GENCD,"NodeId(Identifier='Syn_FileReadIn_GENCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_GGORG,"NodeId(Identifier='Syn_FileReadIn_GGORG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_GMO,"NodeId(Identifier='Syn_FileReadIn_GMO', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_HGHNM,"NodeId(Identifier='Syn_FileReadIn_HGHNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_HRVDT,"NodeId(Identifier='Syn_FileReadIn_HRVDT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_LINCD,"NodeId(Identifier='Syn_FileReadIn_LINCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_LOSCT,"NodeId(Identifier='Syn_FileReadIn_LOSCT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_MATID,"NodeId(Identifier='Syn_FileReadIn_MATID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_MINRNG,"NodeId(Identifier='Syn_FileReadIn_MINRNG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_MINROW,"NodeId(Identifier='Syn_FileReadIn_MINROW', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_MVRMK,"NodeId(Identifier='Syn_FileReadIn_MVRMK', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_PMATID,"NodeId(Identifier='Syn_FileReadIn_PMATID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_REG,"NodeId(Identifier='Syn_FileReadIn_REG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_REMRK,"NodeId(Identifier='Syn_FileReadIn_REMRK', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_RSRGT,"NodeId(Identifier='Syn_FileReadIn_RSRGT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_SDTRT,"NodeId(Identifier='Syn_FileReadIn_SDTRT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_SEACD,"NodeId(Identifier='Syn_FileReadIn_SEACD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_SHPHD,"NodeId(Identifier='Syn_FileReadIn_SHPHD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_SPLOC,"NodeId(Identifier='Syn_FileReadIn_SPLOC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_TRLID,"NodeId(Identifier='Syn_FileReadIn_TRLID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileReadIn_YEAR,"NodeId(Identifier='Syn_FileReadIn_YEAR', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Syn_FileWriteOut_Abacus1Count,"NodeId(Identifier='Syn_FileWriteOut_Abacus1Count', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_Abacus2Count,"NodeId(Identifier='Syn_FileWriteOut_Abacus2Count', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_ABARN,"NodeId(Identifier='Syn_FileWriteOut_ABARN', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_ABBRC,"NodeId(Identifier='Syn_FileWriteOut_ABBRC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_Accepted,"NodeId(Identifier='Syn_FileWriteOut_Accepted', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_ADMNC,"NodeId(Identifier='Syn_FileWriteOut_ADMNC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_ALTID,"NodeId(Identifier='Syn_FileWriteOut_ALTID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_BARCD,"NodeId(Identifier='Syn_FileWriteOut_BARCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_BGPCD,"NodeId(Identifier='Syn_FileWriteOut_BGPCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_BGPNM,"NodeId(Identifier='Syn_FileWriteOut_BGPNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_CGENES,"NodeId(Identifier='Syn_FileWriteOut_CGENES', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_CNT,"NodeId(Identifier='Syn_FileWriteOut_CNT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_COATI,"NodeId(Identifier='Syn_FileWriteOut_COATI', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_ContainerUUID,"NodeId(Identifier='Syn_FileWriteOut_ContainerUUID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_Count1,"NodeId(Identifier='Syn_FileWriteOut_Count1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_Count2,"NodeId(Identifier='Syn_FileWriteOut_Count2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_Count3,"NodeId(Identifier='Syn_FileWriteOut_Count3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_CRPNM,"NodeId(Identifier='Syn_FileWriteOut_CRPNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_EXTNO,"NodeId(Identifier='Syn_FileWriteOut_EXTNO', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_GENCD,"NodeId(Identifier='Syn_FileWriteOut_GENCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_GGORG,"NodeId(Identifier='Syn_FileWriteOut_GGORG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_GMO,"NodeId(Identifier='Syn_FileWriteOut_GMO', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_GrossMoisture,"NodeId(Identifier='Syn_FileWriteOut_GrossMoisture', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_HGHNM,"NodeId(Identifier='Syn_FileWriteOut_HGHNM', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_HRVDT,"NodeId(Identifier='Syn_FileWriteOut_HRVDT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",13,"[datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)..."
+GlobalVars.Syn_FileWriteOut_LINCD,"NodeId(Identifier='Syn_FileWriteOut_LINCD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_LOSCT,"NodeId(Identifier='Syn_FileWriteOut_LOSCT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_MATID,"NodeId(Identifier='Syn_FileWriteOut_MATID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_MetrixTotalCount,"NodeId(Identifier='Syn_FileWriteOut_MetrixTotalCount', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_MINRNG,"NodeId(Identifier='Syn_FileWriteOut_MINRNG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_MINROW,"NodeId(Identifier='Syn_FileWriteOut_MINROW', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_MVRMK,"NodeId(Identifier='Syn_FileWriteOut_MVRMK', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_NetWeight,"NodeId(Identifier='Syn_FileWriteOut_NetWeight', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_OperatorName,"NodeId(Identifier='Syn_FileWriteOut_OperatorName', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_PCName,"NodeId(Identifier='Syn_FileWriteOut_PCName', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_PMATID,"NodeId(Identifier='Syn_FileWriteOut_PMATID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_ProcessingNotes,"NodeId(Identifier='Syn_FileWriteOut_ProcessingNotes', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_REG,"NodeId(Identifier='Syn_FileWriteOut_REG', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_Rejected,"NodeId(Identifier='Syn_FileWriteOut_Rejected', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_REMRK,"NodeId(Identifier='Syn_FileWriteOut_REMRK', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_RSRGT,"NodeId(Identifier='Syn_FileWriteOut_RSRGT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_SampleNumber,"NodeId(Identifier='Syn_FileWriteOut_SampleNumber', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",9,"[0, 0, 0]"
+GlobalVars.Syn_FileWriteOut_SDTRT,"NodeId(Identifier='Syn_FileWriteOut_SDTRT', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_SEACD,"NodeId(Identifier='Syn_FileWriteOut_SEACD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_SeedNotes,"NodeId(Identifier='Syn_FileWriteOut_SeedNotes', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_SHPHD,"NodeId(Identifier='Syn_FileWriteOut_SHPHD', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",13,"[datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)..."
+GlobalVars.Syn_FileWriteOut_SPLOC,"NodeId(Identifier='Syn_FileWriteOut_SPLOC', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_TimeStamp,"NodeId(Identifier='Syn_FileWriteOut_TimeStamp', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",13,"[datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc), datetime.datetime(1601, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)..."
+GlobalVars.Syn_FileWriteOut_TRLID,"NodeId(Identifier='Syn_FileWriteOut_TRLID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,"['', '', '']"
+GlobalVars.Syn_FileWriteOut_Weight1,"NodeId(Identifier='Syn_FileWriteOut_Weight1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_Weight2,"NodeId(Identifier='Syn_FileWriteOut_Weight2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_Weight3,"NodeId(Identifier='Syn_FileWriteOut_Weight3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_WeightOf1000s,"NodeId(Identifier='Syn_FileWriteOut_WeightOf1000s', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",10,"[0.0, 0.0, 0.0]"
+GlobalVars.Syn_FileWriteOut_YEAR,"NodeId(Identifier='Syn_FileWriteOut_YEAR', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",6,"[0, 0, 0]"
+GlobalVars.Trigger_New_Bin_Vmek,"NodeId(Identifier='Trigger_New_Bin_Vmek', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Version,"NodeId(Identifier='Version', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,5.1.4
+GlobalVars.Vmek_Automation_Mode,"NodeId(Identifier='Vmek_Automation_Mode', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",4,-1
+GlobalVars.Vmek_BinID,"NodeId(Identifier='Vmek_BinID', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,
+GlobalVars.Vmek_Data_Accepted_1,"NodeId(Identifier='Vmek_Data_Accepted_1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Accepted_2,"NodeId(Identifier='Vmek_Data_Accepted_2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Accepted_3,"NodeId(Identifier='Vmek_Data_Accepted_3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Accepted_4,"NodeId(Identifier='Vmek_Data_Accepted_4', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Rejected_1,"NodeId(Identifier='Vmek_Data_Rejected_1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Rejected_2,"NodeId(Identifier='Vmek_Data_Rejected_2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Rejected_3,"NodeId(Identifier='Vmek_Data_Rejected_3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Rejected_4,"NodeId(Identifier='Vmek_Data_Rejected_4', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Data_Update_Done,"NodeId(Identifier='Vmek_Data_Update_Done', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Vmek_EndWithoutReachTarget,"NodeId(Identifier='Vmek_EndWithoutReachTarget', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Vmek_Heartbeat,"NodeId(Identifier='Vmek_Heartbeat', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Vmek_Holding_Weight_Option,"NodeId(Identifier='Vmek_Holding_Weight_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Vmek_ON,"NodeId(Identifier='Vmek_ON', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,False
+GlobalVars.Vmek_Ready_Option,"NodeId(Identifier='Vmek_Ready_Option', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",1,True
+GlobalVars.Vmek_Recipe_TargetCount1,"NodeId(Identifier='Vmek_Recipe_TargetCount1', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Recipe_TargetCount2,"NodeId(Identifier='Vmek_Recipe_TargetCount2', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+GlobalVars.Vmek_Recipe_TargetCount3,"NodeId(Identifier='Vmek_Recipe_TargetCount3', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",7,0
+DeviceStatus.Mode,"NodeId(Identifier='DeviceStatus.Mode', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,RUN
+DeviceStatus.ErrorStatus,"NodeId(Identifier='DeviceStatus.ErrorStatus', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",12,ContinuousError
+DeviceStatus.UnpublishedVariablesStatus,"NodeId(Identifier='DeviceStatus.UnpublishedVariablesStatus', NamespaceIndex=4, NodeIdType=<NodeIdType.String: 3>)",5,0
