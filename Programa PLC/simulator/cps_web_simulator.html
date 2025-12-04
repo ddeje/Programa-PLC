@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPS-001 Simulator - PULL SYSTEM</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #00d4ff; margin-bottom: 10px; }
+        h2 { text-align: center; color: #888; font-size: 14px; margin-bottom: 20px; }
+        
+        .status-bar {
+            display: flex; justify-content: space-around;
+            background: #2a2a4a; padding: 15px; border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .status-item { text-align: center; }
+        .status-label { font-size: 12px; color: #888; }
+        .status-value { font-size: 18px; font-weight: bold; }
+        .status-ok { color: #00ff88; }
+        .status-error { color: #ff4444; }
+        .status-warning { color: #ffaa00; }
+        
+        .groups-container {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .group {
+            background: #2a2a4a; border-radius: 10px; padding: 15px;
+            display: flex; align-items: center; gap: 20px;
+        }
+        .group-info { flex: 1; }
+        .group-name { font-weight: bold; color: #00d4ff; }
+        .group-desc { font-size: 12px; color: #888; }
+        
+        .progress-bar {
+            flex: 2; height: 30px; background: #1a1a2e;
+            border-radius: 5px; overflow: hidden; position: relative;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #00d4ff, #00ff88);
+            transition: width 0.1s ease;
+        }
+        .progress-text {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+        
+        .gate {
+            width: 100px; text-align: center; padding: 8px;
+            border-radius: 5px; font-weight: bold;
+        }
+        .gate-open { background: #00ff88; color: #000; }
+        .gate-closed { background: #444; color: #888; }
+        
+        .arrow {
+            text-align: center; font-size: 24px; color: #00d4ff;
+            margin: 5px 0;
+        }
+        
+        .controls {
+            display: flex; gap: 10px; margin-top: 20px;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .btn {
+            padding: 15px 25px; border: none; border-radius: 8px;
+            font-family: inherit; font-size: 14px; font-weight: bold;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-scan { background: #00d4ff; color: #000; }
+        .btn-ready { background: #ffaa00; color: #000; }
+        .btn-start { background: #00ff88; color: #000; }
+        .btn-estop { background: #ff4444; color: #fff; }
+        .btn-reset { background: #888; color: #fff; }
+        
+        .indicators {
+            display: flex; justify-content: center; gap: 30px;
+            margin-top: 20px; flex-wrap: wrap;
+        }
+        .indicator {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .light {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #333; border: 2px solid #555;
+        }
+        .light-green { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .light-yellow { background: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+        .light-blue { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
+        .light-red { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+        
+        .log {
+            background: #1a1a2e; border: 1px solid #333;
+            border-radius: 10px; padding: 15px; margin-top: 20px;
+            height: 120px; overflow-y: auto;
+        }
+        .log-entry { font-size: 12px; padding: 3px 0; border-bottom: 1px solid #222; }
+        .log-time { color: #00d4ff; }
+        
+        .keyboard-hint {
+            text-align: center; margin-top: 15px; color: #666; font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌽 CPS-001 CORN PROCESSING SYSTEM</h1>
+        <h2>Version 2.0 - PULL SYSTEM Simulator</h2>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-label">SYSTEM</div>
+                <div id="sysStatus" class="status-value status-ok">READY</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">E-STOP</div>
+                <div id="estopStatus" class="status-value status-ok">OK</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">CYCLE STEP</div>
+                <div id="cycleStep" class="status-value">0</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">BARCODE</div>
+                <div id="barcodeStatus" class="status-value status-warning">---</div>
+            </div>
+        </div>
+        
+        <!-- Groups -->
+        <div class="groups-container">
+            <!-- Group 1 -->
+            <div class="group">
+                <div class="group-info">
+                    <div class="group-name">GROUP 1: FEEDER</div>
+                    <div class="group-desc">Manual Loading Station</div>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress1" class="progress-fill" style="width: 0%"></div>
+                    <div id="progressText1" class="progress-text">0%</div>
+                </div>
+                <div id="gate1" class="gate gate-closed">MAT GATE<br>CLOSED</div>
+            </div>
+            
+            <div class="arrow">▼</div>
+            
+            <!-- Group 2 -->
+            <div class="group">
+                <div class="group-info">
+                    <div class="group-name">GROUP 2: SHELLER</div>
+                    <div class="group-desc">+ Air Conveyor + Aspirator</div>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress2" class="progress-fill" style="width: 0%"></div>
+                    <div id="progressText2" class="progress-text">0%</div>
+                </div>
+                <div id="gate2" class="gate gate-closed">ASP GATE<br>CLOSED</div>
+            </div>
+            
+            <div class="arrow">▼</div>
+            
+            <!-- Group 3 -->
+            <div class="group">
+                <div class="group-info">
+                    <div class="group-name">GROUP 3: ASPIRATOR</div>
+                    <div class="group-desc">Hopper → VMEK</div>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress3" class="progress-fill" style="width: 0%"></div>
+                    <div id="progressText3" class="progress-text">0%</div>
+                </div>
+                <div id="gate3" class="gate gate-closed">R12 GATE<br>CLOSED</div>
+            </div>
+            
+            <div class="arrow">▼</div>
+            
+            <!-- Group 4 -->
+            <div class="group">
+                <div class="group-info">
+                    <div class="group-name">GROUP 4: R12</div>
+                    <div class="group-desc">Seed Treater</div>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress4" class="progress-fill" style="width: 0%"></div>
+                    <div id="progressText4" class="progress-text">0%</div>
+                </div>
+                <div id="r12permit" class="gate gate-closed">R12 PERMIT<br>OFF</div>
+            </div>
+        </div>
+        
+        <!-- Indicators -->
+        <div class="indicators">
+            <div class="indicator">
+                <div id="lightReady" class="light"></div>
+                <span>Ready to Load</span>
+            </div>
+            <div class="indicator">
+                <div id="lightProgress" class="light"></div>
+                <span>In Progress</span>
+            </div>
+            <div class="indicator">
+                <div id="lightComplete" class="light"></div>
+                <span>Complete</span>
+            </div>
+            <div class="indicator">
+                <div id="lightIncoming" class="light"></div>
+                <span>Material Incoming</span>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <button id="btnScan" class="btn btn-scan" onclick="scanBarcode()">📱 1. SCAN BARCODE</button>
+            <button id="btnReady" class="btn btn-ready" onclick="batchReady()" disabled>📦 2. BATCH READY</button>
+            <button id="btnStart" class="btn btn-start" onclick="startCycle()" disabled>▶️ 3. START CYCLE</button>
+            <button id="btnEstop" class="btn btn-estop" onclick="eStop()">🛑 E-STOP</button>
+            <button id="btnReset" class="btn btn-reset" onclick="resetEstop()" disabled>🔄 RESET</button>
+        </div>
+        
+        <div class="keyboard-hint">
+            Keyboard: [1] Scan | [2] Batch Ready | [3] Start | [E] E-Stop | [R] Reset
+        </div>
+        
+        <!-- Log -->
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        // ============================================================
+        // PLC TAGS (Estado del sistema)
+        // ============================================================
+        const tags = {
+            // Inputs
+            Compressed_Air: true,
+            Dust_Collector_ON: true,
+            AEC_Sheller_ON: true,
+            VMEK_Rdy: true,
+            R12_Ready: true,
+            R12_Envelope_Present: true,
+            
+            // Buttons
+            Barcode_Scanned: false,
+            Batch_Ready_Latched: false,
+            
+            // Internal
+            CPS_RDY: true,
+            Cycle_Start_Enabled: false,
+            Cycle_Active: false,
+            Cycle_Complete: false,
+            Cycle_Step: 0,
+            
+            // E-Stop
+            E_Stop_Active: false,
+            
+            // Gates
+            Material_Gate_Open: false,
+            Air_Conveyor: false,
+            Aspirator_Gate: false,
+            Aspirator_Hopper_Gate: false,
+            R12_Hopper_Gate: false,
+            R12_Permit: false,
+            
+            // Material levels (simulation)
+            material: [0, 0, 0, 0]  // Groups 1-4
+        };
+        
+        // ============================================================
+        // PLC LOGIC
+        // ============================================================
+        function plcScan() {
+            const t = tags;
+            
+            // System Ready
+            t.CPS_RDY = t.Compressed_Air && t.Dust_Collector_ON && 
+                        t.AEC_Sheller_ON && t.VMEK_Rdy && !t.E_Stop_Active;
+            
+            // Cycle Start Enable
+            t.Cycle_Start_Enabled = t.CPS_RDY && t.material[3] < 5 && 
+                                     t.R12_Ready && t.R12_Envelope_Present &&
+                                     t.Batch_Ready_Latched;
+            
+            // Step logic
+            if (t.Cycle_Active) {
+                // Step 1: R12 Hopper Gate (Group3 → Group4)
+                if (t.Cycle_Step === 1) {
+                    if (t.material[3] < 5) {  // Group4 empty
+                        t.R12_Hopper_Gate = true;
+                    }
+                    if (t.material[2] < 5 && t.R12_Hopper_Gate) {  // Group3 emptied
+                        t.Cycle_Step = 2;
+                    }
+                }
+                
+                // Step 2: Aspirator Hopper Gate (Group2 → Group3)
+                if (t.Cycle_Step === 2) {
+                    t.R12_Hopper_Gate = false;
+                    if (t.material[2] < 5) {  // Group3 empty
+                        t.Aspirator_Hopper_Gate = true;
+                    }
+                    if (t.material[1] < 5 && t.Aspirator_Hopper_Gate) {  // Group2 emptied
+                        t.Cycle_Step = 3;
+                    }
+                }
+                
+                // Step 3: Material Gate (Group1 → Group2)
+                if (t.Cycle_Step === 3) {
+                    t.Aspirator_Hopper_Gate = false;
+                    if (t.material[1] < 5) {  // Group2 empty
+                        t.Material_Gate_Open = true;
+                        t.Air_Conveyor = true;
+                        t.Aspirator_Gate = true;
+                    }
+                    if (t.material[0] < 5) {  // Group1 emptied
+                        t.Cycle_Step = 4;
+                        t.Batch_Ready_Latched = false;
+                    }
+                }
+                
+                // Step 4: Wait for all to empty
+                if (t.Cycle_Step === 4) {
+                    t.Material_Gate_Open = false;
+                    t.Air_Conveyor = false;
+                    t.Aspirator_Gate = false;
+                    
+                    if (t.material[0] < 5 && t.material[1] < 5 && 
+                        t.material[2] < 5 && t.material[3] < 5) {
+                        t.Cycle_Complete = true;
+                        t.Cycle_Active = false;
+                        t.Cycle_Step = 0;
+                        addLog("✅ CYCLE COMPLETE - Ready for next batch");
+                    }
+                }
+            }
+            
+            // R12 Permit
+            t.R12_Permit = t.material[3] > 5 && t.R12_Ready && t.CPS_RDY;
+            
+            // Material transfer simulation
+            simulateMaterialTransfer();
+            
+            // Update UI
+            updateUI();
+        }
+        
+        function simulateMaterialTransfer() {
+            const t = tags;
+            const rate = 2;  // % per scan
+            
+            // Group1 → Group2 (Material Gate)
+            if (t.Material_Gate_Open && t.material[0] > 0) {
+                const transfer = Math.min(rate, t.material[0]);
+                t.material[0] -= transfer;
+                t.material[1] += transfer;
+            }
+            
+            // Group2 → Group3 (Aspirator Hopper Gate)
+            if (t.Aspirator_Hopper_Gate && t.material[1] > 0) {
+                const transfer = Math.min(rate, t.material[1]);
+                t.material[1] -= transfer;
+                t.material[2] += transfer;
+            }
+            
+            // Group3 → Group4 (R12 Hopper Gate)
+            if (t.R12_Hopper_Gate && t.material[2] > 0) {
+                const transfer = Math.min(rate, t.material[2]);
+                t.material[2] -= transfer;
+                t.material[3] += transfer;
+            }
+            
+            // R12 processes material
+            if (t.R12_Permit && t.material[3] > 0) {
+                t.material[3] -= rate * 0.5;
+                if (t.material[3] < 0) t.material[3] = 0;
+            }
+        }
+        
+        // ============================================================
+        // USER ACTIONS
+        // ============================================================
+        function scanBarcode() {
+            if (tags.E_Stop_Active) return;
+            tags.Barcode_Scanned = true;
+            addLog("📱 Barcode scanned: CORN_LOT_2025_001");
+            document.getElementById('btnReady').disabled = false;
+        }
+        
+        function batchReady() {
+            if (!tags.Barcode_Scanned || tags.E_Stop_Active) return;
+            tags.Batch_Ready_Latched = true;
+            tags.material[0] = 100;  // Load material
+            addLog("📦 Batch Ready - Material loaded in Group 1");
+            document.getElementById('btnStart').disabled = false;
+        }
+        
+        function startCycle() {
+            if (!tags.Cycle_Start_Enabled || tags.E_Stop_Active) return;
+            tags.Cycle_Active = true;
+            tags.Cycle_Step = 1;
+            tags.Cycle_Complete = false;
+            addLog("▶️ CYCLE STARTED - Step 1: Opening R12 Hopper Gate");
+            document.getElementById('btnStart').disabled = true;
+            document.getElementById('btnReady').disabled = true;
+            document.getElementById('btnScan').disabled = true;
+        }
+        
+        function eStop() {
+            tags.E_Stop_Active = true;
+            tags.Material_Gate_Open = false;
+            tags.Aspirator_Hopper_Gate = false;
+            tags.R12_Hopper_Gate = false;
+            tags.Air_Conveyor = false;
+            tags.Aspirator_Gate = false;
+            addLog("🛑 E-STOP ACTIVATED!");
+            document.getElementById('btnReset').disabled = false;
+        }
+        
+        function resetEstop() {
+            tags.E_Stop_Active = false;
+            tags.Cycle_Active = false;
+            tags.Cycle_Step = 0;
+            tags.Batch_Ready_Latched = false;
+            tags.Barcode_Scanned = false;
+            tags.material = [0, 0, 0, 0];
+            addLog("🔄 System Reset - Ready for new batch");
+            document.getElementById('btnReset').disabled = true;
+            document.getElementById('btnScan').disabled = false;
+            document.getElementById('btnReady').disabled = true;
+            document.getElementById('btnStart').disabled = true;
+        }
+        
+        // ============================================================
+        // UI UPDATE
+        // ============================================================
+        function updateUI() {
+            const t = tags;
+            
+            // Status bar
+            document.getElementById('sysStatus').textContent = t.CPS_RDY ? 'READY' : 'NOT READY';
+            document.getElementById('sysStatus').className = 'status-value ' + (t.CPS_RDY ? 'status-ok' : 'status-error');
+            
+            document.getElementById('estopStatus').textContent = t.E_Stop_Active ? 'ACTIVE!' : 'OK';
+            document.getElementById('estopStatus').className = 'status-value ' + (t.E_Stop_Active ? 'status-error' : 'status-ok');
+            
+            document.getElementById('cycleStep').textContent = t.Cycle_Step;
+            
+            document.getElementById('barcodeStatus').textContent = t.Barcode_Scanned ? 'SCANNED' : '---';
+            document.getElementById('barcodeStatus').className = 'status-value ' + (t.Barcode_Scanned ? 'status-ok' : 'status-warning');
+            
+            // Progress bars
+            for (let i = 0; i < 4; i++) {
+                document.getElementById('progress' + (i+1)).style.width = t.material[i] + '%';
+                document.getElementById('progressText' + (i+1)).textContent = Math.round(t.material[i]) + '%';
+            }
+            
+            // Gates
+            updateGate('gate1', t.Material_Gate_Open, 'MAT GATE');
+            updateGate('gate2', t.Aspirator_Hopper_Gate, 'ASP GATE');
+            updateGate('gate3', t.R12_Hopper_Gate, 'R12 GATE');
+            
+            // R12 Permit
+            const r12El = document.getElementById('r12permit');
+            r12El.className = 'gate ' + (t.R12_Permit ? 'gate-open' : 'gate-closed');
+            r12El.innerHTML = 'R12 PERMIT<br>' + (t.R12_Permit ? 'ON' : 'OFF');
+            
+            // Lights
+            document.getElementById('lightReady').className = 'light ' + 
+                (t.CPS_RDY && !t.Batch_Ready_Latched && !t.Cycle_Active ? 'light-green' : '');
+            document.getElementById('lightProgress').className = 'light ' + 
+                (t.Cycle_Active ? 'light-yellow' : '');
+            document.getElementById('lightComplete').className = 'light ' + 
+                (t.Cycle_Complete ? 'light-blue' : '');
+            document.getElementById('lightIncoming').className = 'light ' + 
+                (t.material[2] > 5 ? 'light-yellow' : '');
+        }
+        
+        function updateGate(id, isOpen, name) {
+            const el = document.getElementById(id);
+            el.className = 'gate ' + (isOpen ? 'gate-open' : 'gate-closed');
+            el.innerHTML = name + '<br>' + (isOpen ? 'OPEN' : 'CLOSED');
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML = `<div class="log-entry"><span class="log-time">[${time}]</span> ${message}</div>` + log.innerHTML;
+        }
+        
+        // ============================================================
+        // KEYBOARD CONTROLS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case '1': scanBarcode(); break;
+                case '2': batchReady(); break;
+                case '3': startCycle(); break;
+                case 'e': case 'E': eStop(); break;
+                case 'r': case 'R': resetEstop(); break;
+            }
+        });
+        
+        // ============================================================
+        // MAIN LOOP
+        // ============================================================
+        addLog("🌽 CPS-001 Simulator Started");
+        addLog("Press [1] to scan barcode");
+        setInterval(plcScan, 100);  // 100ms scan cycle
+    </script>
+</body>
+</html>

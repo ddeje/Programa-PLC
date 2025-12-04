@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+================================================================================
+    CPS_001 - CORN PROCESSING SYSTEM
+    Version 2.0 - PULL SYSTEM Implementation
+    
+    Based on: CORN_PROCESSING_SOP_V2
+    Date: December 4, 2025
+    
+    For Import into RSLogix 5000 / Studio 5000
+    Target: CompactLogix 5069-L310ER
+================================================================================
+-->
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="33.00" TargetName="CPS_001" TargetType="Controller" ContainsContext="true" Owner="Rockwell Automation" ExportDate="Wed Dec 04 10:00:00 2025" ExportOptions="References NoRawData L5KData DecoratedData Context Dependencies ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Target" Name="CPS_001" ProcessorType="5069-L310ER" MajorRev="33" MinorRev="11" TimeSlice="20" ShareUnusedTimeSlice="1" ProjectCreationDate="Wed Dec 04 09:00:00 2025" LastModifiedDate="Wed Dec 04 10:00:00 2025" SFCExecutionControl="CurrentActive" SFCRestartPosition="MostRecent" SFCLastScan="DontScan" ProjectSN="16#0000_0000" MatchProjectToController="false" CanUseRPIFromProducer="false" InhibitAutomaticFirmwareUpdate="0" PassThroughConfiguration="EnabledWithAppend" DownloadProjectDocumentationAndExtendedProperties="true" DownloadProjectCustomProperties="true" ReportMinorOverflow="false">
+<Description>
+<![CDATA[CPS_001 - Corn Processing System - PULL SYSTEM v2.0]]>
+</Description>
+
+<!-- ============================================================ -->
+<!-- DATA TYPES -->
+<!-- ============================================================ -->
+<DataTypes>
+<DataType Name="TIMER" Family="NoFamily" Class="Predefined"/>
+<DataType Name="COUNTER" Family="NoFamily" Class="Predefined"/>
+</DataTypes>
+
+<!-- ============================================================ -->
+<!-- TAGS - CONTROLLER SCOPE -->
+<!-- ============================================================ -->
+<Tags>
+
+<!-- ==================== DIGITAL INPUTS - SLOT 1 ==================== -->
+<Tag Name="AEC_Sheller_ON" TagType="Alias" AliasFor="Local:1:I.Pt00.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[AEC Sheller Running Status]]></Description>
+</Tag>
+<Tag Name="Compressed_Air" TagType="Alias" AliasFor="Local:1:I.Pt01.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Compressed Air Pressure OK]]></Description>
+</Tag>
+<Tag Name="Dust_Collector_ON" TagType="Alias" AliasFor="Local:1:I.Pt02.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Dust Collector Running Status]]></Description>
+</Tag>
+<Tag Name="Seed_Treater_R12_Running" TagType="Alias" AliasFor="Local:1:I.Pt03.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Seed Treater Running Status]]></Description>
+</Tag>
+<Tag Name="Material_Gate_Open_Pos" TagType="Alias" AliasFor="Local:1:I.Pt04.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Material Gate Open Position Sensor]]></Description>
+</Tag>
+<Tag Name="Material_Gate_Close_Pos" TagType="Alias" AliasFor="Local:1:I.Pt05.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Material Gate Closed Position Sensor]]></Description>
+</Tag>
+<Tag Name="AEC_Material_Sensor" TagType="Alias" AliasFor="Local:1:I.Pt07.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[AEC Hopper Material Detection Sensor]]></Description>
+</Tag>
+<Tag Name="Aspiration_Gate_Open" TagType="Alias" AliasFor="Local:1:I.Pt08.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspiration Gate Open Position Sensor]]></Description>
+</Tag>
+<Tag Name="Aspiration_Gate_Close" TagType="Alias" AliasFor="Local:1:I.Pt09.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspiration Gate Closed Position Sensor]]></Description>
+</Tag>
+<Tag Name="Aspirator_Hopper_Sensor" TagType="Alias" AliasFor="Local:1:I.Pt10.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspirator Hopper Material Sensor]]></Description>
+</Tag>
+<Tag Name="R12_Hopper_Sensor" TagType="Alias" AliasFor="Local:1:I.Pt11.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Hopper Material Detection Sensor]]></Description>
+</Tag>
+<Tag Name="R12_Gate_Open_Pos" TagType="Alias" AliasFor="Local:1:I.Pt12.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Gate Open Position Sensor]]></Description>
+</Tag>
+<Tag Name="R12_Gate_Close_Pos" TagType="Alias" AliasFor="Local:1:I.Pt13.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Gate Closed Position Sensor]]></Description>
+</Tag>
+<Tag Name="R12_Ready" TagType="Alias" AliasFor="Local:1:I.Pt14.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 System Ready Signal]]></Description>
+</Tag>
+<Tag Name="R12_Envelope_Present_Sensor" TagType="Alias" AliasFor="Local:1:I.Pt15.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Envelope Present Sensor]]></Description>
+</Tag>
+
+<!-- ==================== DIGITAL INPUTS - SLOT 2 ==================== -->
+<Tag Name="Aspirator_Hopper_Gate_Close_Pos" TagType="Alias" AliasFor="Local:2:I.Pt00.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspirator Hopper Gate Closed Position]]></Description>
+</Tag>
+<Tag Name="Aspirator_Hopper_Gate_Open_Pos" TagType="Alias" AliasFor="Local:2:I.Pt01.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspirator Hopper Gate Open Position]]></Description>
+</Tag>
+
+<!-- ==================== DIGITAL OUTPUTS - SLOT 3 ==================== -->
+<Tag Name="AEC_Sheller_Run_Command" TagType="Alias" AliasFor="Local:3:O.Pt00.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[AEC Sheller Start Command]]></Description>
+</Tag>
+<Tag Name="AEC_Sheller_Stop_Command" TagType="Alias" AliasFor="Local:3:O.Pt01.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[AEC Sheller Stop Command]]></Description>
+</Tag>
+<Tag Name="R12_Start_Command" TagType="Alias" AliasFor="Local:3:O.Pt02.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Seed Treater Start Command]]></Description>
+</Tag>
+<Tag Name="Material_Gate_Open" TagType="Alias" AliasFor="Local:3:O.Pt03.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Material/Feeder Gate Open Command]]></Description>
+</Tag>
+<Tag Name="Air_Conveyor" TagType="Alias" AliasFor="Local:3:O.Pt04.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Air Conveyor Run Command]]></Description>
+</Tag>
+<Tag Name="Aspirator_Hopper_Gate" TagType="Alias" AliasFor="Local:3:O.Pt05.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspirator Hopper Gate Open Command]]></Description>
+</Tag>
+<Tag Name="Aspirator_Gate" TagType="Alias" AliasFor="Local:3:O.Pt06.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[Aspirator Gate Open Command]]></Description>
+</Tag>
+<Tag Name="R12_Hopper_Gate" TagType="Alias" AliasFor="Local:3:O.Pt07.Data" DataType="BOOL" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Hopper Gate Open Command]]></Description>
+</Tag>
+
+<!-- ==================== INTERNAL TAGS ==================== -->
+<!-- System Status -->
+<Tag Name="CPS_RDY" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[System Ready - All prerequisites met]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="VMEK_Rdy" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[VMEK Counter System Ready (from OPC)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Operator Workflow -->
+<Tag Name="Barcode_Scanned" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Barcode has been scanned successfully]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="BATCH_READY_Button" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Operator Batch Ready Button (HMI)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Batch_Ready_Latched" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Batch Ready Latched - Material loaded in Group 1]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="START_Button" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Cycle Start Button (HMI)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Cycle Control -->
+<Tag Name="Cycle_Start_Enabled" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[All conditions met to start cycle]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Cycle_Active" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Cycle is currently running]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Cycle_Complete" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Cycle has completed successfully]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Cycle_Step" TagType="Base" DataType="DINT" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Current step in cycle sequence (0-4)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Step Active Flags -->
+<Tag Name="Step1_Active" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Step 1 Active - R12 Hopper Gate]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Step2_Active" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Step 2 Active - Aspirator Hopper Gate]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Step3_Active" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Step 3 Active - Material Gate]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Waiting_For_Group4_Empty" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Waiting for Group 4 to empty]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Group Status -->
+<Tag Name="Group1_Empty" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 1 (Feeder) is empty]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group2_Empty" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 2 (Sheller/Conveyor) is empty]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group3_Empty" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 3 (Aspirator Hopper) is empty]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group4_Empty" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 4 (R12 Hopper) is empty]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group1_Has_Material" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 1 has material]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group2_Has_Material" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 2 has material]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group3_Has_Material" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 3 has material]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Group4_Has_Material" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 4 has material]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Empty Detection Timers -->
+<Tag Name="Group2_Empty_Dly" TagType="Base" DataType="TIMER" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 2 Empty Detection Delay Timer]]></Description>
+</Tag>
+<Tag Name="Group3_Empty_Dly" TagType="Base" DataType="TIMER" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 3 Empty Detection Delay Timer]]></Description>
+</Tag>
+<Tag Name="Group4_Empty_Dly" TagType="Base" DataType="TIMER" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Group 4 Empty Detection Delay Timer]]></Description>
+</Tag>
+
+<!-- E-Stop -->
+<Tag Name="E_Stop_Button" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Emergency Stop Button]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="E_Stop_Condition" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[E-Stop Condition Detected]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="E_Stop_Active" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[E-Stop is Active (Latched)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="E_Stop_Reset_Button" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[E-Stop Reset Button]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="E_Stop_Reset_OK" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[E-Stop Reset Conditions OK]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- R12 Communication -->
+<Tag Name="R12_Permit" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Permit - OK to process material]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- Indicator Lights -->
+<Tag Name="Ready_To_Load_Light" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Ready to Load Indicator (Green)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Cycle_In_Progress_Light" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Cycle In Progress Indicator (Yellow)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Cycle_Complete_Light" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Cycle Complete Indicator (Blue)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="Material_Incoming_Light" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[Material Incoming Warning (R12 Station)]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="R12_Processing_Light" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[R12 Processing Indicator]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+<!-- One-Shot Flags -->
+<Tag Name="One_Shot_Start" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[One-shot for cycle start]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+<Tag Name="One_Shot_CycleStart" TagType="Base" DataType="BOOL" Radix="Decimal" ExternalAccess="Read/Write">
+<Description><![CDATA[One-shot storage for cycle start rising edge]]></Description>
+<Data Format="L5K"><![CDATA[0]]></Data>
+<Data Format="Decorated"><![CDATA[0]]></Data>
+</Tag>
+
+</Tags>
+
+<!-- ============================================================ -->
+<!-- PROGRAMS -->
+<!-- ============================================================ -->
+<Programs>
+<Program Name="MainProgram" TestEdits="false" MainRoutineName="Main" Disabled="false">
+<Description><![CDATA[CPS_001 Main Program - PULL SYSTEM Logic]]></Description>
+
+<Tags>
+</Tags>
+
+<Routines>
+
+<!-- ==================== MAIN ROUTINE ==================== -->
+<Routine Name="Main" Type="RLL">
+<Description><![CDATA[Main routine - calls all subroutines]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[Call all program routines in sequence]]></Comment>
+<Text><![CDATA[JSR(_00_System_Status,0);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Text><![CDATA[JSR(_01_Operator_Workflow,0);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text><![CDATA[JSR(_02_Group_Status,0);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Text><![CDATA[JSR(_03_Cycle_Sequence,0);]]></Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text><![CDATA[JSR(_04_Gate_Control,0);]]></Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Text><![CDATA[JSR(_05_R12_Interface,0);]]></Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text><![CDATA[JSR(_06_Indicators,0);]]></Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Text><![CDATA[JSR(_07_Emergency_Stop,0);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== SYSTEM STATUS ==================== -->
+<Routine Name="_00_System_Status" Type="RLL">
+<Description><![CDATA[System Ready Conditions]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[System Ready (CPS_RDY) - All prerequisites must be met]]></Comment>
+<Text><![CDATA[XIC(Compressed_Air)XIC(Dust_Collector_ON)XIC(AEC_Sheller_ON)XIC(VMEK_Rdy)OTE(CPS_RDY);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Cycle Start Enable - All conditions for starting a new cycle]]></Comment>
+<Text><![CDATA[XIC(CPS_RDY)XIC(Group4_Empty)XIC(R12_Ready)XIC(R12_Envelope_Present_Sensor)XIC(Batch_Ready_Latched)XIO(E_Stop_Active)OTE(Cycle_Start_Enabled);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== OPERATOR WORKFLOW ==================== -->
+<Routine Name="_01_Operator_Workflow" Type="RLL">
+<Description><![CDATA[Operator workflow - Batch Ready latching]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[Batch Ready Latch - Operator indicates material is loaded]]></Comment>
+<Text><![CDATA[[XIC(Barcode_Scanned)XIC(BATCH_READY_Button)XIO(Cycle_Active),XIC(Batch_Ready_Latched)]OTE(Batch_Ready_Latched);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Clear Batch Ready when cycle completes]]></Comment>
+<Text><![CDATA[XIC(Cycle_Complete)OTU(Batch_Ready_Latched);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment><![CDATA[Clear Barcode when cycle completes]]></Comment>
+<Text><![CDATA[XIC(Cycle_Complete)OTU(Barcode_Scanned);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== GROUP STATUS ==================== -->
+<Routine Name="_02_Group_Status" Type="RLL">
+<Description><![CDATA[Group Empty/Full Detection]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[Group 1 Empty - No batch ready = Group 1 is empty]]></Comment>
+<Text><![CDATA[XIO(Batch_Ready_Latched)OTE(Group1_Empty);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Group 2 Empty Detection - 3 second delay]]></Comment>
+<Text><![CDATA[XIO(AEC_Material_Sensor)TON(Group2_Empty_Dly,?,?);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Text><![CDATA[XIC(Group2_Empty_Dly.DN)OTE(Group2_Empty);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment><![CDATA[Group 3 Empty Detection - 3 second delay]]></Comment>
+<Text><![CDATA[XIO(Aspirator_Hopper_Sensor)TON(Group3_Empty_Dly,?,?);]]></Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Text><![CDATA[XIC(Group3_Empty_Dly.DN)OTE(Group3_Empty);]]></Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment><![CDATA[Group 4 Empty Detection - 3 second delay]]></Comment>
+<Text><![CDATA[XIO(R12_Hopper_Sensor)TON(Group4_Empty_Dly,?,?);]]></Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Text><![CDATA[XIC(Group4_Empty_Dly.DN)OTE(Group4_Empty);]]></Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment><![CDATA[Group Has Material Flags]]></Comment>
+<Text><![CDATA[XIC(Batch_Ready_Latched)OTE(Group1_Has_Material);]]></Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Text><![CDATA[XIO(Group2_Empty)OTE(Group2_Has_Material);]]></Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Text><![CDATA[XIO(Group3_Empty)OTE(Group3_Has_Material);]]></Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Text><![CDATA[XIO(Group4_Empty)OTE(Group4_Has_Material);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== CYCLE SEQUENCE ==================== -->
+<Routine Name="_03_Cycle_Sequence" Type="RLL">
+<Description><![CDATA[PULL System Sequential Cycle Control]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[Start Cycle - Rising edge on START button when enabled]]></Comment>
+<Text><![CDATA[[XIC(Cycle_Start_Enabled)XIC(START_Button)ONS(One_Shot_Start),XIC(Cycle_Active)]XIO(Cycle_Complete)OTE(Cycle_Active);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Initialize Step Counter on Cycle Start]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)ONS(One_Shot_CycleStart)MOV(1,Cycle_Step);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment><![CDATA[Step 1 Active - R12 Hopper Gate (Group3 to Group4)]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)EQU(Cycle_Step,1)XIC(Group4_Empty)OTE(Step1_Active);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment><![CDATA[Step 1 Complete - Move to Step 2 when Group3 empty]]></Comment>
+<Text><![CDATA[XIC(Step1_Active)XIC(Group3_Empty)MOV(2,Cycle_Step);]]></Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment><![CDATA[Step 2 Active - Aspirator Hopper Gate (Group2 to Group3)]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)EQU(Cycle_Step,2)XIC(Group3_Empty)OTE(Step2_Active);]]></Text>
+</Rung>
+<Rung Number="5" Type="N">
+<Comment><![CDATA[Step 2 Complete - Move to Step 3 when Group2 empty]]></Comment>
+<Text><![CDATA[XIC(Step2_Active)XIC(Group2_Empty)MOV(3,Cycle_Step);]]></Text>
+</Rung>
+<Rung Number="6" Type="N">
+<Comment><![CDATA[Step 3 Active - Material Gate + Air Conveyor (Group1 to Group2)]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)EQU(Cycle_Step,3)XIC(Group2_Empty)OTE(Step3_Active);]]></Text>
+</Rung>
+<Rung Number="7" Type="N">
+<Comment><![CDATA[Step 3 Complete - Move to Step 4 when Group1 empty]]></Comment>
+<Text><![CDATA[XIC(Step3_Active)XIC(Group1_Empty)MOV(4,Cycle_Step);]]></Text>
+</Rung>
+<Rung Number="8" Type="N">
+<Comment><![CDATA[Step 4 - Waiting for all groups to empty]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)EQU(Cycle_Step,4)XIC(Group1_Empty)XIC(Group2_Empty)XIC(Group3_Empty)OTE(Waiting_For_Group4_Empty);]]></Text>
+</Rung>
+<Rung Number="9" Type="N">
+<Comment><![CDATA[Cycle Complete - All groups empty]]></Comment>
+<Text><![CDATA[XIC(Waiting_For_Group4_Empty)XIC(Group4_Empty)OTE(Cycle_Complete);]]></Text>
+</Rung>
+<Rung Number="10" Type="N">
+<Comment><![CDATA[Reset Cycle when complete]]></Comment>
+<Text><![CDATA[XIC(Cycle_Complete)OTU(Cycle_Active);]]></Text>
+</Rung>
+<Rung Number="11" Type="N">
+<Text><![CDATA[XIC(Cycle_Complete)MOV(0,Cycle_Step);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== GATE CONTROL ==================== -->
+<Routine Name="_04_Gate_Control" Type="RLL">
+<Description><![CDATA[Gate Open/Close Commands]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[R12 Hopper Gate - Open during Step 1]]></Comment>
+<Text><![CDATA[XIC(Step1_Active)OTE(R12_Hopper_Gate);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Aspirator Hopper Gate - Open during Step 2]]></Comment>
+<Text><![CDATA[XIC(Step2_Active)OTE(Aspirator_Hopper_Gate);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment><![CDATA[Material Gate - Open during Step 3]]></Comment>
+<Text><![CDATA[XIC(Step3_Active)OTE(Material_Gate_Open);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment><![CDATA[Air Conveyor - ON during Step 3]]></Comment>
+<Text><![CDATA[XIC(Step3_Active)OTE(Air_Conveyor);]]></Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment><![CDATA[Aspirator Gate - ON during Step 3]]></Comment>
+<Text><![CDATA[XIC(Step3_Active)OTE(Aspirator_Gate);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== R12 INTERFACE ==================== -->
+<Routine Name="_05_R12_Interface" Type="RLL">
+<Description><![CDATA[R12 Seed Treater Communication]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[R12 Permit - Material in R12 hopper and system ready]]></Comment>
+<Text><![CDATA[XIC(R12_Hopper_Sensor)XIC(R12_Ready)XIC(CPS_RDY)OTE(R12_Permit);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== INDICATORS ==================== -->
+<Routine Name="_06_Indicators" Type="RLL">
+<Description><![CDATA[Operator Indicator Lights]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[Ready to Load Light (Green) - System ready, waiting for batch]]></Comment>
+<Text><![CDATA[XIC(CPS_RDY)XIO(Batch_Ready_Latched)XIO(Cycle_Active)OTE(Ready_To_Load_Light);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[Cycle In Progress Light (Yellow)]]></Comment>
+<Text><![CDATA[XIC(Cycle_Active)OTE(Cycle_In_Progress_Light);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment><![CDATA[Cycle Complete Light (Blue)]]></Comment>
+<Text><![CDATA[XIC(Cycle_Complete)OTE(Cycle_Complete_Light);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment><![CDATA[Material Incoming Light - Warn R12 operator]]></Comment>
+<Text><![CDATA[XIC(Group3_Has_Material)OTE(Material_Incoming_Light);]]></Text>
+</Rung>
+<Rung Number="4" Type="N">
+<Comment><![CDATA[R12 Processing Light]]></Comment>
+<Text><![CDATA[XIC(Group4_Has_Material)OTE(R12_Processing_Light);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+<!-- ==================== EMERGENCY STOP ==================== -->
+<Routine Name="_07_Emergency_Stop" Type="RLL">
+<Description><![CDATA[Emergency Stop Logic]]></Description>
+<RLLContent>
+<Rung Number="0" Type="N">
+<Comment><![CDATA[E-Stop Condition Detection]]></Comment>
+<Text><![CDATA[[XIO(Compressed_Air),XIO(Dust_Collector_ON),XIC(E_Stop_Button)]OTE(E_Stop_Condition);]]></Text>
+</Rung>
+<Rung Number="1" Type="N">
+<Comment><![CDATA[E-Stop Latch - Requires manual reset]]></Comment>
+<Text><![CDATA[[XIC(E_Stop_Condition),XIC(E_Stop_Active)]XIO(E_Stop_Reset_OK)OTE(E_Stop_Active);]]></Text>
+</Rung>
+<Rung Number="2" Type="N">
+<Comment><![CDATA[E-Stop Reset Conditions OK]]></Comment>
+<Text><![CDATA[XIC(Compressed_Air)XIC(Dust_Collector_ON)XIC(E_Stop_Reset_Button)OTE(E_Stop_Reset_OK);]]></Text>
+</Rung>
+<Rung Number="3" Type="N">
+<Comment><![CDATA[E-Stop Actions - Disable cycle when E-Stop active]]></Comment>
+<Text><![CDATA[XIC(E_Stop_Active)OTU(Cycle_Start_Enabled);]]></Text>
+</Rung>
+</RLLContent>
+</Routine>
+
+</Routines>
+</Program>
+</Programs>
+
+<!-- ============================================================ -->
+<!-- TASKS -->
+<!-- ============================================================ -->
+<Tasks>
+<Task Name="MainTask" Type="CONTINUOUS" Rate="10" Priority="10" Watchdog="500" DisableUpdateOutputs="false" InhibitTask="false">
+<Description><![CDATA[Main continuous task - 10ms scan rate]]></Description>
+<ScheduledPrograms>
+<ScheduledProgram Name="MainProgram"/>
+</ScheduledPrograms>
+</Task>
+</Tasks>
+
+</Controller>
+</RSLogix5000Content>
