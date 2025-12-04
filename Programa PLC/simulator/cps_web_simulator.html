@@ -284,65 +284,89 @@
             t.CPS_RDY = t.Compressed_Air && t.Dust_Collector_ON && 
                         t.AEC_Sheller_ON && t.VMEK_Rdy && !t.E_Stop_Active;
             
-            // Cycle Start Enable
-            t.Cycle_Start_Enabled = t.CPS_RDY && t.material[3] < 5 && 
-                                     t.R12_Ready && t.R12_Envelope_Present &&
-                                     t.Batch_Ready_Latched;
+            // Cycle Start Enable - depends on current step
+            if (t.Cycle_Step === 0) {
+                // Initial start - need batch ready
+                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[3] < 5 && 
+                                         t.R12_Ready && t.R12_Envelope_Present &&
+                                         t.Batch_Ready_Latched;
+            } else if (t.Cycle_Step === 10) {
+                // Waiting for next step - Group2 has material, ready to move to Group3
+                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[1] > 50;
+            } else if (t.Cycle_Step === 20) {
+                // Waiting for next step - Group3 has material, ready to move to Group4
+                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[2] > 50 && t.material[3] < 5;
+            } else if (t.Cycle_Step === 30) {
+                // Waiting for R12 to finish
+                t.Cycle_Start_Enabled = false;
+            } else {
+                // During transfer - no start allowed
+                t.Cycle_Start_Enabled = false;
+            }
             
-            // Step logic
+            // Step logic - ONE GROUP AT A TIME
             if (t.Cycle_Active) {
-                // Step 1: R12 Hopper Gate (Group3 → Group4)
+                
+                // ========== Step 1: Group1 → Group2 ==========
                 if (t.Cycle_Step === 1) {
-                    if (t.material[3] < 5) {  // Group4 empty
-                        t.R12_Hopper_Gate = true;
-                    }
-                    if (t.material[2] < 5 && t.R12_Hopper_Gate) {  // Group3 emptied
-                        t.Cycle_Step = 2;
-                    }
-                }
-                
-                // Step 2: Aspirator Hopper Gate (Group2 → Group3)
-                if (t.Cycle_Step === 2) {
-                    t.R12_Hopper_Gate = false;
-                    if (t.material[2] < 5) {  // Group3 empty
-                        t.Aspirator_Hopper_Gate = true;
-                    }
-                    if (t.material[1] < 5 && t.Aspirator_Hopper_Gate) {  // Group2 emptied
-                        t.Cycle_Step = 3;
-                    }
-                }
-                
-                // Step 3: Material Gate (Group1 → Group2)
-                if (t.Cycle_Step === 3) {
-                    t.Aspirator_Hopper_Gate = false;
-                    if (t.material[1] < 5) {  // Group2 empty
-                        t.Material_Gate_Open = true;
-                        t.Air_Conveyor = true;
-                        t.Aspirator_Gate = true;
-                    }
-                    if (t.material[0] < 5) {  // Group1 emptied
-                        t.Cycle_Step = 4;
-                        t.Batch_Ready_Latched = false;
-                    }
-                }
-                
-                // Step 4: Wait for all to empty
-                if (t.Cycle_Step === 4) {
-                    t.Material_Gate_Open = false;
-                    t.Air_Conveyor = false;
-                    t.Aspirator_Gate = false;
+                    t.Material_Gate_Open = true;
+                    t.Air_Conveyor = true;
+                    t.Aspirator_Gate = true;
                     
-                    if (t.material[0] < 5 && t.material[1] < 5 && 
-                        t.material[2] < 5 && t.material[3] < 5) {
+                    // When Group1 is empty, STOP and wait
+                    if (t.material[0] < 1) {
+                        t.Material_Gate_Open = false;
+                        t.Air_Conveyor = false;
+                        t.Aspirator_Gate = false;
+                        t.Cycle_Active = false;  // STOP - wait for operator
+                        t.Cycle_Step = 10;  // Waiting state
+                        t.Batch_Ready_Latched = false;
+                        addLog("⏸️ WAITING - Material in Group 2. Press START to continue.");
+                        document.getElementById('btnStart').disabled = false;
+                    }
+                }
+                
+                // ========== Step 2: Group2 → Group3 ==========
+                if (t.Cycle_Step === 2) {
+                    t.Aspirator_Hopper_Gate = true;
+                    
+                    // When Group2 is empty, STOP and wait
+                    if (t.material[1] < 1) {
+                        t.Aspirator_Hopper_Gate = false;
+                        t.Cycle_Active = false;  // STOP - wait for operator
+                        t.Cycle_Step = 20;  // Waiting state
+                        addLog("⏸️ WAITING - Material in Group 3. Press START to continue.");
+                        document.getElementById('btnStart').disabled = false;
+                    }
+                }
+                
+                // ========== Step 3: Group3 → Group4 ==========
+                if (t.Cycle_Step === 3) {
+                    t.R12_Hopper_Gate = true;
+                    
+                    // When Group3 is empty, STOP and wait for R12
+                    if (t.material[2] < 1) {
+                        t.R12_Hopper_Gate = false;
+                        t.Cycle_Step = 30;  // Wait for R12 to process
+                        addLog("⏳ Material in R12 - Processing...");
+                    }
+                }
+                
+                // ========== Step 4: Wait for R12 to finish ==========
+                if (t.Cycle_Step === 30) {
+                    // R12 is processing, wait until empty
+                    if (t.material[3] < 1) {
                         t.Cycle_Complete = true;
                         t.Cycle_Active = false;
                         t.Cycle_Step = 0;
                         addLog("✅ CYCLE COMPLETE - Ready for next batch");
+                        document.getElementById('btnScan').disabled = false;
+                        document.getElementById('btnStart').disabled = true;
                     }
                 }
             }
             
-            // R12 Permit
+            // R12 Permit - Signal to R12 that there's material to process
             t.R12_Permit = t.material[3] > 5 && t.R12_Ready && t.CPS_RDY;
             
             // Material transfer simulation
@@ -354,13 +378,15 @@
         
         function simulateMaterialTransfer() {
             const t = tags;
-            const rate = 2;  // % per scan
+            const rate = 3;  // % per scan - faster transfer
             
             // Group1 → Group2 (Material Gate)
             if (t.Material_Gate_Open && t.material[0] > 0) {
                 const transfer = Math.min(rate, t.material[0]);
                 t.material[0] -= transfer;
                 t.material[1] += transfer;
+                // Ensure it reaches 0
+                if (t.material[0] < 0.5) t.material[0] = 0;
             }
             
             // Group2 → Group3 (Aspirator Hopper Gate)
@@ -368,6 +394,7 @@
                 const transfer = Math.min(rate, t.material[1]);
                 t.material[1] -= transfer;
                 t.material[2] += transfer;
+                if (t.material[1] < 0.5) t.material[1] = 0;
             }
             
             // Group3 → Group4 (R12 Hopper Gate)
@@ -375,12 +402,13 @@
                 const transfer = Math.min(rate, t.material[2]);
                 t.material[2] -= transfer;
                 t.material[3] += transfer;
+                if (t.material[2] < 0.5) t.material[2] = 0;
             }
             
-            // R12 processes material
+            // R12 processes material (automatic when R12_Permit)
             if (t.R12_Permit && t.material[3] > 0) {
-                t.material[3] -= rate * 0.5;
-                if (t.material[3] < 0) t.material[3] = 0;
+                t.material[3] -= rate * 0.8;
+                if (t.material[3] < 0.5) t.material[3] = 0;
             }
         }
         
@@ -404,10 +432,28 @@
         
         function startCycle() {
             if (!tags.Cycle_Start_Enabled || tags.E_Stop_Active) return;
-            tags.Cycle_Active = true;
-            tags.Cycle_Step = 1;
-            tags.Cycle_Complete = false;
-            addLog("▶️ CYCLE STARTED - Step 1: Opening R12 Hopper Gate");
+            
+            const t = tags;
+            
+            // Determine which step to start based on current state
+            if (t.Cycle_Step === 0) {
+                // Initial start - begin with Step 1
+                t.Cycle_Active = true;
+                t.Cycle_Step = 1;
+                t.Cycle_Complete = false;
+                addLog("▶️ START - Step 1: Moving Group 1 → Group 2");
+            } else if (t.Cycle_Step === 10) {
+                // Continue to Step 2
+                t.Cycle_Active = true;
+                t.Cycle_Step = 2;
+                addLog("▶️ CONTINUE - Step 2: Moving Group 2 → Group 3");
+            } else if (t.Cycle_Step === 20) {
+                // Continue to Step 3
+                t.Cycle_Active = true;
+                t.Cycle_Step = 3;
+                addLog("▶️ CONTINUE - Step 3: Moving Group 3 → Group 4 (R12)");
+            }
+            
             document.getElementById('btnStart').disabled = true;
             document.getElementById('btnReady').disabled = true;
             document.getElementById('btnScan').disabled = true;
