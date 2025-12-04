@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPS-001 Simulator - PULL SYSTEM</title>
+    <title>CPS-001 Simulator - PULL SYSTEM v3</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -13,7 +13,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 0 auto; }
         h1 { text-align: center; color: #00d4ff; margin-bottom: 10px; }
         h2 { text-align: center; color: #888; font-size: 14px; margin-bottom: 20px; }
         
@@ -34,20 +34,26 @@
         }
         .group {
             background: #2a2a4a; border-radius: 10px; padding: 15px;
-            display: flex; align-items: center; gap: 20px;
+            display: flex; align-items: center; gap: 15px;
         }
-        .group-info { flex: 1; }
+        .group-info { width: 180px; }
         .group-name { font-weight: bold; color: #00d4ff; }
         .group-desc { font-size: 12px; color: #888; }
+        .group-lot { font-size: 11px; color: #ffaa00; margin-top: 3px; }
         
         .progress-bar {
-            flex: 2; height: 30px; background: #1a1a2e;
+            flex: 1; height: 30px; background: #1a1a2e;
             border-radius: 5px; overflow: hidden; position: relative;
         }
         .progress-fill {
-            height: 100%; background: linear-gradient(90deg, #00d4ff, #00ff88);
+            height: 100%; 
             transition: width 0.1s ease;
         }
+        .progress-fill.lot-a { background: linear-gradient(90deg, #00d4ff, #0088ff); }
+        .progress-fill.lot-b { background: linear-gradient(90deg, #ff8800, #ffaa00); }
+        .progress-fill.lot-c { background: linear-gradient(90deg, #00ff88, #00cc66); }
+        .progress-fill.lot-d { background: linear-gradient(90deg, #ff44aa, #ff88cc); }
+        .progress-fill.empty { background: transparent; }
         .progress-text {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -56,14 +62,14 @@
         
         .gate {
             width: 100px; text-align: center; padding: 8px;
-            border-radius: 5px; font-weight: bold;
+            border-radius: 5px; font-weight: bold; font-size: 12px;
         }
         .gate-open { background: #00ff88; color: #000; }
         .gate-closed { background: #444; color: #888; }
         
         .arrow {
-            text-align: center; font-size: 24px; color: #00d4ff;
-            margin: 5px 0;
+            text-align: center; font-size: 20px; color: #00d4ff;
+            margin: 3px 0; margin-left: 90px;
         }
         
         .controls {
@@ -78,7 +84,6 @@
         .btn:hover { transform: scale(1.05); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-scan { background: #00d4ff; color: #000; }
-        .btn-ready { background: #ffaa00; color: #000; }
         .btn-start { background: #00ff88; color: #000; }
         .btn-estop { background: #ff4444; color: #fff; }
         .btn-reset { background: #888; color: #fff; }
@@ -97,25 +102,37 @@
         .light-green { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
         .light-yellow { background: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
         .light-blue { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
-        .light-red { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
         
         .log {
             background: #1a1a2e; border: 1px solid #333;
             border-radius: 10px; padding: 15px; margin-top: 20px;
-            height: 120px; overflow-y: auto;
+            height: 150px; overflow-y: auto;
         }
         .log-entry { font-size: 12px; padding: 3px 0; border-bottom: 1px solid #222; }
         .log-time { color: #00d4ff; }
         
-        .keyboard-hint {
-            text-align: center; margin-top: 15px; color: #666; font-size: 12px;
+        .legend {
+            display: flex; justify-content: center; gap: 20px;
+            margin-top: 15px; font-size: 12px;
         }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-color { width: 20px; height: 12px; border-radius: 3px; }
+        
+        .keyboard-hint {
+            text-align: center; margin-top: 10px; color: #666; font-size: 12px;
+        }
+        
+        .queue-info {
+            background: #2a2a4a; padding: 10px 15px; border-radius: 8px;
+            margin-top: 15px; text-align: center;
+        }
+        .queue-info span { color: #ffaa00; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🌽 CPS-001 CORN PROCESSING SYSTEM</h1>
-        <h2>Version 2.0 - PULL SYSTEM Simulator</h2>
+        <h2>Version 3.0 - PULL SYSTEM (No Mixing)</h2>
         
         <!-- Status Bar -->
         <div class="status-bar">
@@ -128,12 +145,12 @@
                 <div id="estopStatus" class="status-value status-ok">OK</div>
             </div>
             <div class="status-item">
-                <div class="status-label">CYCLE STEP</div>
-                <div id="cycleStep" class="status-value">0</div>
+                <div class="status-label">LOTS IN SYSTEM</div>
+                <div id="lotsCount" class="status-value">0</div>
             </div>
             <div class="status-item">
-                <div class="status-label">BARCODE</div>
-                <div id="barcodeStatus" class="status-value status-warning">---</div>
+                <div class="status-label">NEXT LOT</div>
+                <div id="nextLot" class="status-value status-warning">---</div>
             </div>
         </div>
         
@@ -144,9 +161,10 @@
                 <div class="group-info">
                     <div class="group-name">GROUP 1: FEEDER</div>
                     <div class="group-desc">Manual Loading Station</div>
+                    <div id="lot1" class="group-lot">Empty</div>
                 </div>
                 <div class="progress-bar">
-                    <div id="progress1" class="progress-fill" style="width: 0%"></div>
+                    <div id="progress1" class="progress-fill empty" style="width: 0%"></div>
                     <div id="progressText1" class="progress-text">0%</div>
                 </div>
                 <div id="gate1" class="gate gate-closed">MAT GATE<br>CLOSED</div>
@@ -158,10 +176,11 @@
             <div class="group">
                 <div class="group-info">
                     <div class="group-name">GROUP 2: SHELLER</div>
-                    <div class="group-desc">+ Air Conveyor + Aspirator</div>
+                    <div class="group-desc">+ Air Conveyor</div>
+                    <div id="lot2" class="group-lot">Empty</div>
                 </div>
                 <div class="progress-bar">
-                    <div id="progress2" class="progress-fill" style="width: 0%"></div>
+                    <div id="progress2" class="progress-fill empty" style="width: 0%"></div>
                     <div id="progressText2" class="progress-text">0%</div>
                 </div>
                 <div id="gate2" class="gate gate-closed">ASP GATE<br>CLOSED</div>
@@ -174,9 +193,10 @@
                 <div class="group-info">
                     <div class="group-name">GROUP 3: ASPIRATOR</div>
                     <div class="group-desc">Hopper → VMEK</div>
+                    <div id="lot3" class="group-lot">Empty</div>
                 </div>
                 <div class="progress-bar">
-                    <div id="progress3" class="progress-fill" style="width: 0%"></div>
+                    <div id="progress3" class="progress-fill empty" style="width: 0%"></div>
                     <div id="progressText3" class="progress-text">0%</div>
                 </div>
                 <div id="gate3" class="gate gate-closed">R12 GATE<br>CLOSED</div>
@@ -189,13 +209,27 @@
                 <div class="group-info">
                     <div class="group-name">GROUP 4: R12</div>
                     <div class="group-desc">Seed Treater</div>
+                    <div id="lot4" class="group-lot">Empty</div>
                 </div>
                 <div class="progress-bar">
-                    <div id="progress4" class="progress-fill" style="width: 0%"></div>
+                    <div id="progress4" class="progress-fill empty" style="width: 0%"></div>
                     <div id="progressText4" class="progress-text">0%</div>
                 </div>
                 <div id="r12permit" class="gate gate-closed">R12 PERMIT<br>OFF</div>
             </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item"><div class="legend-color" style="background: #00d4ff;"></div> Lot A</div>
+            <div class="legend-item"><div class="legend-color" style="background: #ff8800;"></div> Lot B</div>
+            <div class="legend-item"><div class="legend-color" style="background: #00ff88;"></div> Lot C</div>
+            <div class="legend-item"><div class="legend-color" style="background: #ff44aa;"></div> Lot D</div>
+        </div>
+        
+        <!-- Queue Info -->
+        <div class="queue-info" id="queueInfo">
+            Scan a barcode to load material into Group 1
         </div>
         
         <!-- Indicators -->
@@ -206,29 +240,24 @@
             </div>
             <div class="indicator">
                 <div id="lightProgress" class="light"></div>
-                <span>In Progress</span>
+                <span>Transferring</span>
             </div>
             <div class="indicator">
                 <div id="lightComplete" class="light"></div>
-                <span>Complete</span>
-            </div>
-            <div class="indicator">
-                <div id="lightIncoming" class="light"></div>
-                <span>Material Incoming</span>
+                <span>Lot Complete</span>
             </div>
         </div>
         
         <!-- Controls -->
         <div class="controls">
-            <button id="btnScan" class="btn btn-scan" onclick="scanBarcode()">📱 1. SCAN BARCODE</button>
-            <button id="btnReady" class="btn btn-ready" onclick="batchReady()" disabled>📦 2. BATCH READY</button>
-            <button id="btnStart" class="btn btn-start" onclick="startCycle()" disabled>▶️ 3. START CYCLE</button>
-            <button id="btnEstop" class="btn btn-estop" onclick="eStop()">🛑 E-STOP</button>
-            <button id="btnReset" class="btn btn-reset" onclick="resetEstop()" disabled>🔄 RESET</button>
+            <button id="btnScan" class="btn btn-scan" onclick="scanBarcode()">📱 SCAN BARCODE [1]</button>
+            <button id="btnStart" class="btn btn-start" onclick="startCycle()">▶️ START CYCLE [3]</button>
+            <button id="btnEstop" class="btn btn-estop" onclick="eStop()">🛑 E-STOP [E]</button>
+            <button id="btnReset" class="btn btn-reset" onclick="resetSystem()">🔄 RESET [R]</button>
         </div>
         
         <div class="keyboard-hint">
-            Keyboard: [1] Scan | [2] Batch Ready | [3] Start | [E] E-Stop | [R] Reset
+            Keyboard: [1] Scan Barcode | [3] Start Cycle | [E] E-Stop | [R] Reset
         </div>
         
         <!-- Log -->
@@ -237,296 +266,279 @@
 
     <script>
         // ============================================================
-        // PLC TAGS (Estado del sistema)
+        // SYSTEM STATE
         // ============================================================
-        const tags = {
-            // Inputs
-            Compressed_Air: true,
-            Dust_Collector_ON: true,
-            AEC_Sheller_ON: true,
-            VMEK_Rdy: true,
-            R12_Ready: true,
-            R12_Envelope_Present: true,
-            
-            // Buttons
-            Barcode_Scanned: false,
-            Batch_Ready_Latched: false,
-            
-            // Internal
+        const LOT_COLORS = ['lot-a', 'lot-b', 'lot-c', 'lot-d'];
+        const LOT_NAMES = ['LOT-A', 'LOT-B', 'LOT-C', 'LOT-D'];
+        let lotCounter = 0;
+        
+        const state = {
+            // System
             CPS_RDY: true,
-            Cycle_Start_Enabled: false,
-            Cycle_Active: false,
-            Cycle_Complete: false,
-            Cycle_Step: 0,
-            
-            // E-Stop
             E_Stop_Active: false,
+            transferring: false,
+            
+            // Transfer sequence tracking
+            transferSequence: [],      // Array of pending transfers
+            currentTransferIndex: 0,   // Which transfer is active
+            activeTransfer: null,      // Current transfer object
+            
+            // Groups: {material: 0-100, lot: null or lot name, lotColor: css class}
+            groups: [
+                { material: 0, lot: null, lotColor: 'empty' },  // Group 1
+                { material: 0, lot: null, lotColor: 'empty' },  // Group 2
+                { material: 0, lot: null, lotColor: 'empty' },  // Group 3
+                { material: 0, lot: null, lotColor: 'empty' }   // Group 4
+            ],
             
             // Gates
-            Material_Gate_Open: false,
-            Air_Conveyor: false,
-            Aspirator_Gate: false,
-            Aspirator_Hopper_Gate: false,
-            R12_Hopper_Gate: false,
-            R12_Permit: false,
+            gates: [false, false, false],  // Material, Aspirator, R12
             
-            // Material levels (simulation)
-            material: [0, 0, 0, 0]  // Groups 1-4
+            // R12
+            R12_Permit: false,
+            R12_Ready: true
         };
         
         // ============================================================
         // PLC LOGIC
         // ============================================================
         function plcScan() {
-            const t = tags;
+            const s = state;
             
             // System Ready
-            t.CPS_RDY = t.Compressed_Air && t.Dust_Collector_ON && 
-                        t.AEC_Sheller_ON && t.VMEK_Rdy && !t.E_Stop_Active;
+            s.CPS_RDY = !s.E_Stop_Active;
             
-            // Cycle Start Enable - depends on current step
-            if (t.Cycle_Step === 0) {
-                // Initial start - need batch ready
-                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[3] < 5 && 
-                                         t.R12_Ready && t.R12_Envelope_Present &&
-                                         t.Batch_Ready_Latched;
-            } else if (t.Cycle_Step === 10) {
-                // Waiting for next step - Group2 has material, ready to move to Group3
-                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[1] > 50;
-            } else if (t.Cycle_Step === 20) {
-                // Waiting for next step - Group3 has material, ready to move to Group4
-                t.Cycle_Start_Enabled = t.CPS_RDY && t.material[2] > 50 && t.material[3] < 5;
-            } else if (t.Cycle_Step === 30) {
-                // Waiting for R12 to finish
-                t.Cycle_Start_Enabled = false;
-            } else {
-                // During transfer - no start allowed
-                t.Cycle_Start_Enabled = false;
-            }
+            // R12 Permit - process material in Group 4
+            s.R12_Permit = s.groups[3].material > 0 && s.R12_Ready && s.CPS_RDY;
             
-            // Step logic - ONE GROUP AT A TIME
-            if (t.Cycle_Active) {
-                
-                // ========== Step 1: Group1 → Group2 ==========
-                if (t.Cycle_Step === 1) {
-                    t.Material_Gate_Open = true;
-                    t.Air_Conveyor = true;
-                    t.Aspirator_Gate = true;
-                    
-                    // When Group1 is empty, STOP and wait
-                    if (t.material[0] < 1) {
-                        t.Material_Gate_Open = false;
-                        t.Air_Conveyor = false;
-                        t.Aspirator_Gate = false;
-                        t.Cycle_Active = false;  // STOP - wait for operator
-                        t.Cycle_Step = 10;  // Waiting state
-                        t.Batch_Ready_Latched = false;
-                        addLog("⏸️ WAITING - Material in Group 2. Press START to continue.");
-                        document.getElementById('btnStart').disabled = false;
-                    }
-                }
-                
-                // ========== Step 2: Group2 → Group3 ==========
-                if (t.Cycle_Step === 2) {
-                    t.Aspirator_Hopper_Gate = true;
-                    
-                    // When Group2 is empty, STOP and wait
-                    if (t.material[1] < 1) {
-                        t.Aspirator_Hopper_Gate = false;
-                        t.Cycle_Active = false;  // STOP - wait for operator
-                        t.Cycle_Step = 20;  // Waiting state
-                        addLog("⏸️ WAITING - Material in Group 3. Press START to continue.");
-                        document.getElementById('btnStart').disabled = false;
-                    }
-                }
-                
-                // ========== Step 3: Group3 → Group4 ==========
-                if (t.Cycle_Step === 3) {
-                    t.R12_Hopper_Gate = true;
-                    
-                    // When Group3 is empty, STOP and wait for R12
-                    if (t.material[2] < 1) {
-                        t.R12_Hopper_Gate = false;
-                        t.Cycle_Step = 30;  // Wait for R12 to process
-                        addLog("⏳ Material in R12 - Processing...");
-                    }
-                }
-                
-                // ========== Step 4: Wait for R12 to finish ==========
-                if (t.Cycle_Step === 30) {
-                    // R12 is processing, wait until empty
-                    if (t.material[3] < 1) {
-                        t.Cycle_Complete = true;
-                        t.Cycle_Active = false;
-                        t.Cycle_Step = 0;
-                        addLog("✅ CYCLE COMPLETE - Ready for next batch");
-                        document.getElementById('btnScan').disabled = false;
-                        document.getElementById('btnStart').disabled = true;
+            // Auto-process R12
+            if (s.R12_Permit && s.groups[3].material > 0) {
+                s.groups[3].material -= 3;
+                if (s.groups[3].material <= 0) {
+                    s.groups[3].material = 0;
+                    const completedLot = s.groups[3].lot;
+                    s.groups[3].lot = null;
+                    s.groups[3].lotColor = 'empty';
+                    if (completedLot) {
+                        addLog(`✅ ${completedLot} COMPLETE - Processed by R12`);
                     }
                 }
             }
             
-            // R12 Permit - Signal to R12 that there's material to process
-            t.R12_Permit = t.material[3] > 5 && t.R12_Ready && t.CPS_RDY;
+            // Sequential Transfer logic
+            if (s.transferring && s.activeTransfer) {
+                const t = s.activeTransfer;
+                const fromGroup = s.groups[t.from];
+                const toGroup = s.groups[t.to];
+                
+                if (fromGroup.material > 0) {
+                    const transfer = Math.min(5, fromGroup.material);
+                    fromGroup.material -= transfer;
+                    toGroup.material += transfer;
+                    
+                    // Transfer lot info on first transfer
+                    if (!toGroup.lot) {
+                        toGroup.lot = fromGroup.lot;
+                        toGroup.lotColor = fromGroup.lotColor;
+                    }
+                    
+                    // Check if this transfer is complete
+                    if (fromGroup.material <= 0) {
+                        fromGroup.material = 0;
+                        fromGroup.lot = null;
+                        fromGroup.lotColor = 'empty';
+                        s.gates[t.gate] = false;
+                        addLog(`📦 ${t.lot}: Group ${t.from+1} → Group ${t.to+1} ✓`);
+                        
+                        // Move to next transfer in sequence
+                        s.currentTransferIndex++;
+                        s.activeTransfer = null;
+                        
+                        // Small delay then start next transfer
+                        setTimeout(() => {
+                            startNextTransfer();
+                        }, 200);
+                    }
+                }
+            }
             
-            // Material transfer simulation
-            simulateMaterialTransfer();
-            
-            // Update UI
             updateUI();
-        }
-        
-        function simulateMaterialTransfer() {
-            const t = tags;
-            const rate = 3;  // % per scan - faster transfer
-            
-            // Group1 → Group2 (Material Gate)
-            if (t.Material_Gate_Open && t.material[0] > 0) {
-                const transfer = Math.min(rate, t.material[0]);
-                t.material[0] -= transfer;
-                t.material[1] += transfer;
-                // Ensure it reaches 0
-                if (t.material[0] < 0.5) t.material[0] = 0;
-            }
-            
-            // Group2 → Group3 (Aspirator Hopper Gate)
-            if (t.Aspirator_Hopper_Gate && t.material[1] > 0) {
-                const transfer = Math.min(rate, t.material[1]);
-                t.material[1] -= transfer;
-                t.material[2] += transfer;
-                if (t.material[1] < 0.5) t.material[1] = 0;
-            }
-            
-            // Group3 → Group4 (R12 Hopper Gate)
-            if (t.R12_Hopper_Gate && t.material[2] > 0) {
-                const transfer = Math.min(rate, t.material[2]);
-                t.material[2] -= transfer;
-                t.material[3] += transfer;
-                if (t.material[2] < 0.5) t.material[2] = 0;
-            }
-            
-            // R12 processes material (automatic when R12_Permit)
-            if (t.R12_Permit && t.material[3] > 0) {
-                t.material[3] -= rate * 0.8;
-                if (t.material[3] < 0.5) t.material[3] = 0;
-            }
         }
         
         // ============================================================
         // USER ACTIONS
         // ============================================================
         function scanBarcode() {
-            if (tags.E_Stop_Active) return;
-            tags.Barcode_Scanned = true;
-            addLog("📱 Barcode scanned: CORN_LOT_2025_001");
-            document.getElementById('btnReady').disabled = false;
-        }
-        
-        function batchReady() {
-            if (!tags.Barcode_Scanned || tags.E_Stop_Active) return;
-            tags.Batch_Ready_Latched = true;
-            tags.material[0] = 100;  // Load material
-            addLog("📦 Batch Ready - Material loaded in Group 1");
-            document.getElementById('btnStart').disabled = false;
+            const s = state;
+            if (s.E_Stop_Active) return;
+            
+            // Can only scan if Group 1 is empty
+            if (s.groups[0].material > 0) {
+                addLog("⚠️ Cannot scan - Group 1 still has material");
+                return;
+            }
+            
+            // Create new lot
+            const lotName = LOT_NAMES[lotCounter % 4];
+            const lotColor = LOT_COLORS[lotCounter % 4];
+            lotCounter++;
+            
+            // Load material into Group 1
+            s.groups[0].material = 100;
+            s.groups[0].lot = lotName;
+            s.groups[0].lotColor = lotColor;
+            
+            addLog(`📱 Scanned & Loaded: ${lotName} (100%) in Group 1`);
         }
         
         function startCycle() {
-            if (!tags.Cycle_Start_Enabled || tags.E_Stop_Active) return;
-            
-            const t = tags;
-            
-            // Determine which step to start based on current state
-            if (t.Cycle_Step === 0) {
-                // Initial start - begin with Step 1
-                t.Cycle_Active = true;
-                t.Cycle_Step = 1;
-                t.Cycle_Complete = false;
-                addLog("▶️ START - Step 1: Moving Group 1 → Group 2");
-            } else if (t.Cycle_Step === 10) {
-                // Continue to Step 2
-                t.Cycle_Active = true;
-                t.Cycle_Step = 2;
-                addLog("▶️ CONTINUE - Step 2: Moving Group 2 → Group 3");
-            } else if (t.Cycle_Step === 20) {
-                // Continue to Step 3
-                t.Cycle_Active = true;
-                t.Cycle_Step = 3;
-                addLog("▶️ CONTINUE - Step 3: Moving Group 3 → Group 4 (R12)");
+            const s = state;
+            if (s.E_Stop_Active) return;
+            if (s.transferring) {
+                addLog("⚠️ Transfer in progress - wait...");
+                return;
             }
             
-            document.getElementById('btnStart').disabled = true;
-            document.getElementById('btnReady').disabled = true;
-            document.getElementById('btnScan').disabled = true;
+            // PULL system - Start from back, move ALL materials one step forward
+            // But each gate only opens if destination is empty
+            // Sequence: Gate2 first, then Gate1, then Gate0
+            
+            let gatesOpened = 0;
+            let pendingGates = [];
+            
+            // Check all possible transfers (from back to front)
+            // Gate 2: Group 3 → Group 4
+            if (s.groups[2].material > 0 && s.groups[3].material === 0) {
+                pendingGates.push({ gate: 2, from: 2, to: 3, lot: s.groups[2].lot });
+            }
+            // Gate 1: Group 2 → Group 3 (will be empty after gate 2 moves)
+            if (s.groups[1].material > 0 && (s.groups[2].material === 0 || pendingGates.find(g => g.gate === 2))) {
+                pendingGates.push({ gate: 1, from: 1, to: 2, lot: s.groups[1].lot });
+            }
+            // Gate 0: Group 1 → Group 2 (will be empty after gate 1 moves)
+            if (s.groups[0].material > 0 && (s.groups[1].material === 0 || pendingGates.find(g => g.gate === 1))) {
+                pendingGates.push({ gate: 0, from: 0, to: 1, lot: s.groups[0].lot });
+            }
+            
+            if (pendingGates.length === 0) {
+                if (s.groups[0].material === 0 && s.groups[1].material === 0 && 
+                    s.groups[2].material === 0 && s.groups[3].material === 0) {
+                    addLog("⚠️ System empty - scan a barcode first");
+                } else {
+                    addLog("⚠️ Waiting - R12 (Group 4) still processing");
+                }
+                return;
+            }
+            
+            // Start sequential transfer - all gates that can open
+            s.transferSequence = pendingGates;
+            s.currentTransferIndex = 0;
+            s.transferring = true;
+            
+            // Log what will happen
+            const movements = pendingGates.map(g => `${g.lot}: G${g.from+1}→G${g.to+1}`).join(', ');
+            addLog(`▶️ START: ${movements}`);
+            
+            // Open first gate (from back)
+            startNextTransfer();
+        }
+        
+        function startNextTransfer() {
+            const s = state;
+            if (s.currentTransferIndex >= s.transferSequence.length) {
+                // All transfers complete
+                s.transferring = false;
+                s.transferSequence = [];
+                return;
+            }
+            
+            const transfer = s.transferSequence[s.currentTransferIndex];
+            s.gates[transfer.gate] = true;
+            s.activeTransfer = transfer;
         }
         
         function eStop() {
-            tags.E_Stop_Active = true;
-            tags.Material_Gate_Open = false;
-            tags.Aspirator_Hopper_Gate = false;
-            tags.R12_Hopper_Gate = false;
-            tags.Air_Conveyor = false;
-            tags.Aspirator_Gate = false;
+            state.E_Stop_Active = true;
+            state.gates = [false, false, false];
+            state.transferring = false;
             addLog("🛑 E-STOP ACTIVATED!");
-            document.getElementById('btnReset').disabled = false;
         }
         
-        function resetEstop() {
-            tags.E_Stop_Active = false;
-            tags.Cycle_Active = false;
-            tags.Cycle_Step = 0;
-            tags.Batch_Ready_Latched = false;
-            tags.Barcode_Scanned = false;
-            tags.material = [0, 0, 0, 0];
-            addLog("🔄 System Reset - Ready for new batch");
-            document.getElementById('btnReset').disabled = true;
-            document.getElementById('btnScan').disabled = false;
-            document.getElementById('btnReady').disabled = true;
-            document.getElementById('btnStart').disabled = true;
+        function resetSystem() {
+            state.E_Stop_Active = false;
+            state.transferring = false;
+            state.gates = [false, false, false];
+            state.groups = [
+                { material: 0, lot: null, lotColor: 'empty' },
+                { material: 0, lot: null, lotColor: 'empty' },
+                { material: 0, lot: null, lotColor: 'empty' },
+                { material: 0, lot: null, lotColor: 'empty' }
+            ];
+            lotCounter = 0;
+            addLog("🔄 System Reset");
         }
         
         // ============================================================
         // UI UPDATE
         // ============================================================
         function updateUI() {
-            const t = tags;
+            const s = state;
             
             // Status bar
-            document.getElementById('sysStatus').textContent = t.CPS_RDY ? 'READY' : 'NOT READY';
-            document.getElementById('sysStatus').className = 'status-value ' + (t.CPS_RDY ? 'status-ok' : 'status-error');
+            document.getElementById('sysStatus').textContent = s.CPS_RDY ? 'READY' : 'NOT READY';
+            document.getElementById('sysStatus').className = 'status-value ' + (s.CPS_RDY ? 'status-ok' : 'status-error');
             
-            document.getElementById('estopStatus').textContent = t.E_Stop_Active ? 'ACTIVE!' : 'OK';
-            document.getElementById('estopStatus').className = 'status-value ' + (t.E_Stop_Active ? 'status-error' : 'status-ok');
+            document.getElementById('estopStatus').textContent = s.E_Stop_Active ? 'ACTIVE!' : 'OK';
+            document.getElementById('estopStatus').className = 'status-value ' + (s.E_Stop_Active ? 'status-error' : 'status-ok');
             
-            document.getElementById('cycleStep').textContent = t.Cycle_Step;
+            // Count lots in system
+            const lotsInSystem = s.groups.filter(g => g.lot !== null).length;
+            document.getElementById('lotsCount').textContent = lotsInSystem;
             
-            document.getElementById('barcodeStatus').textContent = t.Barcode_Scanned ? 'SCANNED' : '---';
-            document.getElementById('barcodeStatus').className = 'status-value ' + (t.Barcode_Scanned ? 'status-ok' : 'status-warning');
+            // Next lot
+            const nextLotNum = lotCounter % 4;
+            document.getElementById('nextLot').textContent = s.groups[0].material === 0 ? LOT_NAMES[nextLotNum] : 'WAIT';
             
-            // Progress bars
+            // Progress bars and lots
             for (let i = 0; i < 4; i++) {
-                document.getElementById('progress' + (i+1)).style.width = t.material[i] + '%';
-                document.getElementById('progressText' + (i+1)).textContent = Math.round(t.material[i]) + '%';
+                const g = s.groups[i];
+                const progressEl = document.getElementById('progress' + (i+1));
+                progressEl.style.width = g.material + '%';
+                progressEl.className = 'progress-fill ' + g.lotColor;
+                document.getElementById('progressText' + (i+1)).textContent = Math.round(g.material) + '%';
+                document.getElementById('lot' + (i+1)).textContent = g.lot || 'Empty';
             }
             
             // Gates
-            updateGate('gate1', t.Material_Gate_Open, 'MAT GATE');
-            updateGate('gate2', t.Aspirator_Hopper_Gate, 'ASP GATE');
-            updateGate('gate3', t.R12_Hopper_Gate, 'R12 GATE');
+            updateGate('gate1', s.gates[0], 'MAT GATE');
+            updateGate('gate2', s.gates[1], 'ASP GATE');
+            updateGate('gate3', s.gates[2], 'R12 GATE');
             
             // R12 Permit
             const r12El = document.getElementById('r12permit');
-            r12El.className = 'gate ' + (t.R12_Permit ? 'gate-open' : 'gate-closed');
-            r12El.innerHTML = 'R12 PERMIT<br>' + (t.R12_Permit ? 'ON' : 'OFF');
+            r12El.className = 'gate ' + (s.R12_Permit ? 'gate-open' : 'gate-closed');
+            r12El.innerHTML = 'R12 PERMIT<br>' + (s.R12_Permit ? 'ON' : 'OFF');
             
             // Lights
             document.getElementById('lightReady').className = 'light ' + 
-                (t.CPS_RDY && !t.Batch_Ready_Latched && !t.Cycle_Active ? 'light-green' : '');
+                (s.CPS_RDY && s.groups[0].material === 0 && !s.transferring ? 'light-green' : '');
             document.getElementById('lightProgress').className = 'light ' + 
-                (t.Cycle_Active ? 'light-yellow' : '');
+                (s.transferring ? 'light-yellow' : '');
             document.getElementById('lightComplete').className = 'light ' + 
-                (t.Cycle_Complete ? 'light-blue' : '');
-            document.getElementById('lightIncoming').className = 'light ' + 
-                (t.material[2] > 5 ? 'light-yellow' : '');
+                (lotsInSystem === 0 && !s.transferring ? 'light-blue' : '');
+            
+            // Queue info
+            let queueText = '';
+            if (s.E_Stop_Active) {
+                queueText = '🛑 E-STOP ACTIVE - Press Reset';
+            } else if (s.transferring) {
+                queueText = '⏳ Transfer in progress...';
+            } else if (s.groups[0].material === 0) {
+                queueText = '📱 Ready to scan new barcode (Group 1 empty)';
+            } else {
+                queueText = '▶️ Press START to move material forward';
+            }
+            document.getElementById('queueInfo').textContent = queueText;
         }
         
         function updateGate(id, isOpen, name) {
@@ -547,19 +559,18 @@
         document.addEventListener('keydown', (e) => {
             switch(e.key) {
                 case '1': scanBarcode(); break;
-                case '2': batchReady(); break;
                 case '3': startCycle(); break;
                 case 'e': case 'E': eStop(); break;
-                case 'r': case 'R': resetEstop(); break;
+                case 'r': case 'R': resetSystem(); break;
             }
         });
         
         // ============================================================
         // MAIN LOOP
         // ============================================================
-        addLog("🌽 CPS-001 Simulator Started");
-        addLog("Press [1] to scan barcode");
-        setInterval(plcScan, 100);  // 100ms scan cycle
+        addLog("🌽 CPS-001 Simulator Started - Version 3.0");
+        addLog("📱 Press [1] to scan barcode and load material");
+        setInterval(plcScan, 100);
     </script>
 </body>
 </html>
