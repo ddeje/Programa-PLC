@@ -17,7 +17,7 @@ from asyncua import Client
 # CONFIGURACIÓN CORRECTA PARA OPTIX EDGE
 # ============================================================================
 
-SERVER_URL = "opc.tcp://192.168.101.96:4840"
+SERVER_URL = "opc.tcp://192.168.101.100:59100"
 
 # ¡NAMESPACE CORRECTO ES 6, NO 2!
 NAMESPACE_INDEX = 6

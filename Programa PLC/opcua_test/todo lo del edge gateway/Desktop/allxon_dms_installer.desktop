@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Allxon Installer
+GenericName=Allxon Installer
+Comment=It's an installer to assist users to install the Allxon Agent
+Exec=/bin/allxon_dms_installer.sh
+Icon=allxon

@@ -1,0 +1,9 @@
+# Ver archivos Python
+find /home -name "*.py" 2>/dev/null
+
+# Buscar código que use los tags
+grep -r "EgComIn" /home/ 2>/dev/null
+grep -r "GlobalVars" /home/ 2>/dev/null
+
+# Ver contenedores Docker
+docker ps -a
